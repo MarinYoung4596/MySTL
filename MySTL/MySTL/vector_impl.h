@@ -19,9 +19,36 @@ namespace MySTL
 
 
 	template <typename T>
-	vector::~vector()
+	explicit vector::vector(const::size_t n)
 	{
-		free();
+		auto newdata = alloc.allocate(n);
+		elements = newdata;
+		first_free = cap = elements + n;
+	}
+
+
+	template <typename T>
+	vector::vector(const std::size_t n, const T &val)
+	{
+		auto newdata = alloc.allocate(n);
+		for (std::size_t i = 0; i < n;)
+			alloc.construct(i++, val);
+		elements = newdata;
+		first_free = cap = elements + n;
+	}
+
+
+	template <typename T>
+	vector::vector(initializer_list<T> il)
+	{
+
+	}
+
+
+	template <typename InputIterator>
+	vector::vector(InputIterator first, InputIterator second)
+	{
+
 	}
 
 
@@ -52,6 +79,21 @@ namespace MySTL
 
 
 	template <typename T>
+	vector& vector::operator=(initializer_list<T> il)
+	{
+
+	}
+
+
+	template <typename T>
+	vector::~vector()
+	{
+		free();
+	}
+
+
+	// Modifiers
+	template <typename T>
 	void vector::push_back(const T &s)
 	{
 		chk_n_alloc();
@@ -59,25 +101,11 @@ namespace MySTL
 	}
 
 
-	std::pair<std::string*, std::string*>
-		vector::alloc_n_copy(const string* b, const string *e)
-	{
-			auto data = alloc.allocate(e - b);
-			return{ data, unintialized_copy(b, e, data) };
-		}
-
-
 	template <typename T>
-	void vector::free()
+	void vector::pop_back()
 	{
 		if (elements)
-		{
-			// destory the object p in vector one by one,
-			for (auto p = first_free; p != elements;)
-				alloc.destory(--p);
-			// and free the space.
-			alloc.deallocate(elements, cap - elements);
-		}
+			alloc.destroy(--first_free);
 	}
 
 
@@ -87,8 +115,32 @@ namespace MySTL
 		if (elements)
 		{
 			for (auto p = first_free; p != elements;)
-				alloc.destory(--p);
+				alloc.destroy(--p);
 		}
+	}
+
+
+
+	template <typename T>
+	void vector::free()
+	{
+		if (elements)
+		{
+			// destory the object p in vector one by one,
+			for (auto p = first_free; p != elements;)
+				alloc.destroy(--p);
+			// and free the space.
+			alloc.deallocate(elements, cap - elements);
+		}
+	}
+
+
+	template <typename T>
+	std::pair<T*, T*>
+		vector::alloc_n_copy(const T *first, const T *second)
+	{
+		auto data = alloc.allocate(second - first);
+		return{ data, uninitialized_copy(first, second, data) };
 	}
 
 
@@ -108,5 +160,4 @@ namespace MySTL
 		first_free = dest;
 		cap = elements + newcapacity;
 	}
-
 }
