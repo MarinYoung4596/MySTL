@@ -1,6 +1,13 @@
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
+
+#include <initializer_list>
+
 /*
+Reference:
+C++ Primer (5th Edition)
+http://www.cplusplus.com/reference/vector/vector/
+
 | 0 | 1 | 2 | 3 |   |   |   |   |   |   |
 ^               ^                       ^
 elements        first_free              cap
@@ -64,8 +71,8 @@ namespace MySTL
 
         // Capacity
         std::size_t size() const { return first_free - elements; }	// return size
-        //std::size_t max_size() const noexcept;						// return maximum size
-        void resize(std::size_t n);									// change size
+        //std::size_t max_size() const noexcept;					// return maximum size
+		void resize(std::size_t n, const T &val);					// change size
         std::size_t capacity() const { return cap - elements; }		// return size of allocated storage capacity
         bool empty() const { return elements == first_free; }		// test whether vector is empty
         void reverse(std::size_t n);								// request a change in capacity
