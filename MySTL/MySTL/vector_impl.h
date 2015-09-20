@@ -3,14 +3,14 @@
 
 
 #include <utility>	// for std::move & std::forward & std::pair
-#include <memory> // uninitialized_copy & uninitialized_fill
+#include <memory>	// uninitialized_copy & uninitialized_fill
 
 #include "vector.h"
 
 namespace MySTL
 {
 	template <typename T>
-	vector::vector(const vector &s)
+	vector<T>::vector(const vector &s)
 	{
 		auto newdata = alloc_n_copy(s.begin(), s.end());
 		elements = newdata.first;
@@ -19,14 +19,15 @@ namespace MySTL
 
 
 	template <typename T>
-	vector::vector(vector &&s) noexcept : elements(s.elements), first_free(s.first_free), cap(s.cap)
+	vector<T>::vector(vector &&s) //noexcept 
+		: elements(s.elements), first_free(s.first_free), cap(s.cap)
 	{
 		s.elements = s.first_free = s.cap = nullptr;
 	}
 
 
 	template <typename T>
-	explicit vector::vector(const::size_t n)
+	explicit vector<T>::vector(const::size_t n)
 	{
 		auto newdata = alloc.allocate(n);
 		elements = newdata;
@@ -35,7 +36,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector::vector(const std::size_t n, const T &val)
+	vector<T>::vector(const std::size_t n, const T &val)
 	{
 		auto newdata = alloc.allocate(n);
 		for (std::size_t i = 0; i < n;)
@@ -46,7 +47,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector::vector(initializer_list<T> il)
+	vector<T>::vector(initializer_list<T> il)
 	{
 		auto data = alloc_n_copy(il.begin(), il.end());
 		elements = data.first;
@@ -55,14 +56,14 @@ namespace MySTL
 
 
 	template <typename InputIterator>
-	vector::vector(InputIterator first, InputIterator second)
+	vector<T>::vector(InputIterator first, InputIterator second)
 	{
 
 	}
 
 
 	template <typename T>
-	vector& vector::operator=(const vector &rhs)
+	vector& vector<T>::operator=(const vector &rhs)
 	{
 		auto data = alloc_n_copy(rhs.begin(), rhs.end());
 		free();
@@ -73,7 +74,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector& vector::operator=(const vector &&rhs) noexcept
+	vector& vector<T>::operator=(const vector &&rhs) //noexcept
 	{
 		if (this != &rhs)
 		{
@@ -88,7 +89,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector& vector::operator=(initializer_list<T> il)
+	vector& vector<T>::operator=(initializer_list<T> il)
 	{
 		auto data = alloc_n_copy(il.begin(), il.end());
 		free();
@@ -99,7 +100,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector::~vector()
+	vector<T>::~vector()
 	{
 		free();
 	}
@@ -107,7 +108,7 @@ namespace MySTL
 
 	// Elements Access
 	template <typename T>
-	T& vector::at(std::size_t n)
+	T& vector<T>::at(std::size_t n)
 	{
 		if (n >= size())
 		{
@@ -117,16 +118,10 @@ namespace MySTL
 	}
 
 
-	template <typename T>
-	T* vector::data() noexcept
-	{
-
-	}
-		
 
 	// Modifiers
 	template <typename T>
-	void vector::push_back(const T &s)
+	void vector<T>::push_back(const T &s)
 	{
 		chk_n_alloc();
 		alloc.construct(first_free++, s);
@@ -134,7 +129,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector::pop_back()
+	void vector<T>::pop_back()
 	{
 		if (elements)
 			alloc.destroy(--first_free);
@@ -142,7 +137,47 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector::clear() noexcept
+	T* vector<T>::insert(const T* position, const T &val)
+	{
+		MySTL::insert(position, 1, val);
+	}
+
+
+	template <typename T>
+	T* vector<T>::insert(const T* position, std::size_t n, const T &val)
+	{
+		if (position > end())
+			throw out_of_range("position out of range!");
+		auto space_left = cap - first_free;
+		if (space_left >= n)
+		{
+			for (auto curr = end() - 1 ; curr != position; --curr)
+				*(curr + space_left) = *curr;
+			uninitialized_fill_n(position, n, val);
+			first_free += n;
+		}
+		else
+		{
+			T *_start = alloc.allocate(static_cast<std::size_t>(capacity()) + n);
+			T *_end = uninitialized_copy(begin(), position, _start);
+			_end = uninitialized_fill_n(_end, n, val); // _end point to next free space
+			_end = uninitialized_copy(position, end(), _end);
+			free();
+			elements = _start;
+			first_free = cap = _end;
+		}
+	}
+
+
+	template <typename T, typename InputIterator>
+	T* vector<T>::insert(const T* position, InputIterator first, InputIterator second)
+	{
+
+	}
+
+
+	template <typename T>
+	void vector<T>::clear() //noexcept
 	{
 		if (elements)
 		{
@@ -153,21 +188,33 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector::swap(vector &x)
+	void vector<T>::swap(vector &x)
+	{
+		if (this != &x)
+		{
+			std::swap(elements, x.elements);
+			std::swap(first_free, x.first_free);
+			std::swap(cap, x.cap);
+		}
+	}
+
+
+	template <typename T>
+	T* vector<T>::erase(const T* position)
 	{
 
 	}
 
 
 	template <typename... Args>
-	T* vector::emplace(const T* position, Args&&... args)
+	T* vector<T>::emplace(const T* position, Args&&... args)
 	{
 
 	}
 
 
 	template <typename... Args>
-	void vector::emplace_back(Args&&... args)
+	void vector<T>::emplace_back(Args&&... args)
 	{
 		chk_n_alloc();
 		alloc.construct(first_free++, std::forward<Args>(args)...);
@@ -176,7 +223,7 @@ namespace MySTL
 
 	// capacity
 	template <typename T>
-	void vector::resize(std::size_t n, const T &val)
+	void vector<T>::resize(std::size_t n, const T &val)
 	{
 		if (n < size())
 		{
@@ -190,22 +237,26 @@ namespace MySTL
 		}
 		else
 		{
-			auto newdata = alloc.allocate(n);
-			auto elem = elements;
-			auto dest = newdata;
-			for (std::size_t i = 0; i < size(); ++i)
-				alloc.construct(dest++, std::move(*elem++));
-			for (std::size_t i = size(); i < n; ++i)
-				alloc.construct(dest++, val);
-			free(); // destroy and deallocate all
-			elements = newdata;
-			first_free = cap = dest;
+			T *_start = alloc.allocate(n);
+			//auto elem = elements;
+			//auto _end = _start;
+			//for (std::size_t i = 0; i < size(); ++i)
+			//	alloc.construct(_end++, std::move(*elem++));
+			//for (std::size_t i = size(); i < n; ++i)
+			//	alloc.construct(_end++, val);
+
+			auto len_insert = n - size();
+			T *_end = uninitialized_copy(begin(), end(), _start);
+			_end = uninitialized_fill_n(_end, len_insert, val);
+			free();
+			elements = _start;
+			first_free = cap = _end;
 		}
 	}
 
 
 	template <typename T>
-	void vector::reverse(std::size_t n)
+	void vector<T>::reverse(std::size_t n)
 	{
 		if (n <= capacity())
 			return;
@@ -219,7 +270,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector::shrink_to_fit()
+	void vector<T>::shrink_to_fit()
 	{
 		alloc.deallocate(first_free, cap - first_free);
 		cap = first_free;
@@ -228,7 +279,7 @@ namespace MySTL
 
 	// 
 	template <typename T>
-	void vector::free()
+	void vector<T>::free()
 	{
 		if (elements)
 		{
@@ -242,7 +293,7 @@ namespace MySTL
 
 
 	template <typename T>
-	std::pair<T*, T*> vector::alloc_n_copy(const T *first, const T *last)
+	std::pair<T*, T*> vector<T>::alloc_n_copy(const T *first, const T *last)
 	{
 		auto data = alloc.allocate(last - first);
 		return { data, uninitialized_copy(first, last, data) };
@@ -250,7 +301,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector::reallocate()
+	void vector<T>::reallocate()
 	{
 		auto newcapacity = size() ? 2 * size() : 1;
 		auto newdata = alloc.allocate(newcapacity);

@@ -46,7 +46,7 @@ namespace MySTL
         T& front() { return *(begin()); }                               // access first element
         T& back() { return *(end() - 1); }                              // access last element
         T& at(std::size_t n);                                           // access element
-        T* data() noexcept;												// access data
+		T* data() noexcept { return elements; }							// access data
 
         // Modifiers
         void assign(std::size_t n, const T&);							// assign vector content: fill
