@@ -31,7 +31,7 @@ public:
 	vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
 	vector(const vector &);										    // constructor: copy
 	vector(vector &&); //noexcept;									// constructor: move 
-	explicit vector(const std::size_t n);							// constructor: fill
+	vector(const std::size_t n);	// explicit						// constructor: fill
 	vector(const std::size_t n, const T &val);						// constructor: fill
 	vector(std::initializer_list<T> il);							// constructor: initializer_list
 	template<typename InputIterator>

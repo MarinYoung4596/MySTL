@@ -28,7 +28,7 @@ vector<T>::vector(vector &&s) //noexcept
 
 
 template <typename T>
-explicit vector<T>::vector(const::size_t n)
+vector<T>::vector(const::size_t n)
 {
 	auto newdata = alloc.allocate(n);
 	for (std::size_t i = 0; i < n;)
@@ -58,7 +58,8 @@ vector<T>::vector(std::initializer_list<T> il)
 }
 
 
-template <typename T, typename InputIterator>
+template <typename T>
+template <typename InputIterator>
 vector<T>::vector(InputIterator first, InputIterator second)
 {
 	auto data = alloc_n_copy(first, second);
@@ -68,7 +69,7 @@ vector<T>::vector(InputIterator first, InputIterator second)
 
 
 template <typename T>
-vector& vector<T>::operator=(const vector &rhs)
+vector<T>& vector<T>::operator=(const vector &rhs)
 {
 	auto data = alloc_n_copy(rhs.begin(), rhs.end());
 	free();
@@ -79,7 +80,7 @@ vector& vector<T>::operator=(const vector &rhs)
 
 
 template <typename T>
-vector& vector<T>::operator=(const vector &&rhs) //noexcept
+vector<T>& vector<T>::operator=(vector &&rhs) //noexcept
 {
 	if (this != &rhs)
 	{
@@ -94,7 +95,7 @@ vector& vector<T>::operator=(const vector &&rhs) //noexcept
 
 
 template <typename T>
-vector& vector<T>::operator=(std::initializer_list<T> il)
+vector<T>& vector<T>::operator=(std::initializer_list<T> il)
 {
 	auto data = alloc_n_copy(il.begin(), il.end());
 	free();
@@ -180,7 +181,8 @@ T* vector<T>::insert(const T* position, std::size_t n, const T &val)
 }
 
 
-template <typename T, typename InputIterator>
+template <typename T>
+template <typename InputIterator>
 T* vector<T>::insert(const T* position, InputIterator first, InputIterator second)
 {
 	if (position < begin() || position > end())
@@ -298,8 +300,9 @@ T* vector<T>::erase(const T* first, const T* second)
 }
 
 
-template <typename T, typename... Args>
-T* vector<T>::emplace(const T* position, Args&&... args)
+template <typename T>
+template <typename... Args>
+void vector<T>::emplace(const T* position, Args&&... args)
 {
 	if (position < begin() || position > end())
 		throw std::out_of_range("Invalid parameters!");
@@ -312,7 +315,8 @@ T* vector<T>::emplace(const T* position, Args&&... args)
 }
 
 
-template <typename T, typename... Args>
+template <typename T>
+template <typename... Args>
 void vector<T>::emplace_back(Args&&... args)
 {
 	chk_n_alloc();
@@ -395,8 +399,7 @@ template <typename T>
 std::pair<T*, T*> vector<T>::alloc_n_copy(const T *first, const T *last)
 {
 	auto data = alloc.allocate(last - first);
-	return{ data,
-		uninitialized_copy(make_move_iterator(first), make_move_iterator(last), data) };
+	return { data, uninitialized_copy(first, last, data) };
 }
 
 
