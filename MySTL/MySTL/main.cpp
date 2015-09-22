@@ -1,12 +1,16 @@
 #include <iostream>
 
-#include "vector.h"
-#include "vector_impl.h"
+#define _SCL_SECURE_NO_WARNINGS
 
-using namespace std;
+#include "TestCase/test_vector.h"
+
 
 int main()
 {
+
+
+
+
 
 	system("pause");
 	return 0;
