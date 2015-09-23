@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 #include "../Declaration/string.h"
 
@@ -258,7 +259,7 @@ void testcase_replace()
 	// replace signatures used in the same order as described above:
 
 	// Using positions:                 0123456789*123456789*12345
-	std::string str = base;           // "this is a test string."
+	MySTL::string str = base;           // "this is a test string."
 	str.replace(9, 5, str2);          // "this is an example string." (1)
 	str.replace(19, 6, str3, 7, 6);     // "this is an example phrase." (2)
 	str.replace(8, 10, "just a");     // "this is just a phrase."     (3)
@@ -287,5 +288,25 @@ void testcase_swap()
 
 	std::cout << " After the swap, buyer has " << buyer;
 	std::cout << " and seller has " << seller << '\n';
+}
+
+
+void testcase_cstr()
+{
+	MySTL::string str("Please split this sentence into tokens");
+
+	char * cstr = new char[str.length() + 1];
+	std::strcpy(cstr, str.c_str());
+
+	// cstr now contains a c-string copy of str
+
+	char * p = std::strtok(cstr, " ");
+	while (p != 0)
+	{
+		std::cout << p << '\n';
+		p = std::strtok(NULL, " ");
+	}
+
+	delete[] cstr;
 }
 #endif

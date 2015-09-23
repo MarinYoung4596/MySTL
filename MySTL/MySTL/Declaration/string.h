@@ -8,6 +8,7 @@
 #include <type_traits>	
 #include <initializer_list>
 #include <iterator>		// reverse_iterator
+#include <iostream>		// std::istream, std::ostream
 
 namespace MySTL
 {
@@ -118,15 +119,15 @@ namespace MySTL
 		//////////////////// capacity
 		// Return length of string
 		// Returns the length of the string, in terms of bytes.
-		size_type size() const noexcept;
+		std::size_t size() const noexcept;
 		
 		// Return length of string
 		//	Returns the length of the string, in terms of bytes.
-		size_type length() const noexcept;
+		std::size_t length() const noexcept;
 
 		// Return maximum size of string
 		//	Returns the maximum length the string can reach.
-		size_type max_size() const noexcept;
+		std::size_t max_size() const noexcept;
 
 		// Resize string
 		//	Resizes the string to a length of n characters.
@@ -135,7 +136,7 @@ namespace MySTL
 
 		// Return size of allocated storage
 		// 	Returns the size of the storage space currently allocated for the string, expressed in terms of bytes.
-		size_type capacity() const noexcept;
+		std::size_t capacity() const noexcept;
 
 		// Request a change in capacity
 		//	Requests that the string capacity be adapted to a planned change in size to a length of up to n characters.
@@ -158,13 +159,13 @@ namespace MySTL
 		//////////////////// element access
 		// Get character of string
 		// Returns a reference to the character at position pos in the string.
-		char& operator[] (size_t pos);
-		const char& operator[] (size_t pos) const;
+		char& operator[] (std::size_t pos);
+		const char& operator[] (std::size_t pos) const;
 
 		// Get character in string
 		//	Returns a reference to the character at position pos in the string.
-		char& at(size_t pos);
-		const char& at(size_t pos) const;
+		char& at(std::size_t pos);
+		const char& at(std::size_t pos) const;
 
 		// Access last character
 		//	Returns a reference to the last character of the string.
@@ -194,17 +195,18 @@ namespace MySTL
 		string& append(const string& str);
 		// (2) substring
 		//	Appends a copy of a substring of str.The substring is the portion of str that begins at the character 
-		//  position subpos and spans sublen characters(or until the end of str, if either str is too short or if sublen is string::npos).
-		string& append(const string& str, size_t subpos, size_t sublen);
+		//  position subpos and spans sublen characters
+		//  (or until the end of str, if either str is too short or if sublen is string::npos).
+		string& append(const string& str, std::size_t subpos, std::size_t sublen);
 		// (3) c - string
 		//	Appends a copy of the string formed by the null - terminated character sequence(C - string) pointed by s.
 		string& append(const char* s);
 		// (4) buffer
 		//	Appends a copy of the first n characters in the array of characters pointed by s.
-		string& append(const char* s, size_t n);
+		string& append(const char* s, std::size_t n);
 		// (5) fill
 		//	Appends n consecutive copies of character c.
-		string& append(size_t n, char c);
+		string& append(std::size_t n, char c);
 		// (6) range
 		//	Appends a copy of the sequence of characters in the range[first, last), in the same order.
 		template <typename InputIterator>
@@ -228,16 +230,16 @@ namespace MySTL
 		//	(2) substring
 		//	Copies the portion of str that begins at the character position subpos and spans sublen characters
 		//  (or until the end of str, if either str is too short or if sublen is string::npos).
-		string& assign(const string& str, size_t subpos, size_t sublen);
+		string& assign(const string& str, std::size_t subpos, std::size_t sublen);
 		//	(3) c - string
 		//	Copies the null - terminated character sequence(C - string) pointed by s.
 		string& assign(const char* s);
 		//	(4) buffer
 		//	Copies the first n characters from the array of characters pointed by s.
-		string& assign(const char* s, size_t n);
+		string& assign(const char* s, std::size_t n);
 		//	(5) fill
 		//	Replaces the current value by n consecutive copies of character c.
-		string& assign(size_t n, char c);
+		string& assign(std::size_t n, char c);
 		//	(6) range
 		//	Copies the sequence of characters in the range[first, last), in the same order.
 		template <typename InputIterator>
@@ -256,21 +258,21 @@ namespace MySTL
 
 		//	(1) string
 		//	Inserts a copy of str.
-		string& insert(size_t pos, const string& str);
+		string& insert(std::size_t pos, const string& str);
 		//	(2) substring
-		//	Inserts a copy of a substring of str.The substring is the portion of str that begins at the character position subpos 
-		//  and spans sublen characters(or until the end of str, if either str is too short or if sublen is npos).
-		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen);
+		//	Inserts a copy of a substring of str.The substring is the portion of str that begins at the character position 
+		//  subpos and spans sublen characters(or until the end of str, if either str is too short or if sublen is npos).
+		string& insert(std::size_t pos, const string& str, std::size_t subpos, std::size_t sublen);
 		//	(3) c - string
 		//	Inserts a copy of the string formed by the null - terminated character sequence(C - string) pointed by s.
-		string& insert(size_t pos, const char* s);
+		string& insert(std::size_t pos, const char* s);
 		//	(4) buffer
 		//	Inserts a copy of the first n characters in the array of characters pointed by s.
-		string& insert(size_t pos, const char* s, size_t n);
+		string& insert(std::size_t pos, const char* s, std::size_t n);
 		//	(5) fill
 		//	Inserts n consecutive copies of character c.
-		string& insert(size_t pos, size_t n, char c);
-		iterator insert(const_iterator p, size_t n, char c);
+		string& insert(std::size_t pos, std::size_t n, char c);
+		iterator insert(const_iterator p, std::size_t n, char c);
 		//	(6) single character
 		//	Inserts character c.
 		iterator insert(const_iterator p, char c);
@@ -290,7 +292,7 @@ namespace MySTL
 		//	Erases the portion of the string value that begins at the character position pos and spans len characters
 		//  (or until the end of the string, if either the content is too short or if len is string::npos.
 		//	Notice that the default argument erases all characters in the string(like member function clear).
-		string& erase(size_t pos = 0, size_t len = npos);
+		string& erase(std::size_t pos = 0, std::size_t len = npos);
 		//	(2) character
 		//	Erases the character pointed by p.
 		iterator erase(const_iterator p);
@@ -305,24 +307,24 @@ namespace MySTL
 
 		//  (1) string
 		//	Copies str.
-		string& replace(size_t pos, size_t len, const string& str);
+		string& replace(std::size_t pos, std::size_t len, const string& str);
 		string& replace(const_iterator i1, const_iterator i2, const string& str);
 		//	(2) substring
 		//	Copies the portion of str that begins at the character position subpos and spans sublen characters
 		//  (or until the end of str, if either str is too short or if sublen is string::npos).
-		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen);
+		string& replace(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen);
 		//	(3) c - string
 		//	Copies the null - terminated character sequence(C - string) pointed by s.
-		string& replace(size_t pos, size_t len, const char* s);
+		string& replace(std::size_t pos, std::size_t len, const char* s);
 		string& replace(const_iterator i1, const_iterator i2, const char* s);
 		//	(4) buffer
 		//	Copies the first n characters from the array of characters pointed by s.
-		string& replace(size_t pos, size_t len, const char* s, size_t n);
-		string& replace(const_iterator i1, const_iterator i2, const char* s, size_t n);
+		string& replace(std::size_t pos, std::size_t len, const char* s, std::size_t n);
+		string& replace(const_iterator i1, const_iterator i2, const char* s, std::size_t n);
 		//	(5) fill
 		//	Replaces the portion of the string by n consecutive copies of character c.
-		string& replace(size_t pos, size_t len, size_t n, char c);
-		string& replace(const_iterator i1, const_iterator i2, size_t n, char c);
+		string& replace(std::size_t pos, std::size_t len, std::size_t n, char c);
+		string& replace(const_iterator i1, const_iterator i2, std::size_t n, char c);
 		//	(6) range
 		//	Copies the sequence of characters in the range[first, last), in the same order.
 		template <typename InputIterator>
@@ -343,16 +345,196 @@ namespace MySTL
 
 
 		//////////////////// string operations
+		// Get C string equivalent
+		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string) 
+		// representing the current value of the string object.
+		const char* c_str() const noexcept;
+
+		// Get string data
+		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string) 
+		//	representing the current value of the string object.
+		const char* data() const noexcept;
+
+		//  Get allocator
+		//	Returns a copy of the allocator object associated with the string.
+		allocator_type get_allocator() const noexcept;
+
+		// Copy sequence of characters from string
+		//	Copies a substring of the current value of the string object into the array pointed by s.
+		//  This substring contains the len characters that start at position pos.
+		std::size_t copy(char* s, std::size_t len, std::size_t pos = 0) const;
+
+		//	Find content in string
+		//	Searches the string for the first occurrence of the sequence specified by its arguments.
+		std::size_t find(const string& str, std::size_t pos = 0) const noexcept;			// string(1)
+		std::size_t find(const char* s, std::size_t pos = 0) const;							// c - string(2)		
+		std::size_t find(const char* s, std::size_t pos, std::size_t n) const;				// buffer(3)
+		std::size_t find(char c, std::size_t pos = 0) const noexcept;						// character(4)
+
+		//  Find last occurrence of content in string
+		//	Searches the string for the last occurrence of the sequence specified by its arguments.
+		std::size_t rfind(const string& str, std::size_t pos = npos) const noexcept;		// string(1)
+		std::size_t rfind(const char* s, std::size_t pos = npos) const;						// c - string(2)
+		std::size_t rfind(const char* s, std::size_t pos, std::size_t n) const;				// buffer(3)
+		std::size_t rfind(char c, std::size_t pos = npos) const noexcept;					// character(4)
+
+		// Find character in string
+		// Searches the string for the first character that matches any of the characters specified in its arguments.
+		std::size_t find_first_of(const string& str, std::size_t pos = 0) const noexcept;	// string(1)
+		std::size_t find_first_of(const char* s, std::size_t pos = 0) const;				// c - string(2)
+		std::size_t find_first_of(const char* s, std::size_t pos, std::size_t n) const;		// buffer(3)
+		std::size_t find_first_of(char c, std::size_t pos = 0) const noexcept;				// character(4)
+
+		// Find character in string from the end
+		// Searches the string for the last character that matches any of the characters specified in its arguments.
+		std::size_t find_last_of(const string& str, std::size_t pos = npos) const noexcept;	// string(1)
+		std::size_t find_last_of(const char* s, std::size_t pos = npos) const;				// c - string(2)
+		std::size_t find_last_of(const char* s, std::size_t pos, std::size_t n) const;		// buffer(3)
+		std::size_t find_last_of(char c, std::size_t pos = npos) const noexcept;			// character(4)
+
+		// Find absence of character in string
+		// Searches the string for the first character that does not match any of the characters specified in its arguments.
+		std::size_t find_first_not_of(const string& str, std::size_t pos = 0) const noexcept;// string(1)
+		std::size_t find_first_not_of(const char* s, std::size_t pos = 0) const;			// c - string(2)
+		std::size_t find_first_not_of(const char* s, std::size_t pos, std::size_t n) const;	// buffer(3)
+		std::size_t find_first_not_of(char c, std::size_t pos = 0) const noexcept;			// character(4)
+
+		// Find non-matching character in string from the end
+		// Searches the string for the last character that does not match any of the characters specified in its arguments.
+		std::size_t find_last_not_of(const string& str, std::size_t pos = npos) const noexcept;// string(1)
+		std::size_t find_last_not_of(const char* s, std::size_t pos = npos) const;			// c - string(2)
+		std::size_t find_last_not_of(const char* s, std::size_t pos, std::size_t n) const;	// buffer(3)
+		std::size_t find_last_not_of(char c, std::size_t pos = npos) const noexcept;		// character(4)
+
+		// Generate substring
+		//	Returns a newly constructed string object with its value initialized to a copy of a substring of this object.
+		string substr(std::size_t pos = 0, std::size_t len = npos) const;
+
+		// Compare strings
+		//	Compares the value of the string object(or a substring) to the sequence of characters specified by its arguments.
+		int compare(const string& str) const noexcept;										// string(1)
+		int compare(std::size_t pos, std::size_t len, const string& str) const;				// string(1)
+		int compare(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen) const;// substrings(2)
+		int compare(const char* s) const;													// c - string(3)
+		int compare(std::size_t pos, std::size_t len, const char* s) const;					// c - string(3)
+		int compare(std::size_t pos, std::size_t len, const char* s, std::size_t n) const;	// buffer(4)
 
 
 
 		//////////////////// member constants
+	private:
+		static const std::size_t npos = -1;
 
+		char *_start;
+		char *_first_free;
+		char *cap;
 
-
+	public:
 		//////////////////// non-member functions overloads
-		// friend
+		// Concatenate strings
+		// Returns a newly constructed string object with its value being the concatenation of the 
+		//	characters in lhs followed by those of rhs.
+		friend string operator+ (const string& lhs, const string& rhs);		// string(1)
+		friend string operator+ (string&&      lhs, string&&      rhs);
+		friend string operator+ (string&&      lhs, const string& rhs);
+		friend string operator+ (const string& lhs, string&&      rhs);
+		friend string operator+ (const string& lhs, const char*   rhs);		// c - string(2)
+		friend string operator+ (string&&      lhs, const char*   rhs);
+		friend string operator+ (const char*   lhs, const string& rhs);
+		friend string operator+ (const char*   lhs, string&&      rhs);
+		friend string operator+ (const string& lhs, char          rhs);		// character(3)
+		friend string operator+ (string&&      lhs, char          rhs);
+		friend string operator+ (char          lhs, const string& rhs);
+		friend string operator+ (char          lhs, string&&      rhs);
 
+
+		// Relational operators for string
+		// Performs the appropriate comparison operation between the string objects lhs and rhs.
+		friend bool operator== (const string& lhs, const string& rhs);		// (1)
+		friend bool operator== (const char*   lhs, const string& rhs);
+		friend bool operator== (const string& lhs, const char*   rhs);
+		friend bool operator!= (const string& lhs, const string& rhs);		// (2)
+		friend bool operator!= (const char*   lhs, const string& rhs);
+		friend bool operator!= (const string& lhs, const char*   rhs);
+		friend bool operator<  (const string& lhs, const string& rhs);		// (3)
+		friend bool operator<  (const char*   lhs, const string& rhs);
+		friend bool operator<  (const string& lhs, const char*   rhs);
+		friend bool operator<= (const string& lhs, const string& rhs);		// (4)
+		friend bool operator<= (const char*   lhs, const string& rhs);
+		friend bool operator<= (const string& lhs, const char*   rhs);
+		friend bool operator>  (const string& lhs, const string& rhs);		// (5)
+		friend bool operator>  (const char*   lhs, const string& rhs);
+		friend bool operator>  (const string& lhs, const char*   rhs);
+		friend bool operator>= (const string& lhs, const string& rhs);		// (6)
+		friend bool operator>= (const char*   lhs, const string& rhs);
+		friend bool operator>= (const string& lhs, const char*   rhs);
+
+
+		// Exchanges the values of two strings
+		//	Exchanges the values of string objects x and y, such that after the call to this function,
+		//  the value of x is the one which was on y before the call, and the value of y is that of x.
+		friend void swap (string& x, string& y);
+
+		
+		// Extract string from stream
+		//	Extracts a string from the input stream is, storing the sequence in str, which is overwritten
+		//  (the previous value of str is replaced).
+		friend std::istream& operator>> (std::istream& is, string& str);
+		// Insert string into stream
+		//	Inserts the sequence of characters that conforms value of str into os.
+		friend std::ostream& operator<< (std::ostream& os, const string& str);
+		
+
+		// Get line from stream into string
+		// Extracts characters from is and stores them into str until the delimitation character delim is found
+		//	(or the newline character, '\n', for (2)).
+		friend std::istream& getline(std::istream&  is, string& str, char delim);	// (1)
+		friend std::istream& getline(std::istream&& is, string& str, char delim);
+		friend std::istream& getline(std::istream&  is, string& str);				// (2)
+		friend std::istream& getline(std::istream&& is, string& str);
 	};
+
+	// friend declaration
+	string operator+ (const string& lhs, const string& rhs);		// string(1)
+	string operator+ (string&&      lhs, string&&      rhs);
+	string operator+ (string&&      lhs, const string& rhs);
+	string operator+ (const string& lhs, string&&      rhs);
+	string operator+ (const string& lhs, const char*   rhs);		// c - string(2)
+	string operator+ (string&&      lhs, const char*   rhs);
+	string operator+ (const char*   lhs, const string& rhs);
+	string operator+ (const char*   lhs, string&&      rhs);
+	string operator+ (const string& lhs, char          rhs);		// character(3)
+	string operator+ (string&&      lhs, char          rhs);
+	string operator+ (char          lhs, const string& rhs);
+	string operator+ (char          lhs, string&&      rhs);
+
+	bool operator== (const string& lhs, const string& rhs);		// (1)
+	bool operator== (const char*   lhs, const string& rhs);
+	bool operator== (const string& lhs, const char*   rhs);
+	bool operator!= (const string& lhs, const string& rhs);		// (2)
+	bool operator!= (const char*   lhs, const string& rhs);
+	bool operator!= (const string& lhs, const char*   rhs);
+	bool operator<  (const string& lhs, const string& rhs);		// (3)
+	bool operator<  (const char*   lhs, const string& rhs);
+	bool operator<  (const string& lhs, const char*   rhs);
+	bool operator<= (const string& lhs, const string& rhs);		// (4)
+	bool operator<= (const char*   lhs, const string& rhs);
+	bool operator<= (const string& lhs, const char*   rhs);
+	bool operator>  (const string& lhs, const string& rhs);		// (5)
+	bool operator>  (const char*   lhs, const string& rhs);
+	bool operator>  (const string& lhs, const char*   rhs);
+	bool operator>= (const string& lhs, const string& rhs);		// (6)
+	bool operator>= (const char*   lhs, const string& rhs);
+	bool operator>= (const string& lhs, const char*   rhs);
+
+	void swap(string& x, string& y);
+
+	std::istream& operator>> (std::istream& is, string& str);
+	std::ostream& operator<< (std::ostream& os, const string& str);
+
+	std::istream& getline(std::istream&  is, string& str, char delim);	// (1)
+	std::istream& getline(std::istream&& is, string& str, char delim);
+	std::istream& getline(std::istream&  is, string& str);				// (2)
+	std::istream& getline(std::istream&& is, string& str);
 }
 #endif
