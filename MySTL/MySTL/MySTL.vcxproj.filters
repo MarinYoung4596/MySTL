@@ -36,6 +36,9 @@
     <ClInclude Include="TestCase\test_string.h">
       <Filter>TestCase</Filter>
     </ClInclude>
+    <ClInclude Include="Implementation\string_impl.h">
+      <Filter>Implementation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

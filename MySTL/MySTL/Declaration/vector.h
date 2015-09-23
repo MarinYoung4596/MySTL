@@ -22,13 +22,15 @@ namespace MySTL
 	class vector
 	{
 	public:
-		typedef std::size_t         size_type;
-		typedef T                   value_type;
-		typedef T&                  reference;
-		typedef const T&            const_reference;
-		typedef T*                  iterator;
-		typedef const T*            const_iterator;
-		typedef std::ptrdiff_t		difference_type;
+		typedef std::size_t						size_type;
+		typedef T								value_type;
+		typedef T&								reference;
+		typedef const T&						const_reference;
+		typedef T*								iterator;
+		typedef const T*						const_iterator;
+		typedef std::reverse_iterator<T*>		reverse_iterator;
+		typedef std::reverse_iterator<const T*> const_reverse_iterator;
+		typedef std::ptrdiff_t					difference_type;
 
 	public:
 		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
@@ -63,8 +65,8 @@ namespace MySTL
 		template<typename InputIterator>
 		T* insert(const T* position, InputIterator first, InputIterator second);// insert elements: range
 		T* insert(const T* position, T &&val);						// insert elements: move
-		T* insert(const T* position, std::initializer_list<T> il);		// insert elements: initializer list
-		void clear(); //noexcept;										// clear content
+		T* insert(const T* position, std::initializer_list<T> il);	// insert elements: initializer list
+		void clear(); //noexcept;									// clear content
 		void swap(vector &x);										// swap content
 		T* erase(const T* position);                                // erase elements: single element
 		T* erase(const T* first, const T* second);					// erase elements: range
@@ -83,14 +85,14 @@ namespace MySTL
 		void shrink_to_fit();										// shrink to fit
 
 		// Iterators
-		T* begin() const { return elements; }       // return iterator to begining
-		T* end() const { return first_free; }       // return iterator to end
-		T* rbegin() const;                          // return reverse iterator to reverse begining
-		T* rend() const;                            // return reverse iterator to reverse end
-		const T* cbegin() const { return elements; }// return const_iterator to begining
-		const T* cend() const { return first_free; }// return const_iterator to end	
-		const T* crbegin() const;                   // return const_reverse_iterator to reverse beigining
-		const T* crend() const;                     // return const_reverse_iterator to reverse end
+		T* begin() const { return elements; }						// return iterator to begining
+		T* end() const { return first_free; }						// return iterator to end
+		T* rbegin() const { return reverse_iterator(elements); }	// return reverse iterator to reverse begining
+		T* rend() const { return reverse_iterator(first_free); }	// return reverse iterator to reverse end
+		const T* cbegin() const { return elements; }				// return const_iterator to begining
+		const T* cend() const { return first_free; }				// return const_iterator to end	
+		const T* crbegin() const { return const_reverse_iterator(elements); } // return const_reverse_iterator to reverse beigining
+		const T* crend() const { return const_reverse_iterator(first_free); } // return const_reverse_iterator to reverse end
 
 
 	private:
