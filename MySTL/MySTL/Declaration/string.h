@@ -67,7 +67,7 @@ namespace MySTL
 		//////////////////// destructor ////////////////////
 		// Destroys the string object.
 		// This deallocates all the storage capacity allocated by the string using its allocator.
-		~string();
+		~string() { free(); }
 
 
 
@@ -435,7 +435,9 @@ namespace MySTL
 		// check and allocate
 		void chk_n_alloc();
 		// allocate and copy
-		std::pair<iterator, iterator> alloc_n_copy(iterator first, iterator second);
+		std::pair<iterator, iterator> alloc_n_copy(const_iterator first, const_iterator second);
+		// allocate and fill n
+		std::pair<iterator, iterator> alloc_n_fill_n(const char &c, std::size_t n);
 		// destroy and deallocate
 		void free();
 		// re allocate
