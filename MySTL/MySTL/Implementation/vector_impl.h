@@ -256,8 +256,8 @@ namespace MySTL
 	{
 		if (elements)
 		{
-			for (auto p = first_free; p != elements;)
-				alloc.destroy(--p);
+			while (first_free != elements)
+				alloc.destroy(--first_free);
 		}
 	}
 
@@ -336,7 +336,7 @@ namespace MySTL
 			for (; first_free > elements + n;)
 				alloc.destroy(--first_free);
 		}
-		if (n >= size() && n < capacity())
+		else if (n >= size() && n < capacity())
 		{
 			auto len_insert = n - size();
 			first_free = uninitialized_fill_n(first_free, len_insert, val);

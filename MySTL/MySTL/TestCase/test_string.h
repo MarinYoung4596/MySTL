@@ -190,9 +190,6 @@ void testcase_modifiers()
 		while (!file.eof()) str4.push_back(file.get());
 	}
 	std::cout << str4 << '\n';
-
-
-
 }
 
 

@@ -33,7 +33,7 @@ namespace MySTL
 
 		// (1) empty string constructor (default constructor)
 		// Constructs an empty string, with a length of zero characters.
-		string() : _start(nullptr), _first_free(nullptr), _cap(nullptr) {}
+		string() : _begin(nullptr), _end(nullptr), _cap(nullptr) {}
 		// (2) copy constructor
 		// Constructs a copy of str.
 		string(const string &str);
@@ -67,7 +67,7 @@ namespace MySTL
 		//////////////////// destructor ////////////////////
 		// Destroys the string object.
 		// This deallocates all the storage capacity allocated by the string using its allocator.
-		~string() { free(); }
+		~string();
 
 
 
@@ -85,45 +85,45 @@ namespace MySTL
 
 		// Return iterator to beginning
 		// Returns an iterator pointing to the first character of the string.
-		iterator begin() { return _start; } // noexcept;
-		const_iterator begin() const { return _start; }// noexcept;
+		iterator begin() { return _begin; } // noexcept;
+		const_iterator begin() const { return _begin; }// noexcept;
 		// Return iterator to end
 		// Returns an iterator pointing to the past - the - end character of the string.
-		iterator end() { return _first_free; } // noexcept;
-		const_iterator end() const { return _first_free; }// noexcept;
+		iterator end() { return _end; } // noexcept;
+		const_iterator end() const { return _end; }// noexcept;
 		// Return reverse iterator to reverse beginning
 		// Returns a reverse iterator pointing to the last character of the string(i.e., its reverse beginning).
-		reverse_iterator rbegin() { return reverse_iterator(_start); }//noexcept;
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(_start); } // noexcept;
+		reverse_iterator rbegin() { return reverse_iterator(_begin); }//noexcept;
+		const_reverse_iterator rbegin() const { return const_reverse_iterator(_begin); } // noexcept;
 		// Return reverse iterator to reverse end
 		// Returns a reverse iterator pointing to the theoretical element preceding the first character of the 
 		//	string (which is considered its reverse end).
-		reverse_iterator rend() { return reverse_iterator(_start); } // noexcept;
-		const_reverse_iterator rend() const { return const_reverse_iterator(_first_free); } // noexcept;
+		reverse_iterator rend() { return reverse_iterator(_begin); } // noexcept;
+		const_reverse_iterator rend() const { return const_reverse_iterator(_end); } // noexcept;
 		// Return const_iterator to beginning
 		// Returns a const_iterator pointing to the first character of the string.
-		const_iterator cbegin() const { return _start; } // noexcept;
+		const_iterator cbegin() const { return _begin; } // noexcept;
 		// Return const_iterator to end
 		// Returns a const_iterator pointing to the past-the-end character of the string.
-		const_iterator cend() const { return _first_free; } // noexcept;
+		const_iterator cend() const { return _end; } // noexcept;
 		// Return const_reverse_iterator to reverse beginning
 		//	Returns a const_reverse_iterator pointing to the last character of the string(i.e. its reverse beginning).
-		const_reverse_iterator crbegin() const { return const_reverse_iterator(_start); } // noexcept;
+		const_reverse_iterator crbegin() const { return const_reverse_iterator(_begin); } // noexcept;
 		// Return const_reverse_iterator to reverse end
 		//	Returns a const_reverse_iterator pointing to the theoretical character preceding the first character of 
 		//  the string (which is considered its reverse end).
-		const_reverse_iterator crend() const { return const_reverse_iterator(_first_free); } // noexcept;
+		const_reverse_iterator crend() const { return const_reverse_iterator(_end); } // noexcept;
 
 
 
 		//////////////////// capacity ////////////////////
 		// Return length of string
 		// Returns the length of the string, in terms of bytes.
-		std::size_t size() const { return _first_free - _start; }// noexcept;
+		std::size_t size() const { return _end - _begin; }// noexcept;
 		
 		// Return length of string
 		//	Returns the length of the string, in terms of bytes.
-		std::size_t length() const { return _first_free - _start; } // noexcept;
+		std::size_t length() const { return _end - _begin; } // noexcept;
 
 		// Return maximum size of string
 		//	Returns the maximum length the string can reach.
@@ -136,7 +136,7 @@ namespace MySTL
 
 		// Return size of allocated storage
 		// 	Returns the size of the storage space currently allocated for the string, expressed in terms of bytes.
-		std::size_t capacity() const { return _cap - _start; }// noexcept;
+		std::size_t capacity() const { return _cap - _begin; }// noexcept;
 
 		// Request a change in capacity
 		//	Requests that the string capacity be adapted to a planned change in size to a length of up to n characters.
@@ -148,7 +148,7 @@ namespace MySTL
 
 		// Test if string is empty
 		//	Returns whether the string is empty(i.e.whether its length is 0).
-		bool empty() const { return _start == _first_free; }//noexcept;
+		bool empty() const { return _begin == _end; }//noexcept;
 	
 		// Shrink to fit
 		// 	Requests the string to reduce its capacity to fit its size.
@@ -159,8 +159,8 @@ namespace MySTL
 		//////////////////// element access ////////////////////
 		// Get character of string
 		// Returns a reference to the character at position pos in the string.
-		char& operator[] (std::size_t pos) { return *(_start + pos); }
-		const char& operator[] (std::size_t pos) const { return *(_start + pos); }
+		char& operator[] (std::size_t pos) { return *(_begin + pos); }
+		const char& operator[] (std::size_t pos) const { return *(_begin + pos); }
 
 		// Get character in string
 		//	Returns a reference to the character at position pos in the string.
@@ -169,13 +169,13 @@ namespace MySTL
 
 		// Access last character
 		//	Returns a reference to the last character of the string.
-		char& back() { return *(_first_free - 1); }
-		const char& back() const { return *(_first_free - 1); }
+		char& back() { return *(_end - 1); }
+		const char& back() const { return *(_end - 1); }
 
 		// Access first character
 		//	Returns a reference to the first character of the string.
-		char& front() { return *_start; }
-		const char& front() const { return *_start; }
+		char& front() { return *_begin; }
+		const char& front() const { return *_begin; }
 
 
 
@@ -426,8 +426,8 @@ namespace MySTL
 	private:
 		static const std::size_t npos = -1;
 
-		char *_start;
-		char *_first_free;
+		char *_begin;
+		char *_end;
 		char *_cap;
 
 		std::allocator<char> alloc;
@@ -435,13 +435,16 @@ namespace MySTL
 		// check and allocate
 		void chk_n_alloc();
 		// allocate and copy
-		std::pair<iterator, iterator> alloc_n_copy(const_iterator first, const_iterator second);
+		void alloc_n_copy(const_iterator first, const_iterator second);
 		// allocate and fill n
-		std::pair<iterator, iterator> alloc_n_fill_n(const char &c, std::size_t n);
+		void alloc_n_fill_n(const char &c, std::size_t n);
 		// destroy and deallocate
 		void free();
 		// re allocate
 		void reallocate();
+		// insert-help
+		iterator insert_help(iterator pos, std::size_t n, value_type c);
+
 
 	public:
 		//////////////////// non-member functions overloads ////////////////////

@@ -1,64 +1,29 @@
-﻿生成启动时间为 9/22/2015 12:41:46 PM。
+﻿生成启动时间为 9/24/2015 7:36:22 PM。
      1>项目“C:\Users\MY\Documents\MySTL\MySTL\MySTL\MySTL.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MDd /GS- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
      1>cl : 命令行 warning D9025: 正在重写“/sdl”(用“/GS-”)
          main.cpp
-     1>c:\users\my\documents\mystl\mystl\mystl\vector_impl.h(49): error C2664: “void std::allocator<T>::construct(_Ty *,const _Ty &)”: 无法将参数 1 从“size_t”转换为“std::string *”
+     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(49): error C2664: “void std::allocator<T>::construct(_Ty *,const _Ty &)”: 无法将参数 1 从“size_t”转换为“std::string *”
                  with
                  [
                      T=std::string
          ,            _Ty=std::string
                  ]
                  从整型转换为指针类型要求 reinterpret_cast、C 样式转换或函数样式转换
-                 c:\users\my\documents\mystl\mystl\mystl\vector_impl.h(46): 编译类 模板 成员函数“MySTL::vector<std::string>::vector(const size_t,const T &)”时
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(46): 编译类 模板 成员函数“MySTL::vector<std::string>::vector(const size_t,const T &)”时
                  with
                  [
                      T=std::string
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\main.cpp(21): 参见对正在编译的函数 模板 实例化“MySTL::vector<std::string>::vector(const size_t,const T &)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(24): 参见对正在编译的函数 模板 实例化“MySTL::vector<std::string>::vector(const size_t,const T &)”的引用
                  with
                  [
                      T=std::string
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\main.cpp(21): 参见对正在编译的类 模板 实例化“MySTL::vector<std::string>”的引用
-     1>c:\users\my\documents\mystl\mystl\mystl\main.cpp(13): error C2679: 二进制“<<”: 没有找到接受“std::string”类型的右操作数的运算符(或没有可接受的转换)
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(498): 可能是“std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_streambuf<char,std::char_traits<char>> *)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(478): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(const void *)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(458): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(long double)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(438): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(double)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(418): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(float)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(397): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned __int64)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(377): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(356): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned long)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(336): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(long)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(316): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned int)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(291): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(int)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(271): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned short)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(237): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(short)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(217): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::_Bool)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(210): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::ios_base &(__cdecl *)(std::ios_base &))”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(203): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_ios<char,std::char_traits<char>> &(__cdecl *)(std::basic_ios<char,std::char_traits<char>> &))”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(197): 或       “std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_ostream<char,std::char_traits<char>> &(__cdecl *)(std::basic_ostream<char,std::char_traits<char>> &))”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(699): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const char *)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(746): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,char)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(784): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const char *)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(831): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,char)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(957): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const signed char *)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(964): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,signed char)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(971): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const unsigned char *)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(978): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,unsigned char)”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(988): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>,T>(std::basic_ostream<char,std::char_traits<char>> &&,const _Ty &)”
-                 with
-                 [
-                     T=std::string
-         ,            _Ty=std::string
-                 ]
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream(1026): 或       “std::basic_ostream<char,std::char_traits<char>> &std::operator <<<char,std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const std::error_code &)”
-                 尝试匹配参数列表“(std::ostream, std::string)”时
-                 c:\users\my\documents\mystl\mystl\mystl\main.cpp(22): 参见对正在编译的函数 模板 实例化“void printVector<std::string>(MySTL::vector<std::string> &)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(24): 参见对正在编译的类 模板 实例化“MySTL::vector<std::string>”的引用
      1>已完成生成项目“C:\Users\MY\Documents\MySTL\MySTL\MySTL\MySTL.vcxproj”(Build 个目标)的操作 - 失败。
 
 生成失败。
 
-已用时间 00:00:01.13
+已用时间 00:00:03.03
