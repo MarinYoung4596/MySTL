@@ -166,7 +166,7 @@ namespace MySTL
 		if (space_left >= n)
 		{
 			for (auto curr = end() - 1; curr != position; --curr)
-				*(curr + space_left) = *curr;
+				*(curr + n) = *curr;
 			uninitialized_fill_n(position, n, val);
 			first_free += n;
 		}
@@ -220,32 +220,7 @@ namespace MySTL
 	template <typename T>
 	T* vector<T>::insert(const T* position, std::initializer_list<T> il)
 	{
-		if (position < begin() || position > end())
-			throw std::out_of_range("out of range!");
-		if (!il.size())
-			return const_cast<T*>(position);
-
-		auto space_left = cap - first_free;
-		auto space_required = il.size();
-		if (space_left >= il.size())
-		{
-			T *_start = position + space_required;
-			T *_end = std::max(_start, end());
-			_end = uninitialized_copy(make_move_iterator(position), make_move_iterator(_end), _start);
-			uninitialized_copy(make_move_iterator(il.begin()), make_move_iterator(il.end()), position); // insert
-			first_free = _end;
-		}
-		else
-		{
-			T *_start = alloc.allocate(capacity() + space_required);
-			T *_end = uninitialized_copy(make_move_iterator(begin()), make_move_iterator(position), _start);
-			_end = uninitialized_copy(make_move_iterator(il.begin()), make_move_iterator(il.end()), _end); // insert
-			_end = uninitialized_copy(make_move_iterator(position), make_move_iterator(end()), _end);
-			free();
-			elements = _start;
-			first_free = cap = _end;
-		}
-		return const_cast<T*>(position);
+		return insert<T>(position, il.begin(), il.end());
 	}
 
 	/////////////////////////////////////////////////////////////

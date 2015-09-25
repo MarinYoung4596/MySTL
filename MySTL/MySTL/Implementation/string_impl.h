@@ -6,7 +6,6 @@
 
 #include "../Declaration/string.h"
 
-#define  MIN(A, B) (A) < (B) ? (A) : (B)
 
 
 namespace MySTL
@@ -126,6 +125,7 @@ namespace MySTL
 
 
 	//////////////////// string assignment ////////////////////
+	// operator =
 	string& string::operator= (const string& str)
 	{
 		if (this != &str)
@@ -233,25 +233,24 @@ namespace MySTL
 	}
 
 
-	//////////////////// modifiers ////////////////////
-	string::iterator string::insert_help(iterator p, std::size_t n, value_type c)
+	//////////////////// element access ////////////////////
+	char& string::at(std::size_t pos)
 	{
-		auto newcap = capacity() > n ? 2 * capacity() : capacity() + n;
-		iterator start = alloc.allocate(newcap);
-		iterator finish = std::uninitialized_copy(std::make_move_iterator(_begin), std::make_move_iterator(p), start);
-		finish = std::uninitialized_fill_n(finish, n, c);
-		
-		iterator result = finish;
+		if (pos > size())
+			throw std::out_of_range("out of range!");
+		return *(_begin + pos);
+	}
 
-		finish = std::uninitialized_copy(std::make_move_iterator(finish), std::make_move_iterator(_end), finish);
-		free();
-		_begin = start;
-		_end = finish;
-		_cap = _begin + newcap;
-		return result;
+	const char& string::at(std::size_t pos) const
+	{
+		if (pos > size())
+			throw std::out_of_range("out of range!");
+		return *(_begin + pos);
 	}
 
 
+	//////////////////// modifiers ////////////////////
+	// operator +=
 	string& string::operator+= (const string& str)
 	{
 		insert(size(), str);
@@ -279,28 +278,28 @@ namespace MySTL
 	// insert
 	string& string::insert(std::size_t pos, const string& str)
 	{
-		//if (pos > size())
-		//	throw std::out_of_range("out of range");
-		//if (str.empty())
-		//	return *this;
-
 		insert(_begin + pos, str.begin(), str.end());
 		return *this;
 	}
 
 	string& string::insert(std::size_t pos, const string& str, std::size_t subpos, std::size_t sublen)
 	{
-
+		insert(_begin + pos, str.begin() + subpos, str.begin() + subpos + sublen);
+		return *this;
 	}
 
 	string& string::insert(std::size_t pos, const char* s)
 	{
-
+		std::size_t len = 0;
+		for (auto p = s; p != '\0'; ++p, ++len);
+		insert(_begin + pos, s, s + len);
+		return *this;
 	}
 
 	string& string::insert(std::size_t pos, const char* s, std::size_t n)
 	{
-
+		insert(_begin + pos, s, s + n);
+		return *this;
 	}
 
 	string& string::insert(std::size_t pos, std::size_t n, char c)
@@ -312,22 +311,36 @@ namespace MySTL
 	// insert auxiliary: fill n
 	string::iterator string::insert(const_iterator p, std::size_t n, char c)
 	{
-		auto newcap = capacity() > n ? 2 * capacity() : capacity() + n;
-		iterator start = alloc.allocate(newcap);
-		iterator finish = std::uninitialized_copy(
-			std::make_move_iterator(_begin), 
-			std::make_move_iterator(const_cast<iterator>(p)), 
-			start);
-		finish = std::uninitialized_fill_n(finish, n, c);
+		if (p < _begin || p > _end)
+			throw std::out_of_range("out of range");
+		if (!n)
+			return const_cast<iterator>(p);
 
-		iterator result = finish;
+		auto space_left = _cap - _end;
 
-		finish = std::uninitialized_copy(std::make_move_iterator(finish), std::make_move_iterator(_end), finish);
-		free();
-		_begin = start;
-		_end = finish;
-		_cap = _begin + newcap;
-		return result;
+		iterator res = nullptr;
+		if (n <= space_left)
+		{
+			for (iterator it = _end - 1; it != p; --it)
+				*(it + n) = *it;
+			res = _end = std::uninitialized_fill_n(p, n, c);
+		}
+		else
+		{
+			auto newcap = capacity() > n ? 2 * capacity() : capacity() + n;
+			iterator start = alloc.allocate(newcap);
+			iterator finish = std::uninitialized_copy(
+				std::make_move_iterator(_begin),
+				std::make_move_iterator(const_cast<iterator>(p)),
+				start);
+			res = finish = std::uninitialized_fill_n(finish, n, c);
+			finish = std::uninitialized_copy(std::make_move_iterator(finish), std::make_move_iterator(_end), finish);
+			free();
+			_begin = start;
+			_end = finish;
+			_cap = _begin + newcap;
+		}
+		return res;
 	}
 
 	string::iterator string::insert(const_iterator p, char c)
@@ -339,20 +352,36 @@ namespace MySTL
 	template <typename InputIterator>
 	string::iterator string::insert(iterator p, InputIterator first, InputIterator last)
 	{
-		auto newcap = capacity() > n ? 2 * capacity() : capacity() + n;
-		iterator start = alloc.allocate(newcap);
-		iterator finish = std::uninitialized_copy(
-			std::make_move_iterator(_begin), std::make_move_iterator(p), start);
-		finish = std::uninitialized_copy(std::make_move_iterator(first), std::make_move_iterator(last), finish);
+		if (p < _begin || p > _end)
+			throw std::out_of_range("out of range");
 
-		iterator result = finish;
+		difference_type space_required = last - first;
+		if (!space_required)
+			return p;
 
-		finish = std::uninitialized_copy(std::make_move_iterator(p), std::make_move_iterator(_end), finish);
-		free();
-		_begin = start;
-		_end = finish;
-		_cap = start + newcap;
-		return result;
+		difference_type space_left = _cap - _end;
+		iterator res = nullptr;
+
+		if (space_required <= space_left)
+		{
+			for (iterator it = _end - 1; it != p; --it)
+				*(it + space_required) = *it;
+			res = _end = std::uninitialized_copy(first, last, p);
+		}
+		else
+		{
+			auto newcap = capacity() > n ? 2 * capacity() : capacity() + n;
+			iterator start = alloc.allocate(newcap);
+			iterator finish = std::uninitialized_copy(
+				std::make_move_iterator(_begin), std::make_move_iterator(p), start);
+			res = finish = std::uninitialized_copy(std::make_move_iterator(first), std::make_move_iterator(last), finish);
+			finish = std::uninitialized_copy(std::make_move_iterator(p), std::make_move_iterator(_end), finish);
+			free();
+			_begin = start;
+			_end = finish;
+			_cap = start + newcap;
+		}
+		return res;
 	}
 
 	string& string::insert(const_iterator p, std::initializer_list<char> il)
@@ -360,6 +389,55 @@ namespace MySTL
 		insert(const_cast<iterator>(p), const_cast<iterator>(il.begin()), const_cast<iterator>(il.end()));
 		return *this;
 	}
+
+	// append
+	string& string::append(const string& str)
+	{
+		return insert(size(), str);
+	}
+
+	string& string::append(const string& str, std::size_t subpos, std::size_t sublen)
+	{
+		return insert(size(), str, subpos, sublen);
+	}
+
+	string& string::append(const char* s)
+	{
+		return insert(size(), s);
+	}
+
+	string& string::append(const char* s, std::size_t n)
+	{
+		return insert(size(), s, n);
+	}
+
+	string& string::append(std::size_t n, char c)
+	{
+		return insert(size(), n, c);
+	}
+
+	template <typename InputIterator>
+	string& string::append(InputIterator first, InputIterator last)
+	{
+		insert(_end, first, last);
+		return *this;
+	}
+
+	string& string::append(std::initializer_list<char> il)
+	{
+		return insert(_end, il);
+	}
+
+	void string::push_back(char c)
+	{
+		insert(_end, c);
+	}
+
+	// assign
+
+	// erase
+
+	// replace
 }
 
 #endif
