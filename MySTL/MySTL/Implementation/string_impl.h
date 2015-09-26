@@ -275,6 +275,132 @@ namespace MySTL
 		return *this;
 	}
 
+
+	// append
+	string& string::append(const string& str)
+	{
+		return insert(size(), str);
+	}
+
+	string& string::append(const string& str, std::size_t subpos, std::size_t sublen)
+	{
+		return insert(size(), str, subpos, sublen);
+	}
+
+	string& string::append(const char* s)
+	{
+		return insert(size(), s);
+	}
+
+	string& string::append(const char* s, std::size_t n)
+	{
+		return insert(size(), s, n);
+	}
+
+	string& string::append(std::size_t n, char c)
+	{
+		return insert(size(), n, c);
+	}
+
+	template <typename InputIterator>
+	string& string::append(InputIterator first, InputIterator last)
+	{
+		insert(_end, first, last);
+		return *this;
+	}
+
+	string& string::append(std::initializer_list<char> il)
+	{
+		return insert(_end, il);
+	}
+
+	void string::push_back(char c)
+	{
+		chk_n_alloc();
+		alloc.construct(_end++, c);
+	}
+
+	// assign
+	string& string::assign(const string& str)
+	{
+		return assign(str.begin(), str.end());
+	}
+
+	string& string::assign(const string& str, std::size_t subpos, std::size_t sublen)
+	{
+		return assign(str.begin() + subpos, str.begin() + subpos + sublen);
+	}
+
+	string& string::assign(const char* s)
+	{
+		std::size_t len = 0;
+		for (auto p = s; p != '\0'; ++p, ++len);
+		return assign(s, s + len);
+	}
+
+	string& string::assign(const char* s, std::size_t n)
+	{
+		return assign(s, s + n);
+	}
+
+	string& string::assign(std::size_t n, char c)
+	{
+		if (n <= capacity())
+		{
+			iterator finish = std::uninitialized_fill_n(_begin, n, c);
+			_end = n <= size() ? _end : finish;
+		}
+		else
+		{
+			free();
+			auto newcap = 2 * capacity();
+			iterator data = alloc.allocate(newcap);
+			_end = std::uninitialized_fill_n(data, n, c);
+			_begin = data;
+			_cap = _begin + newcap;
+		}
+		return *this;
+	}
+
+	template <typename InputIterator>
+	string& string::assign(InputIterator first, InputIterator last)
+	{
+		difference_type space_required = last - first;
+		if (space_required <= capacity())
+		{
+			iterator finish = std::uninitialized_copy(first, last, _begin);
+			_end = space_required <= size() ? _end : finish;
+		}
+		else
+		{
+			free();
+			auto newcap = 2 * capacity();
+			iterator data = alloc.allocate(newcap);
+			_end = std::uninitialized_copy(first, last, data);
+			_begin = data;
+			_cap = _begin + newcap;
+		}
+		return *this;
+	}
+
+	string& string::assign(std::initializer_list<char> il)
+	{
+		return assign(il.begin(), il.end());
+	}
+
+	string& string::assign(string&& str) //noexcept
+	{
+		if (this != &str)
+		{
+			_begin = str._begin;
+			_end = str._end;
+			_cap = str._cap;
+			str._begin = str._end = str._cap = nullptr;
+		}
+		return *this;
+	}
+
+
 	// insert
 	string& string::insert(std::size_t pos, const string& str)
 	{
@@ -390,52 +516,30 @@ namespace MySTL
 		return *this;
 	}
 
-	// append
-	string& string::append(const string& str)
-	{
-		return insert(size(), str);
-	}
-
-	string& string::append(const string& str, std::size_t subpos, std::size_t sublen)
-	{
-		return insert(size(), str, subpos, sublen);
-	}
-
-	string& string::append(const char* s)
-	{
-		return insert(size(), s);
-	}
-
-	string& string::append(const char* s, std::size_t n)
-	{
-		return insert(size(), s, n);
-	}
-
-	string& string::append(std::size_t n, char c)
-	{
-		return insert(size(), n, c);
-	}
-
-	template <typename InputIterator>
-	string& string::append(InputIterator first, InputIterator last)
-	{
-		insert(_end, first, last);
-		return *this;
-	}
-
-	string& string::append(std::initializer_list<char> il)
-	{
-		return insert(_end, il);
-	}
-
-	void string::push_back(char c)
-	{
-		insert(_end, c);
-	}
-
-	// assign
 
 	// erase
+	string& string::erase(std::size_t pos = 0, std::size_t len = npos)
+	{
+		return erase(_begin + pos, _begin + pos + len);
+	}
+
+	string::iterator string::erase(const_iterator p)
+	{
+		return erase(p, p + 1);
+	}
+
+	string::iterator string::erase(const_iterator first, const_iterator last)
+	{
+		if (first < _begin || first > _end ||
+			last < _begin || last > _end)
+			throw std::out_of_range("out of range");
+		if (first > last)
+			throw std::invalid_argument("invalid argument");
+		if (first == last)
+			return const_cast<iterator>(first);
+
+		///difference_type 
+	}
 
 	// replace
 }
