@@ -445,6 +445,9 @@ namespace MySTL
 		// insert-help
 		iterator insert_help(iterator pos, std::size_t n, value_type c);
 
+		// swap
+		void swap(iterator s, iterator p);
+
 
 	public:
 		//////////////////// non-member functions overloads ////////////////////

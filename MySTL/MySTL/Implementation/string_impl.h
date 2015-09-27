@@ -333,9 +333,9 @@ namespace MySTL
 
 	string& string::assign(const char* s)
 	{
-		std::size_t len = 0;
-		for (auto p = s; p != '\0'; ++p, ++len);
-		return assign(s, s + len);
+		auto p = s;
+		for (; p != '\0'; ++p);
+		return assign(s, p);
 	}
 
 	string& string::assign(const char* s, std::size_t n)
@@ -416,9 +416,9 @@ namespace MySTL
 
 	string& string::insert(std::size_t pos, const char* s)
 	{
-		std::size_t len = 0;
-		for (auto p = s; p != '\0'; ++p, ++len);
-		insert(_begin + pos, s, s + len);
+		auto p = s;
+		for (; p != '\0'; ++p);
+		insert(_begin + pos, s, p);
 		return *this;
 	}
 
@@ -447,9 +447,10 @@ namespace MySTL
 		iterator res = nullptr;
 		if (n <= space_left)
 		{
-			for (iterator it = _end - 1; it != p; --it)
-				*(it + n) = *it;
-			res = _end = std::uninitialized_fill_n(p, n, c);
+			for (iterator p = _end - 1; p != p; --p)
+				*(p + n) = *p;
+			res = std::uninitialized_fill_n(p, n, c);
+			_end += n;
 		}
 		else
 		{
@@ -490,9 +491,10 @@ namespace MySTL
 
 		if (space_required <= space_left)
 		{
-			for (iterator it = _end - 1; it != p; --it)
-				*(it + space_required) = *it;
-			res = _end = std::uninitialized_copy(first, last, p);
+			for (iterator p = _end - 1; p != p; --p)
+				*(p + space_required) = *p;
+			res = std::uninitialized_copy(first, last, p);
+			_end += space_required;
 		}
 		else
 		{
@@ -538,10 +540,123 @@ namespace MySTL
 		if (first == last)
 			return const_cast<iterator>(first);
 
-		///difference_type 
+		difference_type len = last - first;
+		for (auto i = first; i != last && i != _end; ++i)
+			*i = *(i + len);
+		
+		const_iterator stop = _end - len;
+		for (; _end != stop; )
+			alloc.destroy(--_end);
+		
+		return const_cast<iterator>(first);
 	}
 
+
 	// replace
+	string& string::replace(std::size_t pos, std::size_t len, const string& str)
+	{
+		return replace(_begin + pos, _begin + pos + len, str.begin(), str.end());
+	}
+
+	string& string::replace(const_iterator i1, const_iterator i2, const string& str)
+	{
+		return replace(i1, i2, str.begin(), str.end());
+	}
+
+	string& string::replace(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen)
+	{
+		return replace(_begin + pos, _begin + pos + len, str.begin() + subpos, str.begin() + subpos + sublen);
+	}
+
+	string&	string::replace(std::size_t pos, std::size_t len, const char* s)
+	{
+		auto p = s;
+		for (; p != '\0'; ++p);
+		return replace(_begin + pos, _begin + pos + len, s, p);
+	}
+
+	string& string::replace(const_iterator i1, const_iterator i2, const char* s)
+	{
+		auto p = s;
+		for (; p != '\0'; ++p);
+		return replace(i1, i2, s, p);
+	}
+
+	string& string::replace(std::size_t pos, std::size_t len, const char* s, std::size_t n)
+	{
+		return replace(_begin + pos, _begin + pos + len, s, s + n);
+	}
+
+	string& string::replace(const_iterator i1, const_iterator i2, const char* s, std::size_t n)
+	{
+		return replace(i1, i2, s, s + n);
+	}
+
+	string& string::replace(std::size_t pos, std::size_t len, std::size_t n, char c)
+	{
+		return replace(_begin + pos, _begin + pos + len, n, c);
+	}
+
+	string& string::replace(const_iterator i1, const_iterator i2, std::size_t n, char c)
+	{
+		////
+	}
+
+	template <typename InputIterator>
+	string& string::replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last)
+	{
+		////
+	}
+
+	string& string::replace(const_iterator i1, const_iterator i2, std::initializer_list<char> il)
+	{
+		return replace(i1, i2, il.begin(), il.end());
+	}
+
+
+	// swap
+	void string::swap(string& str)
+	{
+		if (this != &str)
+		{
+			/////
+		}
+	}
+
+
+	// pop_back
+	void string::pop_back()
+	{
+		if (_begin)
+			alloc.destroy(--_end);
+	}
+
+
+
+	//////////////////// string operations ////////////////////
+	const char* string::c_str() const //noexcept
+	{
+		return _begin;
+	}
+
+	const char* string::data() const //noexcept
+	{
+		return _begin;
+	}
+
+	string::allocator_type string::get_allocator() const //noexcept
+	{
+		return alloc;
+	}
+
+	std::size_t string::copy(char* s, std::size_t len, std::size_t pos = 0) const
+	{
+		auto end_copy = (pos + len) < length() ? (_begin + pos + len) : _end;
+		auto finish =  std::uninitialized_copy(_begin + pos, end_copy, s);
+		return end_copy == _end ? length() - pos : len;
+	}
+
+
 }
 
 #endif
