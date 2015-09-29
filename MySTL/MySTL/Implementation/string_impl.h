@@ -599,13 +599,17 @@ namespace MySTL
 
 	string& string::replace(const_iterator i1, const_iterator i2, std::size_t n, char c)
 	{
-		////
+		iterator finish = erase(i1, i2);
+		insert(finish, n, c);
+		return *this;
 	}
 
 	template <typename InputIterator>
 	string& string::replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last)
 	{
-		////
+		iterator finish = erase(i1, i2);
+		insert(finish, first, last);
+		return *this;
 	}
 
 	string& string::replace(const_iterator i1, const_iterator i2, std::initializer_list<char> il)
@@ -636,12 +640,18 @@ namespace MySTL
 	//////////////////// string operations ////////////////////
 	const char* string::c_str() const //noexcept
 	{
-		return _begin;
+		char *res = new char(size() + 1);
+		char *finish = std::uninitialized_copy(_begin, _end, res);
+		*finish = '\0';
+		return res;
 	}
 
 	const char* string::data() const //noexcept
 	{
-		return _begin;
+		char *res = new char(size() + 1);
+		char *finish = std::uninitialized_copy(_begin, _end, res);
+		*finish = '\0';
+		return res;
 	}
 
 	string::allocator_type string::get_allocator() const //noexcept
@@ -657,6 +667,120 @@ namespace MySTL
 	}
 
 
+	// find
+	std::size_t string::find(const string& str, std::size_t pos = 0) const //noexcept
+	{
+		// KMP ?
+	}
+
+	std::size_t string::find(const char* s, std::size_t pos = 0) const
+	{
+		std::size_t len = 0;
+		for (auto p = s; p != '\0'; ++p, ++len);
+		return find(s, pos, len);
+	}
+
+	std::size_t string::find(const char* s, std::size_t pos, std::size_t n) const
+	{
+
+	}
+
+	std::size_t string::find(char c, std::size_t pos = 0) const //noexcept
+	{
+		for (auto cit = cbegin() + pos; cit != cend(); ++cit)
+		{
+			if (*cit == c)
+				return cit - cbegin();
+		}
+		return npos; // -1
+	}
+
+
+	// rfind
+	std::size_t string::rfind(const string& str, std::size_t pos = npos) const //noexcept
+	{
+
+	}
+	
+	std::size_t string::rfind(const char* s, std::size_t pos = npos) const
+	{
+
+	}
+
+	std::size_t string::rfind(const char* s, std::size_t pos, std::size_t n) const
+	{
+
+	}
+
+	std::size_t string::rfind(char c, std::size_t pos = npos) const // noexcept
+	{
+
+	}
+
+	//std::size_t find_first_of(const string& str, std::size_t pos = 0) const noexcept;	// string(1)
+	//std::size_t find_first_of(const char* s, std::size_t pos = 0) const;				// c - string(2)
+	//std::size_t find_first_of(const char* s, std::size_t pos, std::size_t n) const;		// buffer(3)
+	//std::size_t find_first_of(char c, std::size_t pos = 0) const noexcept;				// character(4)
+
+	//// Find character in string from the end
+	//// Searches the string for the last character that matches any of the characters specified in its arguments.
+	//std::size_t find_last_of(const string& str, std::size_t pos = npos) const noexcept;	// string(1)
+	//std::size_t find_last_of(const char* s, std::size_t pos = npos) const;				// c - string(2)
+	//std::size_t find_last_of(const char* s, std::size_t pos, std::size_t n) const;		// buffer(3)
+	//std::size_t find_last_of(char c, std::size_t pos = npos) const noexcept;			// character(4)
+
+	//// Find absence of character in string
+	//// Searches the string for the first character that does not match any of the characters specified in its arguments.
+	//std::size_t find_first_not_of(const string& str, std::size_t pos = 0) const noexcept;// string(1)
+	//std::size_t find_first_not_of(const char* s, std::size_t pos = 0) const;			// c - string(2)
+	//std::size_t find_first_not_of(const char* s, std::size_t pos, std::size_t n) const;	// buffer(3)
+	//std::size_t find_first_not_of(char c, std::size_t pos = 0) const noexcept;			// character(4)
+
+	//// Find non-matching character in string from the end
+	//// Searches the string for the last character that does not match any of the characters specified in its arguments.
+	//std::size_t find_last_not_of(const string& str, std::size_t pos = npos) const noexcept;// string(1)
+	//std::size_t find_last_not_of(const char* s, std::size_t pos = npos) const;			// c - string(2)
+	//std::size_t find_last_not_of(const char* s, std::size_t pos, std::size_t n) const;	// buffer(3)
+	//std::size_t find_last_not_of(char c, std::size_t pos = npos) const noexcept;		// character(4)
+
+
+	string string::substr(std::size_t pos = 0, std::size_t len = npos) const
+	{
+		string res(*this, pos, len);
+		return res;
+	}
+
+
+	// compare
+	int string::compare(const string& str) const //noexcept
+	{
+
+	}
+
+	int string::compare(std::size_t pos, std::size_t len, const string& str) const
+	{
+
+	}
+
+	int string::compare(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen) const
+	{
+
+	}
+
+	int string::compare(const char* s) const
+	{
+
+	}
+
+	int string::compare(std::size_t pos, std::size_t len, const char* s) const
+	{
+
+	}
+
+	int string::compare(std::size_t pos, std::size_t len, const char* s, std::size_t n) const
+	{
+
+	}
 }
 
 #endif
