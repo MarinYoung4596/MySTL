@@ -6,7 +6,7 @@
 #include <memory>	// uninitialized_copy & uninitialized_fill
 #include <algorithm>	// std::swap, std::max
 #include <iterator>		// make_move_iterator
-#include <exception>
+#include <stdexcept>
 
 #include "Declaration/vector.h"
 

@@ -3,12 +3,12 @@
 
 #include <initializer_list>
 #include <cstddef>		// ptrdiff_t
-#include <memory>		// allocator
+#include <memory>		// allocator, uninitialized_copy, uninitialized_fill
 
 /*
 Reference:
-C++ Primer (5th Edition)
-http://www.cplusplus.com/reference/vector/vector/
+1. C++ Primer (5th Edition)
+2. http://www.cplusplus.com/reference/vector/vector/
 
 | 0 | 1 | 2 | 3 |   |   |   |   |   |   |
 ^               ^                       ^

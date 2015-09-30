@@ -4,11 +4,13 @@
 // reference:
 // http://www.cplusplus.com/reference/string/string/?kw=string
 
-#include <memory>		// allocator
+#include <memory>		// allocator, uninitialized_copy, uninitialized_fill_n
 #include <type_traits>	
 #include <initializer_list>
 #include <iterator>		// reverse_iterator
 #include <iostream>		// std::istream, std::ostream
+#include <cstddef>		// size_t, ptrdiff_t
+#include <climits>      // UINT_MAX
 
 namespace MySTL
 {
@@ -65,6 +67,7 @@ namespace MySTL
 
 
 		//////////////////// destructor ////////////////////
+
 		// Destroys the string object.
 		// This deallocates all the storage capacity allocated by the string using its allocator.
 		~string();
@@ -72,6 +75,7 @@ namespace MySTL
 
 
 		//////////////////// string assignment ////////////////////
+
 		// Assigns a new value to the string, replacing its current contents.
 		string& operator= (const string& str);				// string
 		string& operator= (const char* s);					// c-string
@@ -117,6 +121,7 @@ namespace MySTL
 
 
 		//////////////////// capacity ////////////////////
+
 		// Return length of string
 		// Returns the length of the string, in terms of bytes.
 		std::size_t size() const { return _end - _begin; }// noexcept;
@@ -127,7 +132,7 @@ namespace MySTL
 
 		// Return maximum size of string
 		//	Returns the maximum length the string can reach.
-		std::size_t max_size() const noexcept;
+		std::size_t max_size() const { return size_type(UINT_MAX / sizeof(char)); }//noexcept;
 
 		// Resize string
 		//	Resizes the string to a length of n characters.
@@ -157,6 +162,7 @@ namespace MySTL
 
 
 		//////////////////// element access ////////////////////
+
 		// Get character of string
 		// Returns a reference to the character at position pos in the string.
 		char& operator[] (std::size_t pos) { return *(_begin + pos); }
@@ -180,6 +186,7 @@ namespace MySTL
 
 
 		//////////////////// modifiers ////////////////////
+
 		// Append to string
 		// Extends the string by appending additional characters at the end of its current value :
 		string& operator+= (const string& str);					// string(1)
@@ -345,6 +352,7 @@ namespace MySTL
 
 
 		//////////////////// string operations ////////////////////
+
 		// Get C string equivalent
 		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string) 
 		// representing the current value of the string object.
@@ -423,12 +431,17 @@ namespace MySTL
 
 
 		//////////////////// member constants ////////////////////
+
 	private:
 		static const std::size_t npos = -1;
 
-		char *_begin;
-		char *_end;
-		char *_cap;
+		//char *_begin;
+		//char *_end;
+		//char *_cap;
+
+		iterator _begin;
+		iterator _end;
+		iterator _cap;
 
 		std::allocator<char> alloc;
 
@@ -442,15 +455,16 @@ namespace MySTL
 		void free();
 		// re allocate
 		void reallocate();
-		// insert-help
-		iterator insert_help(iterator pos, std::size_t n, value_type c);
 
 		// swap
 		void swap(iterator s, iterator p);
+		// cstring - strlen
+		std::size_t strlen(const char *s) const;
 
 
 	public:
 		//////////////////// non-member functions overloads ////////////////////
+
 		// Concatenate strings
 		// Returns a newly constructed string object with its value being the concatenation of the 
 		//	characters in lhs followed by those of rhs.
@@ -515,6 +529,7 @@ namespace MySTL
 	};
 
 	//////////////////// friend functions' declaration ////////////////////
+
 	string operator+ (const string& lhs, const string& rhs);		// string(1)
 	string operator+ (string&&      lhs, string&&      rhs);
 	string operator+ (string&&      lhs, const string& rhs);

@@ -1,8 +1,9 @@
 #ifndef _STRING_IMPL_H_
 #define _STRING_IMPL_H_
 
-#include <utility>
-#include <iterator>
+#include <utility>     // for std::move()
+#include <iterator>    // for make_move_iterator
+#include <stdexcept>   // for std::out_of_range, std::invalid_argument
 
 #include "../Declaration/string.h"
 
@@ -52,7 +53,6 @@ namespace MySTL
 		_end = _cap = finish;
 	}
 
-
 	void string::alloc_n_fill_n(const char &c, std::size_t n)
 	{
 		auto start = alloc.allocate(n);
@@ -61,6 +61,15 @@ namespace MySTL
 		_begin = start;
 		_end = _cap = finish;
 	}
+
+
+	std::size_t string::strlen(const char *s) const
+	{
+		std::size_t len = 0;
+		for (auto p = s; p != '\0'; ++p, ++len);
+		return len;
+	}
+
 
 	//////////////////// constructor ////////////////////
 	string::string(const string &str)
@@ -84,10 +93,7 @@ namespace MySTL
 
 	string::string(const char* s)
 	{
-		char *p = const_cast<char *>(s);
-		for (; p != '\0'; ++p);
-
-		alloc_n_copy(s, p);
+		alloc_n_copy(s, s + strlen(s));
 	}
 
 	string::string(const char* s, std::size_t n)
@@ -137,12 +143,9 @@ namespace MySTL
 	}
 
 	string& string::operator= (const char* s)
-	{
-		auto *p = const_cast<char *>(s);
-		for (; p != '\0'; ++p);
-		
+	{	
 		free();
-		alloc_n_copy(s, p);
+		alloc_n_copy(s, s + strlen(s));
 		return *this;
 	}
 
@@ -178,7 +181,7 @@ namespace MySTL
 	//////////////////// capacity ////////////////////
 	void string::resize(std::size_t n)
 	{
-		resize(n, value_type());
+		resize(n, value_type());  // value_type() ??
 	}
 
 	void string::resize(std::size_t n, char c)
@@ -333,9 +336,7 @@ namespace MySTL
 
 	string& string::assign(const char* s)
 	{
-		auto p = s;
-		for (; p != '\0'; ++p);
-		return assign(s, p);
+		return assign(s, s + strlen(s));
 	}
 
 	string& string::assign(const char* s, std::size_t n)
@@ -416,9 +417,7 @@ namespace MySTL
 
 	string& string::insert(std::size_t pos, const char* s)
 	{
-		auto p = s;
-		for (; p != '\0'; ++p);
-		insert(_begin + pos, s, p);
+		insert(_begin + pos, s, s + strlen(s));
 		return *this;
 	}
 
@@ -541,8 +540,8 @@ namespace MySTL
 			return const_cast<iterator>(first);
 
 		difference_type len = last - first;
-		for (auto i = first; i != last && i != _end; ++i)
-			*i = *(i + len);
+		for (iterator i = const_cast<iterator>(first); i != last && i != _end; ++i)
+			*i = *(i + len);  // right?
 		
 		const_iterator stop = _end - len;
 		for (; _end != stop; )
@@ -570,16 +569,12 @@ namespace MySTL
 
 	string&	string::replace(std::size_t pos, std::size_t len, const char* s)
 	{
-		auto p = s;
-		for (; p != '\0'; ++p);
-		return replace(_begin + pos, _begin + pos + len, s, p);
+		return replace(_begin + pos, _begin + pos + len, s, s + strlen(s));
 	}
 
 	string& string::replace(const_iterator i1, const_iterator i2, const char* s)
 	{
-		auto p = s;
-		for (; p != '\0'; ++p);
-		return replace(i1, i2, s, p);
+		return replace(i1, i2, s, s + strlen(s));
 	}
 
 	string& string::replace(std::size_t pos, std::size_t len, const char* s, std::size_t n)
@@ -597,6 +592,7 @@ namespace MySTL
 		return replace(_begin + pos, _begin + pos + len, n, c);
 	}
 
+	// replace auxiliary: fill
 	string& string::replace(const_iterator i1, const_iterator i2, std::size_t n, char c)
 	{
 		iterator finish = erase(i1, i2);
@@ -604,6 +600,7 @@ namespace MySTL
 		return *this;
 	}
 
+	// replace auxiliary: range
 	template <typename InputIterator>
 	string& string::replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last)
 	{
@@ -623,7 +620,8 @@ namespace MySTL
 	{
 		if (this != &str)
 		{
-			/////
+			///
+			
 		}
 	}
 
@@ -668,6 +666,12 @@ namespace MySTL
 
 
 	// find
+	// @str		another string with the subject to search for
+	// @s		pointer to an array of characters 
+	//			(if argument @n is specified, the sequence to match are the first n characters in the array)
+	// @c		individual character to be searched for
+	// @pos		position of the first character in the string to be considered in the search
+	// @n		length of sequence of characters to match
 	std::size_t string::find(const string& str, std::size_t pos = 0) const //noexcept
 	{
 		// KMP ?
@@ -675,11 +679,10 @@ namespace MySTL
 
 	std::size_t string::find(const char* s, std::size_t pos = 0) const
 	{
-		std::size_t len = 0;
-		for (auto p = s; p != '\0'; ++p, ++len);
-		return find(s, pos, len);
+		return find(s, pos, strlen(s));
 	}
 
+	// find auxiliary: buffer
 	std::size_t string::find(const char* s, std::size_t pos, std::size_t n) const
 	{
 
@@ -704,9 +707,10 @@ namespace MySTL
 	
 	std::size_t string::rfind(const char* s, std::size_t pos = npos) const
 	{
-
+		return rfind(s, pos, strlen(s));
 	}
 
+	// rfind auxiliary: buffer
 	std::size_t string::rfind(const char* s, std::size_t pos, std::size_t n) const
 	{
 
@@ -714,34 +718,111 @@ namespace MySTL
 
 	std::size_t string::rfind(char c, std::size_t pos = npos) const // noexcept
 	{
+		for (auto cit = cbegin() + pos; cit >= cbegin(); --cit)
+		{
+			if (*cit == c)
+				return cit - cbegin();
+		}
+		return npos;
+	}
+
+
+	// find_first_of
+	std::size_t string::find_first_of(const string& str, std::size_t pos = 0) const //noexcept
+	{
 
 	}
 
-	//std::size_t find_first_of(const string& str, std::size_t pos = 0) const noexcept;	// string(1)
-	//std::size_t find_first_of(const char* s, std::size_t pos = 0) const;				// c - string(2)
-	//std::size_t find_first_of(const char* s, std::size_t pos, std::size_t n) const;		// buffer(3)
-	//std::size_t find_first_of(char c, std::size_t pos = 0) const noexcept;				// character(4)
+	std::size_t string::find_first_of(const char* s, std::size_t pos = 0) const
+	{
+		return find_first_of(s, pos, strlen(s));
+	}
 
-	//// Find character in string from the end
-	//// Searches the string for the last character that matches any of the characters specified in its arguments.
-	//std::size_t find_last_of(const string& str, std::size_t pos = npos) const noexcept;	// string(1)
-	//std::size_t find_last_of(const char* s, std::size_t pos = npos) const;				// c - string(2)
-	//std::size_t find_last_of(const char* s, std::size_t pos, std::size_t n) const;		// buffer(3)
-	//std::size_t find_last_of(char c, std::size_t pos = npos) const noexcept;			// character(4)
+	std::size_t string::find_first_of(const char* s, std::size_t pos, std::size_t n) const
+	{
 
-	//// Find absence of character in string
-	//// Searches the string for the first character that does not match any of the characters specified in its arguments.
-	//std::size_t find_first_not_of(const string& str, std::size_t pos = 0) const noexcept;// string(1)
-	//std::size_t find_first_not_of(const char* s, std::size_t pos = 0) const;			// c - string(2)
-	//std::size_t find_first_not_of(const char* s, std::size_t pos, std::size_t n) const;	// buffer(3)
-	//std::size_t find_first_not_of(char c, std::size_t pos = 0) const noexcept;			// character(4)
+	}
 
-	//// Find non-matching character in string from the end
-	//// Searches the string for the last character that does not match any of the characters specified in its arguments.
-	//std::size_t find_last_not_of(const string& str, std::size_t pos = npos) const noexcept;// string(1)
-	//std::size_t find_last_not_of(const char* s, std::size_t pos = npos) const;			// c - string(2)
-	//std::size_t find_last_not_of(const char* s, std::size_t pos, std::size_t n) const;	// buffer(3)
-	//std::size_t find_last_not_of(char c, std::size_t pos = npos) const noexcept;		// character(4)
+	std::size_t string::find_first_of(char c, std::size_t pos = 0) const //noexcept
+	{
+		return find(c, pos);
+	}
+
+
+	// find_last_of
+	std::size_t string::find_last_of(const string& str, std::size_t pos = npos) const //noexcept
+	{
+		
+	}
+
+	std::size_t string::find_last_of(const char* s, std::size_t pos = npos) const
+	{
+		return find_last_of(s, pos, strlen(s));
+	}
+
+	std::size_t string::find_last_of(const char* s, std::size_t pos, std::size_t n) const
+	{
+
+	}
+
+	std::size_t string::find_last_of(char c, std::size_t pos = npos) const //noexcept
+	{
+		return rfind(c, pos);
+	}
+
+
+	// find_first_not_of
+	std::size_t string::find_first_not_of(const string& str, std::size_t pos = 0) const //noexcept
+	{
+
+	}
+
+	std::size_t string::find_first_not_of(const char* s, std::size_t pos = 0) const
+	{
+		return find_first_not_of(s, pos, strlen(s));
+	}
+
+	std::size_t string::find_first_not_of(const char* s, std::size_t pos, std::size_t n) const
+	{
+
+	}
+
+	std::size_t string::find_first_not_of(char c, std::size_t pos = 0) const //noexcept
+	{
+		for (auto i = pos; i != size(); ++i)
+		{
+			if (*(cbegin() + i) != c)
+				return i;
+		}
+		return npos;
+	}
+
+
+	// find_last_not_of
+	std::size_t string::find_last_not_of(const string& str, std::size_t pos = npos) const //noexcept
+	{
+
+	}
+
+	std::size_t string::find_last_not_of(const char* s, std::size_t pos = npos) const
+	{
+		return find_last_not_of(s, pos, strlen(s));
+	}
+
+	std::size_t string::find_last_not_of(const char* s, std::size_t pos, std::size_t n) const
+	{
+
+	}
+
+	std::size_t string::find_last_not_of(char c, std::size_t pos = npos) const //noexcept
+	{
+		for (auto i = pos; i >= 0; --i)
+		{
+			if (*(cbegin() + i) != c)
+				return i;
+		}
+		return npos;
+	}
 
 
 	string string::substr(std::size_t pos = 0, std::size_t len = npos) const
@@ -752,16 +833,25 @@ namespace MySTL
 
 
 	// compare
+	// @str		another string object, used entirely (or partially) as the \comparing string
+	// @s		pointer to an array of characters 
+	//			(if argument @n is specified, the first n characters in the array are used as the \comparing string)
+	// @pos		position of the first character in the \compared string 
+	// @len		length of \compared string (if the string is shorter, as many characters as possible)
+	// @subpos, sublen
+	//			same as @pos and @len above, but for /comparing string
+	// @n		number of characters to compare
 	int string::compare(const string& str) const //noexcept
 	{
-
+		return compare(0, size(), str, 0, str.size());
 	}
 
 	int string::compare(std::size_t pos, std::size_t len, const string& str) const
 	{
-
+		return compare(pos, len, str, 0, str.size());
 	}
 
+	// compare auxiliary: string object
 	int string::compare(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen) const
 	{
 
@@ -769,18 +859,23 @@ namespace MySTL
 
 	int string::compare(const char* s) const
 	{
-
+		return compare(0, size(), s, strlen(s));
 	}
 
 	int string::compare(std::size_t pos, std::size_t len, const char* s) const
 	{
-
+		return compare(pos, len, s, strlen(s));
 	}
 
+	// compare auxiliary: buffer
 	int string::compare(std::size_t pos, std::size_t len, const char* s, std::size_t n) const
 	{
 
 	}
+
+
+
+	//////////////////// non-member functions overloads ////////////////////
 }
 
 #endif
