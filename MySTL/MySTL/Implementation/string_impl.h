@@ -446,9 +446,9 @@ namespace MySTL
 		iterator res = nullptr;
 		if (n <= space_left)
 		{
-			for (iterator p = _end - 1; p != p; --p)
-				*(p + n) = *p;
-			res = std::uninitialized_fill_n(p, n, c);
+			for (iterator curr = _end - 1; curr != p; --curr)
+				*(curr + n) = *curr;
+			res = std::uninitialized_fill_n(const_cast<iterator>(p), n, c);
 			_end += n;
 		}
 		else
@@ -490,8 +490,8 @@ namespace MySTL
 
 		if (space_required <= space_left)
 		{
-			for (iterator p = _end - 1; p != p; --p)
-				*(p + space_required) = *p;
+			for (iterator curr = _end - 1; curr != p; --curr)
+				*(curr + space_required) = *curr;
 			res = std::uninitialized_copy(first, last, p);
 			_end += space_required;
 		}
@@ -521,7 +521,7 @@ namespace MySTL
 	// erase
 	string& string::erase(std::size_t pos = 0, std::size_t len = npos)
 	{
-		return erase(_begin + pos, _begin + pos + len);
+		return erase(cbegin() + pos, cbegin() + pos + len);
 	}
 
 	string::iterator string::erase(const_iterator p)
@@ -619,10 +619,7 @@ namespace MySTL
 	void string::swap(string& str)
 	{
 		if (this != &str)
-		{
-			///
-			
-		}
+			MySTL::swap(*this, str);		// friend function
 	}
 
 
@@ -646,10 +643,7 @@ namespace MySTL
 
 	const char* string::data() const //noexcept
 	{
-		char *res = new char(size() + 1);
-		char *finish = std::uninitialized_copy(_begin, _end, res);
-		*finish = '\0';
-		return res;
+		return c_str();
 	}
 
 	string::allocator_type string::get_allocator() const //noexcept
@@ -854,7 +848,7 @@ namespace MySTL
 	// compare auxiliary: string object
 	int string::compare(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen) const
 	{
-
+		return compare_aux(pos, len, str.begin() + subpos, str.begin() + subpos + sublen);
 	}
 
 	int string::compare(const char* s) const
@@ -870,12 +864,138 @@ namespace MySTL
 	// compare auxiliary: buffer
 	int string::compare(std::size_t pos, std::size_t len, const char* s, std::size_t n) const
 	{
+		return compare_aux(pos, len, s, s + n);
+	}
+
+	// compare auxiliary
+	template <typename InputIterator>
+	int string::compare_aux(std::size_t pos, std::size_t len, InputIterator first, InputIterator last)
+	{
 
 	}
 
 
 
+
 	//////////////////// non-member functions overloads ////////////////////
+	// operator +
+	string operator+ (const string& lhs, const string& rhs)
+	{
+		// can be implemented by insert, append, +=
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (string&&      lhs, string&&      rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (string&&      lhs, const string& rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (const string& lhs, string&&      rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (const string& lhs, const char*   rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (string&&      lhs, const char*   rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (const char*   lhs, const string& rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (const char*   lhs, string&&      rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (const string& lhs, char          rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (string&&      lhs, char          rhs)
+	{
+		string res(lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (char          lhs, const string& rhs)
+	{
+		string res(1, lhs);
+		res += rhs;
+		return res;
+	}
+
+	string operator+ (char          lhs, string&&      rhs)
+	{
+		string res(1, lhs);
+		res += rhs;
+		return res;
+	}
+
+
+	// comparing operator
+	bool operator== (const string& lhs, const string& rhs)
+	{
+
+	}
+
+	bool operator== (const char*   lhs, const string& rhs){}
+	bool operator== (const string& lhs, const char*   rhs){}
+	bool operator!= (const string& lhs, const string& rhs){}
+	bool operator!= (const char*   lhs, const string& rhs){}
+	bool operator!= (const string& lhs, const char*   rhs){}
+	bool operator<  (const string& lhs, const string& rhs){}
+	bool operator<  (const char*   lhs, const string& rhs){}
+	bool operator<  (const string& lhs, const char*   rhs){}
+	bool operator<= (const string& lhs, const string& rhs){}
+	bool operator<= (const char*   lhs, const string& rhs){}
+	bool operator<= (const string& lhs, const char*   rhs){}
+	bool operator>  (const string& lhs, const string& rhs){}
+	bool operator>  (const char*   lhs, const string& rhs){}
+	bool operator>  (const string& lhs, const char*   rhs){}
+	bool operator>= (const string& lhs, const string& rhs){}
+	bool operator>= (const char*   lhs, const string& rhs){}
+	bool operator>= (const string& lhs, const char*   rhs){}
+
+
+	void swap(string& x, string& y)
+	{
+		std::swap(x._begin, y._begin);
+		std::swap(x._end, y._end);
+		std::swap(x._cap, y._cap);
+	}
 }
 
 #endif

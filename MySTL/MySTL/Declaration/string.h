@@ -456,10 +456,12 @@ namespace MySTL
 		// re allocate
 		void reallocate();
 
-		// swap
-		void swap(iterator s, iterator p);
 		// cstring - strlen
 		std::size_t strlen(const char *s) const;
+		// compare_aux
+		template <typename InputIterator>
+		int compare_aux(std::size_t pos, std::size_t len, InputIterator first, InputIterator last);
+
 
 
 	public:
