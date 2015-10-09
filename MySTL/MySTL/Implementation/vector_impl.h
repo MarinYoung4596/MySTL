@@ -4,11 +4,13 @@
 
 #include <utility>	// std::move & std::forward & std::pair
 #include <memory>	// uninitialized_copy & uninitialized_fill
-#include <algorithm>	// std::swap, std::max
+#include <algorithm>	// std::swap, max
 #include <iterator>		// make_move_iterator
 #include <stdexcept>
 
 #include "Declaration/vector.h"
+
+#define max(a, b) (a) > (b) ? (a) : (b)
 
 namespace MySTL
 {
@@ -31,10 +33,10 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::vector(const::size_t n)
+	vector<T>::vector(const size_type n)
 	{
 		auto newdata = alloc.allocate(n);
-		for (std::size_t i = 0; i < n;)
+		for (size_type i = 0; i < n;)
 			alloc.construct(i++, NULL);
 		elements = newdata;
 		first_free = cap = elements + n;
@@ -42,10 +44,10 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::vector(const std::size_t n, const T &val)
+	vector<T>::vector(const size_type n, const T &val)
 	{
 		auto newdata = alloc.allocate(n);
-		for (std::size_t i = 0; i < n;)
+		for (size_type i = 0; i < n;)
 			alloc.construct(i++, val);
 		elements = newdata;
 		first_free = cap = elements + n;
@@ -115,9 +117,10 @@ namespace MySTL
 	}
 
 
+
 	// Elements Access
 	template <typename T>
-	T& vector<T>::at(std::size_t n)
+	typename vector<T>::reference vector<T>::at(size_type n)
 	{
 		if (n >= size())
 		{
@@ -130,7 +133,7 @@ namespace MySTL
 
 	// Modifiers
 	template <typename T>
-	void vector<T>::push_back(const T &s)
+	void vector<T>::push_back(const value_type &s)
 	{
 		chk_n_alloc();
 		alloc.construct(first_free++, s);
@@ -146,7 +149,7 @@ namespace MySTL
 
 
 	template <typename T>
-	T* vector<T>::insert(const T* position, const T &val)
+	typename vector<T>::iterator vector<T>::insert(const_iterator position, const value_type &val)
 	{
 		return vector<T>::insert(position, 1, val);
 	}
@@ -155,7 +158,7 @@ namespace MySTL
 
 	////////////////////////////////////////////////////////
 	template <typename T>
-	T* vector<T>::insert(const T* position, std::size_t n, const T &val)
+	typename vector<T>::iterator vector<T>::insert(const_iterator position, size_type n, const value_type &val)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
@@ -172,13 +175,16 @@ namespace MySTL
 		}
 		else
 		{
-			T *_start = alloc.allocate(static_cast<std::size_t>(capacity()) + n);
-			T *_end = uninitialized_copy(make_move_iterator(begin()), make_move_iterator(position), _start);
+			// bug fix: 2015/10/6
+			const size_type len = size() + max(size(), n);
+			iterator _start = alloc.allocate(static_cast<size_type>(len));
+			iterator _end = uninitialized_copy(begin(), position, _start);
 			_end = uninitialized_fill_n(_end, n, val); // _end point to next free space
-			_end = uninitialized_copy(make_move_iterator(position), make_move_iterator(end()), _end);
+			_end = uninitialized_copy(position, end(), _end);
 			free();
 			elements = _start;
-			first_free = cap = _end;
+			first_free = _end;
+			cap = elements + len;
 		}
 		return const_cast<T *>(position);
 	}
@@ -186,39 +192,42 @@ namespace MySTL
 
 	template <typename T>
 	template <typename InputIterator>
-	T* vector<T>::insert(const T* position, InputIterator first, InputIterator second)
+	typename vector<T>::iterator vector<T>::insert(const_iterator position, InputIterator first, InputIterator second)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
 		if (first == second)
-			return const_cast<T*>(position);
+			return const_cast<iterator>(position);
 
 		auto space_left = cap - first_free;
 		auto space_required = second - first;
 		if (space_left >= space_required)
 		{
-			T *_start = position + space_required;
-			T *_end = std::max(_start, end());
-			_end = uninitialized_copy(make_move_iterator(position), make_move_iterator(_end), _start); // move forward
-			uninitialized_copy(make_move_iterator(first), make_move_iterator(second), position);// insert
+			iterator _start = const_cast<iterator>(position) + space_required;
+			iterator _end = max(_start, end());
+			_end = std::uninitialized_copy(position, _end, _start); // move forward
+			std::uninitialized_copy(first, second, position);// insert
 			first_free = _end;
 		}
 		else
 		{
-			T *_start = alloc.allocate(capacity() + space_required);
-			T *_end = uninitialized_copy(make_move_iterator(begin()), make_move_iterator(position), _start);
-			_end = uninitialized_copy(make_move_iterator(first), make_move_iterator(second), _end); // insert
-			_end = uninitialized_copy(make_move_iterator(position), make_move_iterator(end()), _end);
+			// bug fix: 2015/10/6
+			const size_type len = size() + max(size(), space_required);
+			T *_start = alloc.allocate(len);
+			T *_end = std::uninitialized_copy(begin(), position, _start);
+			_end = std::uninitialized_copy(first, second, _end); // insert
+			_end = std::uninitialized_copy(position, end(), _end);
 			free();
 			elements = _start;
-			first_free = cap = _end;
+			first_free = _end;
+			cap = elements + len;
 		}
-		return const_cast<T*>(position);
+		return const_cast<iterator>(position);
 	}
 
 
 	template <typename T>
-	T* vector<T>::insert(const T* position, std::initializer_list<T> il)
+	typename vector<T>::iterator vector<T>::insert(const_iterator position, std::initializer_list<T> il)
 	{
 		return insert<T>(position, il.begin(), il.end());
 	}
@@ -250,37 +259,37 @@ namespace MySTL
 
 
 	template <typename T>
-	T* vector<T>::erase(const T* position)
+	typename vector<T>::iterator vector<T>::erase(const_iterator position)
 	{
 		return vector<T>::erase(position, position + 1);
 	}
 
 
 	template <typename T>
-	T* vector<T>::erase(const T* first, const T* second)
+	typename vector<T>::iterator vector<T>::erase(const_iterator first, const_iterator second)
 	{
 		if (first < begin() || second > end())
 			throw std::out_of_range("out of range!");
 		if (first > second)
 			throw std::invalid_argument("invalid arguments!");
 		if (first == second)
-			return const_cast<T*>(first);
+			return const_cast<iterator>(first);
 
 		auto len = second - first;
-		for (auto i : len)
+		for (auto i = 0; i < len; ++i)
 			*(first + i) = *(second + i);
 		// destory the objects from second to end() one by one
 		for (auto ptr = second; ptr != end(); ++ptr)
 			alloc.destroy(ptr);
 
 		first_free -= len;
-		return const_cast<T*>(first);
+		return const_cast<iterator>(first);
 	}
 
 
 	template <typename T>
 	template <typename... Args>
-	void vector<T>::emplace(const T* position, Args&&... args)
+	void vector<T>::emplace(const_iterator position, Args&&... args)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
@@ -304,7 +313,7 @@ namespace MySTL
 
 	// capacity
 	template <typename T>
-	void vector<T>::resize(std::size_t n, const T &val)
+	void vector<T>::resize(size_type n, value_type val = value_type())
 	{
 		if (n < size())
 		{
@@ -314,16 +323,16 @@ namespace MySTL
 		else if (n >= size() && n < capacity())
 		{
 			auto len_insert = n - size();
-			first_free = uninitialized_fill_n(first_free, len_insert, val);
+			first_free = std::uninitialized_fill_n(first_free, len_insert, val);
 		}
 		else
 		{
 			T *_start = alloc.allocate(n);
 			//auto elem = elements;
 			//auto _end = _start;
-			//for (std::size_t i = 0; i < size(); ++i)
+			//for (size_type i = 0; i < size(); ++i)
 			//	alloc.construct(_end++, std::move(*elem++));
-			//for (std::size_t i = size(); i < n; ++i)
+			//for (size_type i = size(); i < n; ++i)
 			//	alloc.construct(_end++, val);
 
 			auto len_insert = n - size();
@@ -337,12 +346,12 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector<T>::reverse(std::size_t n)
+	void vector<T>::reserve(size_type n)
 	{
 		if (n <= capacity())
 			return;
-		T* _start = alloc.allocate(n);
-		T* _end = uninitialized_copy(make_move_iterator(begin()), make_move_iterator(end()), _start);
+		iterator _start = alloc.allocate(n);
+		iterator _end = std::uninitialized_copy(begin(), end(), _start);
 		free();
 		elements = _start;
 		first_free = _end;
@@ -374,7 +383,8 @@ namespace MySTL
 
 
 	template <typename T>
-	std::pair<T*, T*> vector<T>::alloc_n_copy(const T *first, const T *last)
+	std::pair<typename vector<T>::iterator, typename vector<T>::iterator> 
+		vector<T>::alloc_n_copy(const_iterator first, const_iterator last)
 	{
 		auto data = alloc.allocate(last - first);
 		return{ data, std::uninitialized_copy(first, last, data) };
@@ -388,7 +398,7 @@ namespace MySTL
 		auto newdata = alloc.allocate(newcapacity);
 		auto dest = newdata;
 		auto elem = elements;
-		for (std::size_t i = 0; i != size(); ++i)
+		for (size_type i = 0; i != size(); ++i)
 		{
 			alloc.construct(dest++, std::move(*elem++));
 		}

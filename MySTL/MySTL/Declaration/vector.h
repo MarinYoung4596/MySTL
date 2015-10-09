@@ -7,12 +7,8 @@
 
 /*
 Reference:
-1. C++ Primer (5th Edition)
-2. http://www.cplusplus.com/reference/vector/vector/
-
-| 0 | 1 | 2 | 3 |   |   |   |   |   |   |
-^               ^                       ^
-elements        first_free              cap
+	1. C++ Primer (5th Edition)
+	2. http://www.cplusplus.com/reference/vector/vector/
 */
 
 namespace MySTL
@@ -31,69 +27,80 @@ namespace MySTL
 		typedef std::reverse_iterator<T*>		reverse_iterator;
 		typedef std::reverse_iterator<const T*> const_reverse_iterator;
 		typedef std::ptrdiff_t					difference_type;
+		//typedef allocator<T>					allocator_type;
+		typedef value_type*						pointer;
+		typedef const value_type*				const_pointer;
 
 	public:
 		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
-		vector(const vector &);										    // constructor: copy
+		vector(const vector &);											// constructor: copy
 		vector(vector &&); //noexcept;									// constructor: move 
-		vector(const std::size_t n);	// explicit						// constructor: fill
-		vector(const std::size_t n, const T &val);						// constructor: fill
-		vector(std::initializer_list<T> il);							// constructor: initializer_list
+		vector(const size_type n);	// explicit							// constructor: fill
+		vector(const size_type n, const value_type &val);				// constructor: fill
+		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
 		template<typename InputIterator>
 		vector(InputIterator first, InputIterator second);				// constructor: range
 
 		vector& operator=(const vector &rhs);							// assign content: copy
-		vector& operator=(std::initializer_list<T> il);					// assign content: initializer list
+		vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
 		vector& operator=(vector &&rhs); //noexcept;					// assign content: move
-		~vector();                                                      // destructor
+		~vector();														// destructor
 
 		// Element Access
-		T& operator[](std::size_t n) { return *(elements + n); }        // access element
-		T& front() { return *(begin()); }                               // access first element
-		T& back() { return *(end() - 1); }                              // access last element
-		T& at(std::size_t n);                                           // access element
-		T* data()  { return elements; }									// access data
+		reference operator[](size_type n) { return *(elements + n); }	// access element
+		reference front() { return *(begin()); }						// access first element
+		reference back() { return *(end() - 1); }						// access last element
+		reference at(size_type n);										// access element
+		iterator data()  { return elements; }							// access data
 
 		// Modifiers
-		void assign(std::size_t n, const T&);							// assign vector content: fill
-		void assign(std::initializer_list<T> il);						// assign vector content: initializer list
-		void push_back(const T&);										// add element at the end
+		void assign(size_type n, const value_type&);					// assign vector content: fill
+		void assign(std::initializer_list<value_type> il);				// assign vector content: initializer list
+		template <typename InputIterator>
+		void assign(InputIterator first, InputIterator last);
+
+		void push_back(const value_type&);								// add element at the end
 		void pop_back();												// delete last element
 
-		T* insert(const T* position, const T &val);					// insert elements: single element
-		T* insert(const T* position, std::size_t n, const T &val);	// insert elements: fill
+		iterator insert(const_iterator position, const value_type &val);				// insert elements: single element
+		iterator insert(const_iterator position, size_type n, const value_type &val);	// insert elements: fill
 		template<typename InputIterator>
-		T* insert(const T* position, InputIterator first, InputIterator second);// insert elements: range
-		T* insert(const T* position, T &&val);						// insert elements: move
-		T* insert(const T* position, std::initializer_list<T> il);	// insert elements: initializer list
-		void clear(); //noexcept;									// clear content
-		void swap(vector &x);										// swap content
-		T* erase(const T* position);                                // erase elements: single element
-		T* erase(const T* first, const T* second);					// erase elements: range
+		iterator insert(const_iterator position, InputIterator first, InputIterator second);// insert elements: range
+		iterator insert(const_iterator position, value_type &&val);						// insert elements: move
+		iterator insert(const_iterator position, std::initializer_list<value_type> il);	// insert elements: initializer list
+		
+		void clear(); //noexcept;										// clear content
+		void swap(vector &x);											// swap content
+		
+		iterator erase(const_iterator position);						// erase elements: single element
+		iterator erase(const_iterator first, const_iterator second);	// erase elements: range
+		
 		template<typename... Args>
-		void emplace(const T* position, Args&&... args);            // construct and insert element
+		void emplace(const_iterator position, Args&&... args);			// construct and insert element
 		template<typename... Args>
-		void emplace_back(Args&&... args);							// construct and insert element at the end
+		void emplace_back(Args&&... args);								// construct and insert element at the end
 
 		// Capacity
-		std::size_t size() const { return first_free - elements; }	// return size
-		//std::size_t max_size() const noexcept;					// return maximum size
-		void resize(std::size_t n, const T &val);					// change size
-		std::size_t capacity() const { return cap - elements; }		// return size of allocated storage capacity
-		bool empty() const { return elements == first_free; }		// test whether vector is empty
-		void reverse(std::size_t n);								// request a change in capacity
-		void shrink_to_fit();										// shrink to fit
+		size_type size() const { return first_free - elements; }		// return size
+		size_type max_size() const { return size_type(UINT_MAX / sizeof(value_type)); } // noexcept; // return maximum size
+		void resize(size_type n, value_type val = value_type());		// change size
+		size_type capacity() const { return cap - elements; }			// return size of allocated storage capacity
+		bool empty() const { return elements == first_free; }			// test whether vector is empty
+		void reserve(size_type n);										// request a change in capacity
+		void shrink_to_fit();											// shrink to fit
 
 		// Iterators
-		T* begin() const { return elements; }						// return iterator to begining
-		T* end() const { return first_free; }						// return iterator to end
-		T* rbegin() const { return reverse_iterator(elements); }	// return reverse iterator to reverse begining
-		T* rend() const { return reverse_iterator(first_free); }	// return reverse iterator to reverse end
-		const T* cbegin() const { return elements; }				// return const_iterator to begining
-		const T* cend() const { return first_free; }				// return const_iterator to end	
-		const T* crbegin() const { return const_reverse_iterator(elements); } // return const_reverse_iterator to reverse beigining
-		const T* crend() const { return const_reverse_iterator(first_free); } // return const_reverse_iterator to reverse end
+		iterator begin() const { return elements; }						// return iterator to begining
+		iterator end() const { return first_free; }						// return iterator to end
+		iterator rbegin() const { return reverse_iterator(elements); }	// return reverse iterator to reverse begining
+		iterator rend() const { return reverse_iterator(first_free); }	// return reverse iterator to reverse end
+		const_iterator cbegin() const { return elements; }				// return const_iterator to begining
+		const_iterator cend() const { return first_free; }				// return const_iterator to end	
+		const_iterator crbegin() const { return const_reverse_iterator(elements); } // return const_reverse_iterator to reverse beigining
+		const_iterator crend() const { return const_reverse_iterator(first_free); } // return const_reverse_iterator to reverse end
 
+		// Allocator
+		// allocator_type get_allocator() const;
 
 	private:
 		void chk_n_alloc()
@@ -103,15 +110,39 @@ namespace MySTL
 		}
 
 
-		std::pair<T*, T*> alloc_n_copy(const T*, const T*);
+		std::pair<iterator, iterator> alloc_n_copy(const_iterator, const_iterator);
 		void free();
 		void reallocate();
 		
-		// static member variables must be defined in the .cpp file
 		std::allocator<T> alloc;
+
+		
 		T *elements;      // head pointer
 		T *first_free;    // the pointer that point to the first free element in the array
 		T *cap;           // tail pointer, end of storage
+
+	//public:
+	//	// non-member functions overloads
+	//	template <typename T, typename Alloc>
+	//	friend bool operator== (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	//	
+	//	template <typename T, typename Alloc>
+	//	friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	//	
+	//	template <typename T, typename Alloc>
+	//	friend bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	//	
+	//	template <typename T, typename Alloc>
+	//	friend bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	//	
+	//	template <typename T, typename Alloc>
+	//	friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	//	
+	//	template <typename T, typename Alloc>
+	//	friend bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	//	template <typename T, typename Alloc>
+	//	friend void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
 	};
 
 }

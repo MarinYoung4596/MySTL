@@ -879,9 +879,9 @@ namespace MySTL
 
 	//////////////////// non-member functions overloads ////////////////////
 	// operator +
+	// can be implemented by insert, append, +=
 	string operator+ (const string& lhs, const string& rhs)
 	{
-		// can be implemented by insert, append, +=
 		string res(lhs);
 		res += rhs;
 		return res;
