@@ -20,16 +20,28 @@ namespace MySTL{
 				std::cout << std::endl;
 			}
 
-			void testcase_constructor_1()
+			void tc_constructor_1()
 			{
 				vector<int> v1;		// constructor: default
 				v1 = { 1, 2, 3, 4, 5 };		// assign content: initializer list
+				printVector(v1);
 
-				vector<std::string> v2(5, "aa");	// constructor: fill
+				//vector<std::string> v2(5, "aa");	// constructor: fill
+				//printVector(v2);
+
 				vector<int> v3({ 4, 5, 6, 7, 8 });	// constructor: initializer list
-				vector<int> v4(v1);		// copy constructor
-				vector<int> v5 = v1;	// assign content: copy
+				printVector(v3);
 
+				vector<int> v4(v1);		// copy constructor
+				printVector(v4);
+
+				vector<int> v5 = v1;	// assign content: copy
+				printVector(v5);
+
+				// the iterator constructor can also be used to construct from arrays:
+				int myints[] = { 16, 2, 77, 29 };
+				MySTL::vector<int> v6(myints, myints + sizeof(myints) / sizeof(int));
+				printVector(v6);
 			}
 
 			void tc_constructor()
@@ -120,7 +132,7 @@ namespace MySTL{
 				myvector.resize(12);
 
 				std::cout << "myvector contains:";
-				for (int i = 0; i < myvector.size(); i++)
+				for (size_t i = 0; i < myvector.size(); i++)
 					std::cout << ' ' << myvector[i];
 				std::cout << '\n';
 			}
@@ -442,7 +454,7 @@ namespace MySTL{
 
 			void testCase_vector()
 			{
-				tc_constructor();
+				tc_constructor_1();
 				tc_assignment();
 				tc_size();
 				tc_empty();

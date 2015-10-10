@@ -1,94 +1,200 @@
-﻿生成启动时间为 10/9/2015 5:10:37 PM。
+﻿生成启动时间为 10/10/2015 9:37:41 PM。
      1>项目“C:\Users\MY\Documents\MySTL\MySTL\MySTL\MySTL.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MDd /GS- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
      1>cl : 命令行 warning D9025: 正在重写“/sdl”(用“/GS-”)
          main.cpp
-     1>c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(123): warning C4018: “<”: 有符号/无符号不匹配
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(40): error C2664: “void std::allocator<T>::construct(_Ty *,const _Ty &)”: 无法将参数 1 从“MySTL::vector<int>::size_type”转换为“int *”
+     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(211): warning C4018: “>”: 有符号/无符号不匹配
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
                  with
                  [
-                     T=int
-         ,            _Ty=int
+                     InputIterator=int
                  ]
-                 从整型转换为指针类型要求 reinterpret_cast、C 样式转换或函数样式转换
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(37): 编译类 模板 成员函数“MySTL::vector<int>::vector(const MySTL::vector<int>::size_type)”时
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(162): 参见对正在编译的函数 模板 实例化“MySTL::vector<int>::vector(const MySTL::vector<int>::size_type)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
+                 with
+                 [
+                     InputIterator=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(348): warning C4996: 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(328): 参见对正在编译的函数 模板 实例化“_FwdIt std::uninitialized_copy<std::move_iterator<int *>,T*>(_InIt,_InIt,_FwdIt)”的引用
+                 with
+                 [
+                     _FwdIt=int *
+         ,            T=int
+         ,            _InIt=std::move_iterator<int *>
+                 ]
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(313): 编译类 模板 成员函数“void MySTL::vector<int>::resize(MySTL::vector<int>::size_type,int)”时
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(130): 参见对正在编译的函数 模板 实例化“void MySTL::vector<int>::resize(MySTL::vector<int>::size_type,int)”的引用
                  c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(25): 参见对正在编译的类 模板 实例化“MySTL::vector<int>”的引用
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(280): error C3892: “i”: 不能给常量赋值
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(270): 编译类 模板 成员函数“int *MySTL::vector<int>::erase(const int *,const int *)”时
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(333): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::erase(const int *,const int *)”的引用
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(51): error C2664: “void std::allocator<T>::construct(_Ty *,const _Ty &)”: 无法将参数 1 从“MySTL::vector<std::string>::size_type”转换为“std::string *”
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2409): warning C4996: 'std::_Copy_backward': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2394) : 参见“std::_Copy_backward”的声明
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(204): 参见对正在编译的函数 模板 实例化“_BidIt2 std::copy_backward<int*,int*>(_BidIt1,_BidIt1,_BidIt2)”的引用
                  with
                  [
-                     T=std::string
-         ,            _Ty=std::string
+                     _BidIt2=int *
+         ,            _BidIt1=int *
                  ]
-                 从整型转换为指针类型要求 reinterpret_cast、C 样式转换或函数样式转换
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(48): 编译类 模板 成员函数“MySTL::vector<std::string>::vector(const MySTL::vector<std::string>::size_type,const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)”时
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(28): 参见对正在编译的函数 模板 实例化“MySTL::vector<std::string>::vector(const MySTL::vector<std::string>::size_type,const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)”的引用
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(28): 参见对正在编译的类 模板 实例化“MySTL::vector<std::string>”的引用
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(70): error C2664: “std::pair<int *,int *> MySTL::vector<int>::alloc_n_copy(const int *,const int *)”: 无法将参数 1 从“int”转换为“const int *”
-                 从整型转换为指针类型要求 reinterpret_cast、C 样式转换或函数样式转换
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(39): 参见对正在编译的函数 模板 实例化“MySTL::vector<int>::vector<int>(InputIterator,InputIterator)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
                  with
                  [
                      InputIterator=int
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(39): 参见对正在编译的函数 模板 实例化“MySTL::vector<int>::vector<int>(InputIterator,InputIterator)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
                  with
                  [
                      InputIterator=int
                  ]
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(71): error C3536: “data”:  初始化之前无法使用
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(71): error C2228: “.first”的左边必须有类/结构/联合
-                 类型是“int”
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(72): error C3536: “data”:  初始化之前无法使用
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(72): error C2228: “.second”的左边必须有类/结构/联合
-                 类型是“int”
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(208): error C2782: “_OutTy *std::uninitialized_copy(_InIt,_InIt,_OutTy (&)[_OutSize])”: 模板 参数“_InIt”不明确
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(355) : 参见“std::uninitialized_copy”的声明
-                 可能是“int *”
-                 或       “const int *”
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(305): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(const int *,InputIterator,InputIterator)”的引用
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371): error C2825: '_Iter': 当后面跟“::”时必须为类或命名空间
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(584): 参见对正在编译的类 模板 实例化“std::iterator_traits<_InIt>”的引用
                  with
                  [
-                     InputIterator=int
+                     _InIt=int
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(305): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(const int *,InputIterator,InputIterator)”的引用
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(345): 参见对正在编译的函数 模板 实例化“void std::_Debug_range<_InIt>(_InIt,_InIt,std::_Dbfile_t,std::_Dbline_t)”的引用
                  with
                  [
-                     InputIterator=int
+                     _InIt=int
                  ]
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(208): error C2782: “_FwdIt std::uninitialized_copy(_InIt,_InIt,_FwdIt)”: 模板 参数“_InIt”不明确
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(342) : 参见“std::uninitialized_copy”的声明
-                 可能是“int *”
-                 或       “const int *”
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(215): warning C4018: “>”: 有符号/无符号不匹配
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(217): error C2782: “_OutTy *std::uninitialized_copy(_InIt,_InIt,_OutTy (&)[_OutSize])”: 模板 参数“_InIt”不明确
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(355) : 参见“std::uninitialized_copy”的声明
-                 可能是“const int *”
-                 或       “int *”
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(217): error C2782: “_FwdIt std::uninitialized_copy(_InIt,_InIt,_FwdIt)”: 模板 参数“_InIt”不明确
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(342) : 参见“std::uninitialized_copy”的声明
-                 可能是“const int *”
-                 或       “int *”
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(219): error C2782: “_OutTy *std::uninitialized_copy(_InIt,_InIt,_OutTy (&)[_OutSize])”: 模板 参数“_InIt”不明确
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(355) : 参见“std::uninitialized_copy”的声明
-                 可能是“int *”
-                 或       “const int *”
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(219): error C2782: “_FwdIt std::uninitialized_copy(_InIt,_InIt,_FwdIt)”: 模板 参数“_InIt”不明确
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(342) : 参见“std::uninitialized_copy”的声明
-                 可能是“int *”
-                 或       “const int *”
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(355) : 参见“std::uninitialized_copy”的声明
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(342) : 参见“std::uninitialized_copy”的声明
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(355) : 参见“std::uninitialized_copy”的声明
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(342) : 参见“std::uninitialized_copy”的声明
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(355) : 参见“std::uninitialized_copy”的声明
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(342) : 参见“std::uninitialized_copy”的声明
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(205): 参见对正在编译的函数 模板 实例化“_FwdIt std::uninitialized_copy<InputIterator,int*>(_InIt,_InIt,_FwdIt)”的引用
+                 with
+                 [
+                     _FwdIt=int *
+         ,            InputIterator=int
+         ,            _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371): error C2039: “iterator_category”: 不是“`global namespace'”的成员
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371): error C2146: 语法错误: 缺少“;”(在标识符“iterator_category”的前面)
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371): error C2602: “std::iterator_traits<_InIt>::iterator_category”不是“std::iterator_traits<_InIt>”基类的成员
+                 with
+                 [
+                     _InIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371) : 参见“std::iterator_traits<_InIt>::iterator_category”的声明
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371): error C2868: “std::iterator_traits<_InIt>::iterator_category”: 非法的 using 声明语法；应输入限定名
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(372): error C2825: '_Iter': 当后面跟“::”时必须为类或命名空间
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(372): error C2039: “value_type”: 不是“`global namespace'”的成员
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(372): error C2146: 语法错误: 缺少“;”(在标识符“value_type”的前面)
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(372): error C2602: “std::iterator_traits<_InIt>::value_type”不是“std::iterator_traits<_InIt>”基类的成员
+                 with
+                 [
+                     _InIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(372) : 参见“std::iterator_traits<_InIt>::value_type”的声明
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(372): error C2868: “std::iterator_traits<_InIt>::value_type”: 非法的 using 声明语法；应输入限定名
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(373): error C2825: '_Iter': 当后面跟“::”时必须为类或命名空间
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(373): error C2039: “difference_type”: 不是“`global namespace'”的成员
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(373): error C2146: 语法错误: 缺少“;”(在标识符“difference_type”的前面)
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(373): error C2602: “std::iterator_traits<_InIt>::difference_type”不是“std::iterator_traits<_InIt>”基类的成员
+                 with
+                 [
+                     _InIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(373) : 参见“std::iterator_traits<_InIt>::difference_type”的声明
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(373): error C2868: “std::iterator_traits<_InIt>::difference_type”: 非法的 using 声明语法；应输入限定名
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(375): error C2825: '_Iter': 当后面跟“::”时必须为类或命名空间
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(375): error C2039: “pointer”: 不是“`global namespace'”的成员
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(375): error C2146: 语法错误: 缺少“;”(在标识符“pointer”的前面)
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(375): error C2602: “std::iterator_traits<_InIt>::pointer”不是“std::iterator_traits<_InIt>”基类的成员
+                 with
+                 [
+                     _InIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(375) : 参见“std::iterator_traits<_InIt>::pointer”的声明
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(375): error C2868: “std::iterator_traits<_InIt>::pointer”: 非法的 using 声明语法；应输入限定名
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(376): error C2825: '_Iter': 当后面跟“::”时必须为类或命名空间
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(376): error C2039: “reference”: 不是“`global namespace'”的成员
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(376): error C2146: 语法错误: 缺少“;”(在标识符“reference”的前面)
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(376): error C2602: “std::iterator_traits<_InIt>::reference”不是“std::iterator_traits<_InIt>”基类的成员
+                 with
+                 [
+                     _InIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(376) : 参见“std::iterator_traits<_InIt>::reference”的声明
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(376): error C2868: “std::iterator_traits<_InIt>::reference”: 非法的 using 声明语法；应输入限定名
+                 with
+                 [
+                     _InIt=int
+                 ]
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(584): error C2665: “std::_Debug_range2”: 2 个重载中没有一个可以转换所有参数类型
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(567): 可能是“void std::_Debug_range2<_InIt>(_RanIt,_RanIt,std::_Dbfile_t,std::_Dbline_t,std::random_access_iterator_tag)”
+                 with
+                 [
+                     _InIt=int
+         ,            _RanIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(559): 或       “void std::_Debug_range2<_InIt>(_InIt,_InIt,std::_Dbfile_t,std::_Dbline_t,std::input_iterator_tag)”
+                 with
+                 [
+                     _InIt=int
+                 ]
+                 尝试匹配参数列表“(int, int, std::_Dbfile_t, std::_Dbline_t, int)”时
+     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(337): error C2665: “std::_Uninitialized_copy0”: 2 个重载中没有一个可以转换所有参数类型
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(312): 可能是“_FwdIt std::_Uninitialized_copy0<_InIt,_FwdIt>(_InIt,_InIt,_FwdIt,std::random_access_iterator_tag,std::random_access_iterator_tag)”
+                 with
+                 [
+                     _FwdIt=int *
+         ,            _InIt=int
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(303): 或       “_FwdIt std::_Uninitialized_copy0<_InIt,_FwdIt>(_InIt,_InIt,_FwdIt,std::input_iterator_tag,std::forward_iterator_tag)”
+                 with
+                 [
+                     _FwdIt=int *
+         ,            _InIt=int
+                 ]
+                 尝试匹配参数列表“(int, int, int *, int, std::iterator_traits<_RanIt>::iterator_category)”时
+                 with
+                 [
+                     _RanIt=int *
+                 ]
+                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(348): 参见对正在编译的函数 模板 实例化“_FwdIt std::_Uninitialized_copy0<_Iter,_FwdIt>(_InIt,_InIt,_FwdIt,std::false_type)”的引用
+                 with
+                 [
+                     _FwdIt=int *
+         ,            _Iter=int
+         ,            _InIt=int
+                 ]
      1>已完成生成项目“C:\Users\MY\Documents\MySTL\MySTL\MySTL\MySTL.vcxproj”(Build 个目标)的操作 - 失败。
 
 生成失败。
 
-已用时间 00:00:00.61
+已用时间 00:00:00.76

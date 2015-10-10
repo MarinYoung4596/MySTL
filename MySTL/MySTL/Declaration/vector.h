@@ -4,6 +4,9 @@
 #include <initializer_list>
 #include <cstddef>		// ptrdiff_t
 #include <memory>		// allocator, uninitialized_copy, uninitialized_fill
+#include <type_traits>
+
+//#include "iterator.h"
 
 /*
 Reference:
@@ -20,17 +23,17 @@ namespace MySTL
 	public:
 		typedef std::size_t						size_type;
 		typedef T								value_type;
-		typedef T&								reference;
-		typedef const T&						const_reference;
-		typedef T*								iterator;
-		typedef const T*						const_iterator;
+		typedef value_type&						reference;
+		typedef const value_type&				const_reference;
+		typedef value_type*						iterator;
+		typedef value_type*						pointer;
+		typedef const value_type*				const_iterator;
+		typedef const value_type*				const_pointer;
 		typedef std::reverse_iterator<T*>		reverse_iterator;
 		typedef std::reverse_iterator<const T*> const_reverse_iterator;
 		typedef std::ptrdiff_t					difference_type;
 		//typedef allocator<T>					allocator_type;
-		typedef value_type*						pointer;
-		typedef const value_type*				const_pointer;
-
+		
 	public:
 		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
 		vector(const vector &);											// constructor: copy
@@ -62,12 +65,12 @@ namespace MySTL
 		void push_back(const value_type&);								// add element at the end
 		void pop_back();												// delete last element
 
-		iterator insert(const_iterator position, const value_type &val);				// insert elements: single element
-		iterator insert(const_iterator position, size_type n, const value_type &val);	// insert elements: fill
+		iterator insert(iterator position, const value_type &val);				// insert elements: single element
+		iterator insert(iterator position, size_type n, const value_type &val);	// insert elements: fill
 		template<typename InputIterator>
-		iterator insert(const_iterator position, InputIterator first, InputIterator second);// insert elements: range
-		iterator insert(const_iterator position, value_type &&val);						// insert elements: move
-		iterator insert(const_iterator position, std::initializer_list<value_type> il);	// insert elements: initializer list
+		iterator insert(iterator position, InputIterator first, InputIterator second);// insert elements: range
+		iterator insert(iterator position, value_type &&val);					// insert elements: move
+		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
 		
 		void clear(); //noexcept;										// clear content
 		void swap(vector &x);											// swap content
@@ -110,7 +113,9 @@ namespace MySTL
 		}
 
 
-		std::pair<iterator, iterator> alloc_n_copy(const_iterator, const_iterator);
+		template <typename InputIterator>
+		std::pair<iterator, iterator> alloc_n_copy(InputIterator, InputIterator);
+
 		void free();
 		void reallocate();
 		

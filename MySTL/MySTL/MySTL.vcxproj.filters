@@ -39,6 +39,9 @@
     <ClInclude Include="Implementation\string_impl.h">
       <Filter>Implementation</Filter>
     </ClInclude>
+    <ClInclude Include="iterator.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

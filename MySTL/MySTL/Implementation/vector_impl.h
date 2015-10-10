@@ -36,8 +36,7 @@ namespace MySTL
 	vector<T>::vector(const size_type n)
 	{
 		auto newdata = alloc.allocate(n);
-		for (size_type i = 0; i < n;)
-			alloc.construct(i++, NULL);
+		std::uninitialized_fill_n(newdata, n, value_type());
 		elements = newdata;
 		first_free = cap = elements + n;
 	}
@@ -47,8 +46,9 @@ namespace MySTL
 	vector<T>::vector(const size_type n, const T &val)
 	{
 		auto newdata = alloc.allocate(n);
-		for (size_type i = 0; i < n;)
-			alloc.construct(i++, val);
+		//for (size_type i = 0; i < n;)
+		//	alloc.construct(i++, val);
+		std::uninitialized_fill_n(newdata, n, val);
 		elements = newdata;
 		first_free = cap = elements + n;
 	}
@@ -149,16 +149,14 @@ namespace MySTL
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(const_iterator position, const value_type &val)
+	typename vector<T>::iterator vector<T>::insert(iterator position, const value_type &val)
 	{
 		return vector<T>::insert(position, 1, val);
 	}
 
 
-
-	////////////////////////////////////////////////////////
 	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(const_iterator position, size_type n, const value_type &val)
+	typename vector<T>::iterator vector<T>::insert(iterator position, size_type n, const value_type &val)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
@@ -170,7 +168,7 @@ namespace MySTL
 		{
 			for (auto curr = end() - 1; curr != position; --curr)
 				*(curr + n) = *curr;
-			uninitialized_fill_n(position, n, val);
+			std::uninitialized_fill_n(position, n, val);
 			first_free += n;
 		}
 		else
@@ -178,9 +176,9 @@ namespace MySTL
 			// bug fix: 2015/10/6
 			const size_type len = size() + max(size(), n);
 			iterator _start = alloc.allocate(static_cast<size_type>(len));
-			iterator _end = uninitialized_copy(begin(), position, _start);
-			_end = uninitialized_fill_n(_end, n, val); // _end point to next free space
-			_end = uninitialized_copy(position, end(), _end);
+			iterator _end = std::uninitialized_copy(begin(), position, _start);
+			_end = std::uninitialized_fill_n(_end, n, val); // _end point to next free space
+			_end = std::uninitialized_copy(position, end(), _end);
 			free();
 			elements = _start;
 			first_free = _end;
@@ -192,29 +190,27 @@ namespace MySTL
 
 	template <typename T>
 	template <typename InputIterator>
-	typename vector<T>::iterator vector<T>::insert(const_iterator position, InputIterator first, InputIterator second)
+	typename vector<T>::iterator vector<T>::insert(iterator position, InputIterator first, InputIterator second)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
 		if (first == second)
 			return const_cast<iterator>(position);
 
-		auto space_left = cap - first_free;
-		auto space_required = second - first;
+		difference_type space_left = cap - first_free;
+		difference_type space_required = second - first;
 		if (space_left >= space_required)
 		{
-			iterator _start = const_cast<iterator>(position) + space_required;
-			iterator _end = max(_start, end());
-			_end = std::uninitialized_copy(position, _end, _start); // move forward
+			std::copy_backward(position, end(), end() + space_required);
 			std::uninitialized_copy(first, second, position);// insert
-			first_free = _end;
+			first_free += space_required;
 		}
 		else
 		{
 			// bug fix: 2015/10/6
 			const size_type len = size() + max(size(), space_required);
-			T *_start = alloc.allocate(len);
-			T *_end = std::uninitialized_copy(begin(), position, _start);
+			iterator _start = alloc.allocate(len);
+			iterator _end = std::uninitialized_copy(begin(), position, _start);
 			_end = std::uninitialized_copy(first, second, _end); // insert
 			_end = std::uninitialized_copy(position, end(), _end);
 			free();
@@ -227,12 +223,10 @@ namespace MySTL
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(const_iterator position, std::initializer_list<T> il)
+	typename vector<T>::iterator vector<T>::insert(iterator position, std::initializer_list<T> il)
 	{
 		return insert<T>(position, il.begin(), il.end());
 	}
-
-	/////////////////////////////////////////////////////////////
 
 
 	template <typename T>
@@ -275,9 +269,11 @@ namespace MySTL
 		if (first == second)
 			return const_cast<iterator>(first);
 
-		auto len = second - first;
+		difference_type len = second - first;
+		iterator _first = const_cast<iterator>(first);
+		iterator _second = const_cast<iterator>(second);
 		for (auto i = 0; i < len; ++i)
-			*(first + i) = *(second + i);
+			*(_first + i) = *(_second + i);
 		// destory the objects from second to end() one by one
 		for (auto ptr = second; ptr != end(); ++ptr)
 			alloc.destroy(ptr);
@@ -328,13 +324,6 @@ namespace MySTL
 		else
 		{
 			T *_start = alloc.allocate(n);
-			//auto elem = elements;
-			//auto _end = _start;
-			//for (size_type i = 0; i < size(); ++i)
-			//	alloc.construct(_end++, std::move(*elem++));
-			//for (size_type i = size(); i < n; ++i)
-			//	alloc.construct(_end++, val);
-
 			auto len_insert = n - size();
 			T *_end = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), _start);
 			_end = std::uninitialized_fill_n(_end, len_insert, val);
@@ -351,7 +340,7 @@ namespace MySTL
 		if (n <= capacity())
 			return;
 		iterator _start = alloc.allocate(n);
-		iterator _end = std::uninitialized_copy(begin(), end(), _start);
+		iterator _end = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), _start);
 		free();
 		elements = _start;
 		first_free = _end;
@@ -383,11 +372,13 @@ namespace MySTL
 
 
 	template <typename T>
-	std::pair<typename vector<T>::iterator, typename vector<T>::iterator> 
-		vector<T>::alloc_n_copy(const_iterator first, const_iterator last)
+	template <typename InputIterator>
+	std::pair<typename vector<T>::iterator, typename vector<T>::iterator>
+		vector<T>::alloc_n_copy(InputIterator first, InputIterator last)
 	{
-		auto data = alloc.allocate(last - first);
-		return{ data, std::uninitialized_copy(first, last, data) };
+		auto _begin = alloc.allocate(last - first);
+		auto _end = std::uninitialized_copy(first, last, _begin);
+		return std::make_pair(_begin, _end);
 	}
 
 
@@ -396,12 +387,16 @@ namespace MySTL
 	{
 		auto newcapacity = size() ? 2 * size() : 1;
 		auto newdata = alloc.allocate(newcapacity);
+		//
 		auto dest = newdata;
 		auto elem = elements;
 		for (size_type i = 0; i != size(); ++i)
 		{
 			alloc.construct(dest++, std::move(*elem++));
 		}
+		// or
+		// dest = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), newdata);
+
 		free();
 		elements = newdata;
 		first_free = dest;
