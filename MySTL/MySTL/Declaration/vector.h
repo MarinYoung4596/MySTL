@@ -18,7 +18,7 @@ namespace MySTL
 {
 
 	template <typename T>
-	class vector
+	class Vector
 	{
 	public:
 		typedef std::size_t						size_type;
@@ -35,19 +35,19 @@ namespace MySTL
 		//typedef allocator<T>					allocator_type;
 		
 	public:
-		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
-		vector(const vector &);											// constructor: copy
-		vector(vector &&); //noexcept;									// constructor: move 
-		vector(const size_type n);	// explicit							// constructor: fill
-		vector(const size_type n, const value_type &val);				// constructor: fill
-		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
+		Vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
+		Vector(const Vector &);											// constructor: copy
+		Vector(Vector &&); //noexcept;									// constructor: move 
+		Vector(const size_type n);	// explicit							// constructor: fill
+		Vector(const size_type n, const value_type &val);				// constructor: fill
+		Vector(std::initializer_list<value_type> il);					// constructor: initializer_list
 		template<typename InputIterator>
-		vector(InputIterator first, InputIterator second);				// constructor: range
+		Vector(InputIterator first, InputIterator second);				// constructor: range
 
-		vector& operator=(const vector &rhs);							// assign content: copy
-		vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
-		vector& operator=(vector &&rhs); //noexcept;					// assign content: move
-		~vector();														// destructor
+		Vector& operator=(const Vector &rhs);							// assign content: copy
+		Vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
+		Vector& operator=(Vector &&rhs); //noexcept;					// assign content: move
+		~Vector();														// destructor
 
 		// Element Access
 		reference operator[](size_type n) { return *(elements + n); }	// access element
@@ -73,7 +73,7 @@ namespace MySTL
 		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
 		
 		void clear(); //noexcept;										// clear content
-		void swap(vector &x);											// swap content
+		void swap(Vector &x);											// swap content
 		
 		iterator erase(const_iterator position);						// erase elements: single element
 		iterator erase(const_iterator first, const_iterator second);	// erase elements: range

@@ -8,15 +8,22 @@
 #include <iterator>		// make_move_iterator
 #include <stdexcept>
 
-#include "Declaration/vector.h"
+#include "Declaration/Vector.h"
 
 #define max(a, b) (a) > (b) ? (a) : (b)
+
+using std::uninitialized_fill_n;
+using std::_Uninitialized_copy;
+using std::copy_backward;
+
+using MySTL::Vector;
+
 
 namespace MySTL
 {
 
 	template <typename T>
-	vector<T>::vector(const vector &s)
+	Vector<T>::Vector(const Vector &s)
 	{
 		auto newdata = alloc_n_copy(s.begin(), s.end());
 		elements = newdata.first;
@@ -25,7 +32,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::vector(vector &&s) //noexcept 
+	Vector<T>::Vector(Vector &&s) //noexcept 
 		: elements(s.elements), first_free(s.first_free), cap(s.cap)
 	{
 		s.elements = s.first_free = s.cap = nullptr;
@@ -33,7 +40,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::vector(const size_type n)
+	Vector<T>::Vector(const size_type n)
 	{
 		auto newdata = alloc.allocate(n);
 		std::uninitialized_fill_n(newdata, n, value_type());
@@ -43,7 +50,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::vector(const size_type n, const T &val)
+	Vector<T>::Vector(const size_type n, const T &val)
 	{
 		auto newdata = alloc.allocate(n);
 		//for (size_type i = 0; i < n;)
@@ -55,7 +62,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::vector(std::initializer_list<T> il)
+	Vector<T>::Vector(std::initializer_list<T> il)
 	{
 		auto data = alloc_n_copy(il.begin(), il.end());
 		elements = data.first;
@@ -65,7 +72,7 @@ namespace MySTL
 
 	template <typename T>
 	template <typename InputIterator>
-	vector<T>::vector(InputIterator first, InputIterator second)
+	Vector<T>::Vector(InputIterator first, InputIterator second)
 	{
 		auto data = alloc_n_copy(first, second);
 		elements = data.first;
@@ -74,7 +81,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>& vector<T>::operator=(const vector &rhs)
+	Vector<T>& Vector<T>::operator=(const Vector &rhs)
 	{
 		auto data = alloc_n_copy(rhs.begin(), rhs.end());
 		free();
@@ -85,7 +92,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>& vector<T>::operator=(vector &&rhs) //noexcept
+	Vector<T>& Vector<T>::operator=(Vector &&rhs) //noexcept
 	{
 		if (this != &rhs)
 		{
@@ -100,7 +107,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>& vector<T>::operator=(std::initializer_list<T> il)
+	Vector<T>& Vector<T>::operator=(std::initializer_list<T> il)
 	{
 		auto data = alloc_n_copy(il.begin(), il.end());
 		free();
@@ -111,7 +118,7 @@ namespace MySTL
 
 
 	template <typename T>
-	vector<T>::~vector()
+	Vector<T>::~Vector()
 	{
 		free();
 	}
@@ -120,7 +127,7 @@ namespace MySTL
 
 	// Elements Access
 	template <typename T>
-	typename vector<T>::reference vector<T>::at(size_type n)
+	typename Vector<T>::reference Vector<T>::at(size_type n)
 	{
 		if (n >= size())
 		{
@@ -133,7 +140,7 @@ namespace MySTL
 
 	// Modifiers
 	template <typename T>
-	void vector<T>::push_back(const value_type &s)
+	void Vector<T>::push_back(const value_type &s)
 	{
 		chk_n_alloc();
 		alloc.construct(first_free++, s);
@@ -141,7 +148,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector<T>::pop_back()
+	void Vector<T>::pop_back()
 	{
 		if (elements)
 			alloc.destroy(--first_free);
@@ -149,14 +156,14 @@ namespace MySTL
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(iterator position, const value_type &val)
+	typename Vector<T>::iterator Vector<T>::insert(iterator position, const value_type &val)
 	{
-		return vector<T>::insert(position, 1, val);
+		return Vector<T>::insert(position, 1, val);
 	}
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(iterator position, size_type n, const value_type &val)
+	typename Vector<T>::iterator Vector<T>::insert(iterator position, size_type n, const value_type &val)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
@@ -190,7 +197,7 @@ namespace MySTL
 
 	template <typename T>
 	template <typename InputIterator>
-	typename vector<T>::iterator vector<T>::insert(iterator position, InputIterator first, InputIterator second)
+	typename Vector<T>::iterator Vector<T>::insert(iterator position, InputIterator first, InputIterator second)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
@@ -223,14 +230,14 @@ namespace MySTL
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::insert(iterator position, std::initializer_list<T> il)
+	typename Vector<T>::iterator Vector<T>::insert(iterator position, std::initializer_list<T> il)
 	{
 		return insert<T>(position, il.begin(), il.end());
 	}
 
 
 	template <typename T>
-	void vector<T>::clear() //noexcept
+	void Vector<T>::clear() //noexcept
 	{
 		if (elements)
 		{
@@ -241,7 +248,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector<T>::swap(vector &x)
+	void Vector<T>::swap(Vector &x)
 	{
 		if (this != &x)
 		{
@@ -253,14 +260,14 @@ namespace MySTL
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::erase(const_iterator position)
+	typename Vector<T>::iterator Vector<T>::erase(const_iterator position)
 	{
-		return vector<T>::erase(position, position + 1);
+		return Vector<T>::erase(position, position + 1);
 	}
 
 
 	template <typename T>
-	typename vector<T>::iterator vector<T>::erase(const_iterator first, const_iterator second)
+	typename Vector<T>::iterator Vector<T>::erase(const_iterator first, const_iterator second)
 	{
 		if (first < begin() || second > end())
 			throw std::out_of_range("out of range!");
@@ -285,7 +292,7 @@ namespace MySTL
 
 	template <typename T>
 	template <typename... Args>
-	void vector<T>::emplace(const_iterator position, Args&&... args)
+	void Vector<T>::emplace(const_iterator position, Args&&... args)
 	{
 		if (position < begin() || position > end())
 			throw std::out_of_range("out of range!");
@@ -300,7 +307,7 @@ namespace MySTL
 
 	template <typename T>
 	template <typename... Args>
-	void vector<T>::emplace_back(Args&&... args)
+	void Vector<T>::emplace_back(Args&&... args)
 	{
 		chk_n_alloc();
 		alloc.construct(first_free++, std::forward<Args>(args)...);
@@ -309,7 +316,7 @@ namespace MySTL
 
 	// capacity
 	template <typename T>
-	void vector<T>::resize(size_type n, value_type val = value_type())
+	void Vector<T>::resize(size_type n, value_type val = value_type())
 	{
 		if (n < size())
 		{
@@ -335,7 +342,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector<T>::reserve(size_type n)
+	void Vector<T>::reserve(size_type n)
 	{
 		if (n <= capacity())
 			return;
@@ -349,7 +356,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector<T>::shrink_to_fit()
+	void Vector<T>::shrink_to_fit()
 	{
 		alloc.deallocate(first_free, cap - first_free);
 		cap = first_free;
@@ -358,11 +365,11 @@ namespace MySTL
 
 	// private functions
 	template <typename T>
-	void vector<T>::free()
+	void Vector<T>::free()
 	{
 		if (elements)
 		{
-			// destroy the object p in vector one by one
+			// destroy the object p in Vector one by one
 			for (auto p = first_free; p != elements;)
 				alloc.destroy(--p);
 			// and free the space.
@@ -373,8 +380,8 @@ namespace MySTL
 
 	template <typename T>
 	template <typename InputIterator>
-	std::pair<typename vector<T>::iterator, typename vector<T>::iterator>
-		vector<T>::alloc_n_copy(InputIterator first, InputIterator last)
+	std::pair<typename Vector<T>::iterator, typename Vector<T>::iterator>
+		Vector<T>::alloc_n_copy(InputIterator first, InputIterator last)
 	{
 		auto _begin = alloc.allocate(last - first);
 		auto _end = std::uninitialized_copy(first, last, _begin);
@@ -383,7 +390,7 @@ namespace MySTL
 
 
 	template <typename T>
-	void vector<T>::reallocate()
+	void Vector<T>::reallocate()
 	{
 		auto newcapacity = size() ? 2 * size() : 1;
 		auto newdata = alloc.allocate(newcapacity);
