@@ -3,7 +3,8 @@
 
 #include <cstddef>
 
-namespace MySTL{
+namespace MySTL
+{
 
 	struct input_iterator_tag {};
 	struct output_iterator_tag {};
@@ -12,7 +13,7 @@ namespace MySTL{
 	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 
-	// base
+	// base iterator
 	template <typename Category, 
 		typename T,
 		typename Distance = std::ptrdiff_t,
@@ -41,7 +42,7 @@ namespace MySTL{
 	};
 
 
-	// partial specialization of traits of the naive pointer
+	// partial specialization of traits of the ##naive pointer##
 	template <typename T>
 	struct iterator_traits<T*>
 	{
@@ -53,7 +54,7 @@ namespace MySTL{
 	};
 
 
-	// partial specialization of traits of the naive pointer-to-const
+	// partial specialization of traits of the ##naive pointer-to-const##
 	template <typename T>
 	struct iterator_traits<const T*>
 	{
@@ -65,6 +66,7 @@ namespace MySTL{
 	};
 
 
+	// category
 	template <typename Iterator>
 	inline typename iterator_traits<Iterator>::iterator_category iterator_category(const Iterator&)
 	{
@@ -73,6 +75,7 @@ namespace MySTL{
 	}
 
 
+	// distance type
 	template <typename Iterator>
 	inline typename iterator_traits<Iterator>::difference_type* difference_type(const Iterator&)
 	{
@@ -80,6 +83,7 @@ namespace MySTL{
 	}
 
 
+	// value type
 	template <typename Iterator>
 	inline typename iterator_traits<Iterator>::value_type* value_type(const Iterator&)
 	{
