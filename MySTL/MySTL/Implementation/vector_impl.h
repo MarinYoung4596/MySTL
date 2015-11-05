@@ -5,18 +5,15 @@
 #include <utility>	// std::move & std::forward & std::pair
 #include <memory>	// uninitialized_copy & uninitialized_fill
 #include <algorithm>	// std::swap, max
-#include <iterator>		// make_move_iterator
 #include <stdexcept>
 
-#include "Declaration/Vector.h"
+#include "../Declaration/vector.h"
 
 #define max(a, b) (a) > (b) ? (a) : (b)
 
 using std::uninitialized_fill_n;
-using std::_Uninitialized_copy;
-using std::copy_backward;
+using std::uninitialized_copy;
 
-using MySTL::Vector;
 
 
 namespace MySTL
@@ -32,7 +29,7 @@ namespace MySTL
 
 
 	template <typename T>
-	Vector<T>::Vector(Vector &&s) //noexcept 
+	Vector<T>::Vector(Vector &&s) //noexcept
 		: elements(s.elements), first_free(s.first_free), cap(s.cap)
 	{
 		s.elements = s.first_free = s.cap = nullptr;
@@ -208,7 +205,7 @@ namespace MySTL
 		difference_type space_required = second - first;
 		if (space_left >= space_required)
 		{
-			std::copy_backward(position, end(), end() + space_required);
+			std::uninitialized_copy(position, end(), end() + space_required);
 			std::uninitialized_copy(first, second, position);// insert
 			first_free += space_required;
 		}
@@ -332,7 +329,7 @@ namespace MySTL
 		{
 			T *_start = alloc.allocate(n);
 			auto len_insert = n - size();
-			T *_end = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), _start);
+			T *_end = std::uninitialized_copy(begin(), end(), _start);
 			_end = std::uninitialized_fill_n(_end, len_insert, val);
 			free();
 			elements = _start;
@@ -347,7 +344,7 @@ namespace MySTL
 		if (n <= capacity())
 			return;
 		iterator _start = alloc.allocate(n);
-		iterator _end = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), _start);
+		iterator _end = std::uninitialized_copy(begin(), end(), _start);
 		free();
 		elements = _start;
 		first_free = _end;

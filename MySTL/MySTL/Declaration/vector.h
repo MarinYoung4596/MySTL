@@ -4,9 +4,9 @@
 #include <initializer_list>
 #include <cstddef>		// ptrdiff_t
 #include <memory>		// allocator, uninitialized_copy, uninitialized_fill
-#include <type_traits>
 
-//#include "iterator.h"
+#include "../Declaration/iterator.h"
+#include "../Declaration/type_traits.h"
 
 /*
 Reference:
