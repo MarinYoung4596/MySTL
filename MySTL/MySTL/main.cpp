@@ -9,7 +9,7 @@
 int main()
 {
 
-	MySTL::TestCase::VectorTest::testCase_vector();
+	MySTL::TestCase::vectorTest::testCase_vector();
 
 
 

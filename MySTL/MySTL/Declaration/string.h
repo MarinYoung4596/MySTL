@@ -5,7 +5,7 @@
 // http://www.cplusplus.com/reference/string/string/?kw=string
 
 #include <memory>		// allocator, uninitialized_copy, uninitialized_fill_n
-#include <type_traits>	
+#include <type_traits>
 #include <initializer_list>
 #include <iterator>		// reverse_iterator
 #include <iostream>		// std::istream, std::ostream
@@ -58,7 +58,7 @@ namespace MySTL
 		string(InputIterator first, InputIterator last);
 		// (8) initializer list
 		// Copies each of the characters in il, in the same order.
-		string(std::initializer_list<char> il);	
+		string(std::initializer_list<char> il);
 		// (9) move constructor
 		//	Acquires the contents of str.
 		//	str is left in an unspecified but valid state.
@@ -100,7 +100,7 @@ namespace MySTL
 		reverse_iterator rbegin() { return reverse_iterator(_begin); }//noexcept;
 		const_reverse_iterator rbegin() const { return const_reverse_iterator(_begin); } // noexcept;
 		// Return reverse iterator to reverse end
-		// Returns a reverse iterator pointing to the theoretical element preceding the first character of the 
+		// Returns a reverse iterator pointing to the theoretical element preceding the first character of the
 		//	string (which is considered its reverse end).
 		reverse_iterator rend() { return reverse_iterator(_begin); } // noexcept;
 		const_reverse_iterator rend() const { return const_reverse_iterator(_end); } // noexcept;
@@ -114,7 +114,7 @@ namespace MySTL
 		//	Returns a const_reverse_iterator pointing to the last character of the string(i.e. its reverse beginning).
 		const_reverse_iterator crbegin() const { return const_reverse_iterator(_begin); } // noexcept;
 		// Return const_reverse_iterator to reverse end
-		//	Returns a const_reverse_iterator pointing to the theoretical character preceding the first character of 
+		//	Returns a const_reverse_iterator pointing to the theoretical character preceding the first character of
 		//  the string (which is considered its reverse end).
 		const_reverse_iterator crend() const { return const_reverse_iterator(_end); } // noexcept;
 
@@ -125,7 +125,7 @@ namespace MySTL
 		// Return length of string
 		// Returns the length of the string, in terms of bytes.
 		std::size_t size() const { return _end - _begin; }// noexcept;
-		
+
 		// Return length of string
 		//	Returns the length of the string, in terms of bytes.
 		std::size_t length() const { return _end - _begin; } // noexcept;
@@ -154,7 +154,7 @@ namespace MySTL
 		// Test if string is empty
 		//	Returns whether the string is empty(i.e.whether its length is 0).
 		bool empty() const { return _begin == _end; }//noexcept;
-	
+
 		// Shrink to fit
 		// 	Requests the string to reduce its capacity to fit its size.
 		void shrink_to_fit();
@@ -201,7 +201,7 @@ namespace MySTL
 		//	Appends a copy of str.
 		string& append(const string& str);
 		// (2) substring
-		//	Appends a copy of a substring of str.The substring is the portion of str that begins at the character 
+		//	Appends a copy of a substring of str.The substring is the portion of str that begins at the character
 		//  position subpos and spans sublen characters
 		//  (or until the end of str, if either str is too short or if sublen is string::npos).
 		string& append(const string& str, std::size_t subpos, std::size_t sublen);
@@ -267,7 +267,7 @@ namespace MySTL
 		//	Inserts a copy of str.
 		string& insert(std::size_t pos, const string& str);
 		//	(2) substring
-		//	Inserts a copy of a substring of str.The substring is the portion of str that begins at the character position 
+		//	Inserts a copy of a substring of str.The substring is the portion of str that begins at the character position
 		//  subpos and spans sublen characters(or until the end of str, if either str is too short or if sublen is npos).
 		string& insert(std::size_t pos, const string& str, std::size_t subpos, std::size_t sublen);
 		//	(3) c - string
@@ -354,12 +354,12 @@ namespace MySTL
 		//////////////////// string operations ////////////////////
 
 		// Get C string equivalent
-		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string) 
+		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string)
 		// representing the current value of the string object.
 		const char* c_str() const noexcept;
 
 		// Get string data
-		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string) 
+		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string)
 		//	representing the current value of the string object.
 		const char* data() const noexcept;
 
@@ -375,7 +375,7 @@ namespace MySTL
 		//	Find content in string
 		//	Searches the string for the first occurrence of the sequence specified by its arguments.
 		std::size_t find(const string& str, std::size_t pos = 0) const noexcept;			// string(1)
-		std::size_t find(const char* s, std::size_t pos = 0) const;							// c - string(2)		
+		std::size_t find(const char* s, std::size_t pos = 0) const;							// c - string(2)
 		std::size_t find(const char* s, std::size_t pos, std::size_t n) const;				// buffer(3)
 		std::size_t find(char c, std::size_t pos = 0) const noexcept;						// character(4)
 
@@ -422,8 +422,7 @@ namespace MySTL
 		//	Compares the value of the string object(or a substring) to the sequence of characters specified by its arguments.
 		int compare(const string& str) const noexcept;										// string(1)
 		int compare(std::size_t pos, std::size_t len, const string& str) const;				// string(1)
-		int compare(std::size_t pos, std::size_t len, const string& str, 
-			std::size_t subpos, std::size_t sublen) const;// substrings(2)
+		int compare(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen) const;// substrings(2)
 		int compare(const char* s) const;													// c - string(3)
 		int compare(std::size_t pos, std::size_t len, const char* s) const;					// c - string(3)
 		int compare(std::size_t pos, std::size_t len, const char* s, std::size_t n) const;	// buffer(4)
@@ -468,7 +467,7 @@ namespace MySTL
 		//////////////////// non-member functions overloads ////////////////////
 
 		// Concatenate strings
-		// Returns a newly constructed string object with its value being the concatenation of the 
+		// Returns a newly constructed string object with its value being the concatenation of the
 		//	characters in lhs followed by those of rhs.
 		friend string operator+ (const string& lhs, const string& rhs);		// string(1)
 		friend string operator+ (string&&      lhs, string&&      rhs);
@@ -511,7 +510,7 @@ namespace MySTL
 		//  the value of x is the one which was on y before the call, and the value of y is that of x.
 		friend void swap (string& x, string& y);
 
-		
+
 		// Extract string from stream
 		//	Extracts a string from the input stream is, storing the sequence in str, which is overwritten
 		//  (the previous value of str is replaced).
@@ -519,7 +518,7 @@ namespace MySTL
 		// Insert string into stream
 		//	Inserts the sequence of characters that conforms value of str into os.
 		friend std::ostream& operator<< (std::ostream& os, const string& str);
-		
+
 
 		// Get line from stream into string
 		// Extracts characters from is and stores them into str until the delimitation character delim is found

@@ -21,31 +21,37 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vector.h">
-      <Filter>Declaration</Filter>
-    </ClInclude>
-    <ClInclude Include="test_vector.h">
-      <Filter>TestCase</Filter>
-    </ClInclude>
-    <ClInclude Include="string.h">
-      <Filter>Declaration</Filter>
-    </ClInclude>
-    <ClInclude Include="vector_impl.h">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="TestCase\test_string.h">
       <Filter>TestCase</Filter>
     </ClInclude>
     <ClInclude Include="Implementation\string_impl.h">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="iterator.h">
+    <ClInclude Include="Declaration\type_traits.h">
       <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Declaration\iterator.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Declaration\string.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Declaration\vector.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\vector_impl.h">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCase\test_vector.h">
+      <Filter>TestCase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCase\test_vector.cpp">
+      <Filter>TestCase</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

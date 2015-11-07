@@ -79,16 +79,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Declaration\iterator.h" />
+    <ClInclude Include="Declaration\string.h" />
+    <ClInclude Include="Declaration\type_traits.h" />
+    <ClInclude Include="Declaration\vector.h" />
     <ClInclude Include="Implementation\string_impl.h" />
-    <ClInclude Include="iterator.h" />
-    <ClInclude Include="string.h" />
+    <ClInclude Include="Implementation\vector_impl.h" />
     <ClInclude Include="TestCase\test_string.h" />
-    <ClInclude Include="test_vector.h" />
-    <ClInclude Include="vector.h" />
-    <ClInclude Include="vector_impl.h" />
+    <ClInclude Include="TestCase\test_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestCase\test_vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

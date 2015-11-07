@@ -8,17 +8,12 @@
 #include "../Declaration/iterator.h"
 #include "../Declaration/type_traits.h"
 
-/*
-Reference:
-	1. C++ Primer (5th Edition)
-	2. http://www.cplusplus.com/reference/vector/vector/
-*/
 
 namespace MySTL
 {
 
 	template <typename T>
-	class Vector
+	class vector
 	{
 	public:
 		typedef std::size_t						size_type;
@@ -26,8 +21,8 @@ namespace MySTL
 		typedef value_type&						reference;
 		typedef const value_type&				const_reference;
 		typedef value_type*						iterator;
-		typedef value_type*						pointer;
 		typedef const value_type*				const_iterator;
+		typedef value_type*						pointer;
 		typedef const value_type*				const_pointer;
 		typedef std::reverse_iterator<T*>		reverse_iterator;
 		typedef std::reverse_iterator<const T*> const_reverse_iterator;
@@ -35,19 +30,19 @@ namespace MySTL
 		//typedef allocator<T>					allocator_type;
 		
 	public:
-		Vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
-		Vector(const Vector &);											// constructor: copy
-		Vector(Vector &&); //noexcept;									// constructor: move 
-		Vector(const size_type n);	// explicit							// constructor: fill
-		Vector(const size_type n, const value_type &val);				// constructor: fill
-		Vector(std::initializer_list<value_type> il);					// constructor: initializer_list
+		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
+		vector(const vector &);											// constructor: copy
+		vector(vector &&); //noexcept;									// constructor: move 
+		vector(const size_type n);	// explicit							// constructor: fill
+		vector(const size_type n, const value_type &val);				// constructor: fill
+		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
 		template<typename InputIterator>
-		Vector(InputIterator first, InputIterator second);				// constructor: range
+		vector(InputIterator first, InputIterator second);				// constructor: range
 
-		Vector& operator=(const Vector &rhs);							// assign content: copy
-		Vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
-		Vector& operator=(Vector &&rhs); //noexcept;					// assign content: move
-		~Vector();														// destructor
+		vector& operator=(const vector &rhs);							// assign content: copy
+		vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
+		vector& operator=(vector &&rhs); //noexcept;					// assign content: move
+		~vector();														// destructor
 
 		// Element Access
 		reference operator[](size_type n) { return *(elements + n); }	// access element
@@ -73,7 +68,7 @@ namespace MySTL
 		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
 		
 		void clear(); //noexcept;										// clear content
-		void swap(Vector &x);											// swap content
+		void swap(vector &x);											// swap content
 		
 		iterator erase(const_iterator position);						// erase elements: single element
 		iterator erase(const_iterator first, const_iterator second);	// erase elements: range
@@ -106,22 +101,17 @@ namespace MySTL
 		// allocator_type get_allocator() const;
 
 	private:
-		void chk_n_alloc()
-		{
-			if (size() == capacity())
-				reallocate();
-		}
-
+		void chk_n_alloc();
 
 		template <typename InputIterator>
 		std::pair<iterator, iterator> alloc_n_copy(InputIterator, InputIterator);
 
 		void free();
+
 		void reallocate();
 		
-		std::allocator<T> alloc;
 
-		
+		std::allocator<T> alloc;
 		T *elements;      // head pointer
 		T *first_free;    // the pointer that point to the first free element in the array
 		T *cap;           // tail pointer, end of storage
@@ -151,4 +141,7 @@ namespace MySTL
 	};
 
 }
+
+#include "../Implementation/vector_impl.h"
+
 #endif // _VECTOR_H_

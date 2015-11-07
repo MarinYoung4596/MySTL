@@ -1,51 +1,32 @@
-﻿生成启动时间为 10/10/2015 9:37:41 PM。
+﻿生成启动时间为 11/7/2015 2:25:13 PM。
      1>项目“C:\Users\MY\Documents\MySTL\MySTL\MySTL\MySTL.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MDd /GS- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MDd /GS- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TestCase\test_vector.cpp main.cpp
      1>cl : 命令行 warning D9025: 正在重写“/sdl”(用“/GS-”)
-         main.cpp
-     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(211): warning C4018: “>”: 有符号/无符号不匹配
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
+         test_vector.cpp
+     1>c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(214): warning C4018: “>”: 有符号/无符号不匹配
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.cpp(315): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
                  with
                  [
                      InputIterator=int
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.cpp(315): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
                  with
                  [
                      InputIterator=int
                  ]
      1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(348): warning C4996: 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
                  d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(328): 参见对正在编译的函数 模板 实例化“_FwdIt std::uninitialized_copy<std::move_iterator<int *>,T*>(_InIt,_InIt,_FwdIt)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(332): 参见对正在编译的函数 模板 实例化“_FwdIt std::uninitialized_copy<int*,T*>(_InIt,_InIt,_FwdIt)”的引用
                  with
                  [
                      _FwdIt=int *
          ,            T=int
-         ,            _InIt=std::move_iterator<int *>
+         ,            _InIt=int *
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(313): 编译类 模板 成员函数“void MySTL::vector<int>::resize(MySTL::vector<int>::size_type,int)”时
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(130): 参见对正在编译的函数 模板 实例化“void MySTL::vector<int>::resize(MySTL::vector<int>::size_type,int)”的引用
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(25): 参见对正在编译的类 模板 实例化“MySTL::vector<int>”的引用
-     1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2409): warning C4996: 'std::_Copy_backward': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2394) : 参见“std::_Copy_backward”的声明
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(204): 参见对正在编译的函数 模板 实例化“_BidIt2 std::copy_backward<int*,int*>(_BidIt1,_BidIt1,_BidIt2)”的引用
-                 with
-                 [
-                     _BidIt2=int *
-         ,            _BidIt1=int *
-                 ]
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
-                 with
-                 [
-                     InputIterator=int
-                 ]
-                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.h(317): 参见对正在编译的函数 模板 实例化“int *MySTL::vector<int>::insert<int>(int *,InputIterator,InputIterator)”的引用
-                 with
-                 [
-                     InputIterator=int
-                 ]
-                 d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(317): 编译类 模板 成员函数“void MySTL::vector<int>::resize(MySTL::vector<int>::size_type,int)”时
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.cpp(128): 参见对正在编译的函数 模板 实例化“void MySTL::vector<int>::resize(MySTL::vector<int>::size_type,int)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\testcase\test_vector.cpp(23): 参见对正在编译的类 模板 实例化“MySTL::vector<int>”的引用
                  d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
                  d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(333) : 参见“std::_Uninitialized_copy0”的声明
      1>d:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(371): error C2825: '_Iter': 当后面跟“::”时必须为类或命名空间
@@ -59,7 +40,7 @@
                  [
                      _InIt=int
                  ]
-                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(205): 参见对正在编译的函数 模板 实例化“_FwdIt std::uninitialized_copy<InputIterator,int*>(_InIt,_InIt,_FwdIt)”的引用
+                 c:\users\my\documents\mystl\mystl\mystl\implementation\vector_impl.h(208): 参见对正在编译的函数 模板 实例化“_FwdIt std::uninitialized_copy<InputIterator,int*>(_InIt,_InIt,_FwdIt)”的引用
                  with
                  [
                      _FwdIt=int *
@@ -181,10 +162,10 @@
                      _FwdIt=int *
          ,            _InIt=int
                  ]
-                 尝试匹配参数列表“(int, int, int *, int, std::iterator_traits<_RanIt>::iterator_category)”时
+                 尝试匹配参数列表“(int, int, int *, int, std::iterator_traits<_InIt>::iterator_category)”时
                  with
                  [
-                     _RanIt=int *
+                     _InIt=int *
                  ]
                  d:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory(348): 参见对正在编译的函数 模板 实例化“_FwdIt std::_Uninitialized_copy0<_Iter,_FwdIt>(_InIt,_InIt,_FwdIt,std::false_type)”的引用
                  with
@@ -193,8 +174,12 @@
          ,            _Iter=int
          ,            _InIt=int
                  ]
+         正在生成代码...
+         正在编译...
+         main.cpp
+         正在生成代码...
      1>已完成生成项目“C:\Users\MY\Documents\MySTL\MySTL\MySTL\MySTL.vcxproj”(Build 个目标)的操作 - 失败。
 
 生成失败。
 
-已用时间 00:00:00.76
+已用时间 00:00:01.35
