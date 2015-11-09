@@ -13,23 +13,11 @@ namespace MySTL
         new (p) T1(value);  // placement new; invoke T1:T1(value)
     }
 
+    //////////////////////////////////////////////
     template <typename T>
     inline void destory(T *p)
     {
         p->~T();    // default destructor
-    }
-
-    template <typename ForwardIterator>
-    inline void destory(ForwardIterator first, ForwardIterator last)
-    {
-        _destory(first, last, value_type(first));
-    }
-
-    template <typename ForwardIterator, typename T>
-    inline void _destory(ForwardIterator first, ForwardIterator last, T*) // T* and value_type were used to get the real type of T
-    {
-        typedef typename _type_traits<T>::has_trivial_destructor trivial_destructor;
-        return _destory_aux(first, last, trivial_destructor);
     }
 
     template <typename ForwardIterator>
@@ -42,6 +30,18 @@ namespace MySTL
             destory(&*first);   // invoke default destructor
     }
 
+    template <typename ForwardIterator, typename T>
+    inline void _destory(ForwardIterator first, ForwardIterator last, T*) // T* and value_type were used to get the real type of T
+    {
+        typedef typename _type_traits<T>::has_trivial_destructor trivial_destructor;
+        return _destory_aux(first, last, trivial_destructor);
+    }
+
+    template <typename ForwardIterator>
+    inline void destory(ForwardIterator first, ForwardIterator last)
+    {
+        _destory(first, last, value_type(first));
+    }
     // partical specialization
     inline void destory(char *, char *) {}
     inline void destory(wchar_t *, wchar_t *) {}
