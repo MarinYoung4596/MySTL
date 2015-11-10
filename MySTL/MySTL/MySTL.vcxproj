@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="construct.h" />
     <ClInclude Include="Declaration\iterator.h" />
     <ClInclude Include="Declaration\string.h" />
     <ClInclude Include="Declaration\type_traits.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="Implementation\vector_impl.h" />
     <ClInclude Include="TestCase\test_string.h" />
     <ClInclude Include="TestCase\test_vector.h" />
+    <ClInclude Include="uninitialized_functions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

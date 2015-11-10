@@ -1,5 +1,5 @@
-#ifndef _VECTOR_IMPL_H_
-#define _VECTOR_IMPL_H_
+#ifndef INCLUDED_VECTOR_IMPL_H
+#define INCLUDED_VECTOR_IMPL_H
 
 
 #include <utility>	// std::move & std::forward & std::pair

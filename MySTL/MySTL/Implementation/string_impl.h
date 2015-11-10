@@ -1,5 +1,5 @@
-#ifndef _STRING_IMPL_H_
-#define _STRING_IMPL_H_
+#ifndef INCLUDED_STRING_IMPL_H
+#define INCLUDED_STRING_IMPL_H
 
 #include <utility>     // for std::move()
 #include <iterator>    // for make_move_iterator
@@ -48,7 +48,7 @@ namespace MySTL
 	{
 		auto start = alloc.allocate(second - first);
 		auto finish = std::uninitialized_copy(first, second, _begin);
-		
+
 		_begin = start;
 		_end = _cap = finish;
 	}
@@ -57,7 +57,7 @@ namespace MySTL
 	{
 		auto start = alloc.allocate(n);
 		auto finish = std::uninitialized_fill_n(_begin, n, c);
-		
+
 		_begin = start;
 		_end = _cap = finish;
 	}
@@ -81,7 +81,7 @@ namespace MySTL
 	{
 		if (pos > str.size() || len > str.size())
 			throw std::out_of_range("out of range");
-		
+
 		const_iterator finish;
 		if (len == npos)
 			finish = _end;
@@ -143,7 +143,7 @@ namespace MySTL
 	}
 
 	string& string::operator= (const char* s)
-	{	
+	{
 		free();
 		alloc_n_copy(s, s + strlen(s));
 		return *this;
@@ -542,11 +542,11 @@ namespace MySTL
 		difference_type len = last - first;
 		for (iterator i = const_cast<iterator>(first); i != last && i != _end; ++i)
 			*i = *(i + len);  // right?
-		
+
 		const_iterator stop = _end - len;
 		for (; _end != stop; )
 			alloc.destroy(--_end);
-		
+
 		return const_cast<iterator>(first);
 	}
 
@@ -661,14 +661,14 @@ namespace MySTL
 
 	// find
 	// @str		another string with the subject to search for
-	// @s		pointer to an array of characters 
+	// @s		pointer to an array of characters
 	//			(if argument @n is specified, the sequence to match are the first n characters in the array)
 	// @c		individual character to be searched for
 	// @pos		position of the first character in the string to be considered in the search
 	// @n		length of sequence of characters to match
 	std::size_t string::find(const string& str, std::size_t pos = 0) const //noexcept
 	{
-		// KMP ?
+		return find(str.begin(), pos, str.size());
 	}
 
 	std::size_t string::find(const char* s, std::size_t pos = 0) const
@@ -698,7 +698,7 @@ namespace MySTL
 	{
 
 	}
-	
+
 	std::size_t string::rfind(const char* s, std::size_t pos = npos) const
 	{
 		return rfind(s, pos, strlen(s));
@@ -746,7 +746,7 @@ namespace MySTL
 	// find_last_of
 	std::size_t string::find_last_of(const string& str, std::size_t pos = npos) const //noexcept
 	{
-		
+
 	}
 
 	std::size_t string::find_last_of(const char* s, std::size_t pos = npos) const
@@ -828,9 +828,9 @@ namespace MySTL
 
 	// compare
 	// @str		another string object, used entirely (or partially) as the \comparing string
-	// @s		pointer to an array of characters 
+	// @s		pointer to an array of characters
 	//			(if argument @n is specified, the first n characters in the array are used as the \comparing string)
-	// @pos		position of the first character in the \compared string 
+	// @pos		position of the first character in the \compared string
 	// @len		length of \compared string (if the string is shorter, as many characters as possible)
 	// @subpos, sublen
 	//			same as @pos and @len above, but for /comparing string

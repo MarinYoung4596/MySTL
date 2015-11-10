@@ -1,5 +1,5 @@
-#ifndef _TEST_VECTOR_H_
-#define _TEST_VECTOR_H_
+#ifndef INCLUDED_TEST_VECTOR_H
+#define INCLUDED_TEST_VECTOR_H
 
 #include "../Declaration/vector.h"
 
@@ -36,4 +36,4 @@ namespace MySTL
 		}
 	}
 }
-#endif // _TEST_VECTORH_
+#endif

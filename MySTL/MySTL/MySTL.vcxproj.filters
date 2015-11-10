@@ -45,6 +45,12 @@
     <ClInclude Include="TestCase\test_vector.h">
       <Filter>TestCase</Filter>
     </ClInclude>
+    <ClInclude Include="uninitialized_functions.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="construct.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

@@ -1,5 +1,5 @@
-#ifndef _STRING_H_
-#define _STRING_H_
+#ifndef INCLUDED_STRING_H
+#define INCLUDED_STRING_H
 
 // reference:
 // http://www.cplusplus.com/reference/string/string/?kw=string
@@ -32,50 +32,25 @@ namespace MySTL
 
 	public:
 		//////////////////// constructor ////////////////////
-
-		// (1) empty string constructor (default constructor)
-		// Constructs an empty string, with a length of zero characters.
-		string() : _begin(nullptr), _end(nullptr), _cap(nullptr) {}
-		// (2) copy constructor
-		// Constructs a copy of str.
-		string(const string &str);
-		// (3) substring constructor
-		// Copies the portion of str that begins at the character position pos and spans len characters
-		// (or until the end of str, if either str is too short or if len is string::npos).
-		string(const string &str, std::size_t pos, std::size_t len = npos);
-		// (4) from c-string
-		// Copies the null - terminated character sequence(C - string) pointed by s.
-		string(const char* s);
-		// (5) from buffer
-		//	Copies the first n characters from the array of characters pointed by s.
-		string(const char* s, std::size_t n);
-		// (6) fill constructor
-		// Fills the string with n consecutive copies of character c.
-		string(std::size_t n, char c);
-		// (7) range constructor
-		// Copies the sequence of characters in the range[first, last), in the same order.
+		string() : _begin(nullptr), _end(nullptr), _cap(nullptr) {}			// (1) default constructor
+		string(const string &str);											// (2) copy constructor
+		string(const string &str, std::size_t pos, std::size_t len = npos);	// (3) substring constructor
+		string(const char* s);												// (4) from c-string
+		string(const char* s, std::size_t n);								// (5) from buffer
+		string(std::size_t n, char c);										// (6) fill constructor
 		template <typename InputIterator>
-		string(InputIterator first, InputIterator last);
-		// (8) initializer list
-		// Copies each of the characters in il, in the same order.
-		string(std::initializer_list<char> il);
-		// (9) move constructor
-		//	Acquires the contents of str.
-		//	str is left in an unspecified but valid state.
-		string(string &&str) noexcept;
+		string(InputIterator first, InputIterator last);					// (7) range constructor
+		string(std::initializer_list<char> il);								// (8) initializer list
+		string(string &&str) noexcept;										// (9) move constructor
 
 
 
 		//////////////////// destructor ////////////////////
-
-		// Destroys the string object.
-		// This deallocates all the storage capacity allocated by the string using its allocator.
 		~string();
 
 
 
 		//////////////////// string assignment ////////////////////
-
 		// Assigns a new value to the string, replacing its current contents.
 		string& operator= (const string& str);				// string
 		string& operator= (const char* s);					// c-string
@@ -86,100 +61,55 @@ namespace MySTL
 
 
 		//////////////////// iterators ////////////////////
-
-		// Return iterator to beginning
-		// Returns an iterator pointing to the first character of the string.
 		iterator begin() { return _begin; } // noexcept;
-		const_iterator begin() const { return _begin; }// noexcept;
-		// Return iterator to end
-		// Returns an iterator pointing to the past - the - end character of the string.
+		//const_iterator begin() const { return _begin; }// noexcept;
 		iterator end() { return _end; } // noexcept;
-		const_iterator end() const { return _end; }// noexcept;
-		// Return reverse iterator to reverse beginning
-		// Returns a reverse iterator pointing to the last character of the string(i.e., its reverse beginning).
+		//const_iterator end() const { return _end; }// noexcept;
 		reverse_iterator rbegin() { return reverse_iterator(_begin); }//noexcept;
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(_begin); } // noexcept;
-		// Return reverse iterator to reverse end
-		// Returns a reverse iterator pointing to the theoretical element preceding the first character of the
-		//	string (which is considered its reverse end).
+		//const_reverse_iterator rbegin() const { return const_reverse_iterator(_begin); } // noexcept;
 		reverse_iterator rend() { return reverse_iterator(_begin); } // noexcept;
-		const_reverse_iterator rend() const { return const_reverse_iterator(_end); } // noexcept;
-		// Return const_iterator to beginning
-		// Returns a const_iterator pointing to the first character of the string.
+		//const_reverse_iterator rend() const { return const_reverse_iterator(_end); } // noexcept;
 		const_iterator cbegin() const { return _begin; } // noexcept;
-		// Return const_iterator to end
-		// Returns a const_iterator pointing to the past-the-end character of the string.
 		const_iterator cend() const { return _end; } // noexcept;
-		// Return const_reverse_iterator to reverse beginning
-		//	Returns a const_reverse_iterator pointing to the last character of the string(i.e. its reverse beginning).
 		const_reverse_iterator crbegin() const { return const_reverse_iterator(_begin); } // noexcept;
-		// Return const_reverse_iterator to reverse end
-		//	Returns a const_reverse_iterator pointing to the theoretical character preceding the first character of
-		//  the string (which is considered its reverse end).
 		const_reverse_iterator crend() const { return const_reverse_iterator(_end); } // noexcept;
 
 
 
 		//////////////////// capacity ////////////////////
 
-		// Return length of string
-		// Returns the length of the string, in terms of bytes.
 		std::size_t size() const { return _end - _begin; }// noexcept;
 
-		// Return length of string
-		//	Returns the length of the string, in terms of bytes.
 		std::size_t length() const { return _end - _begin; } // noexcept;
 
-		// Return maximum size of string
-		//	Returns the maximum length the string can reach.
 		std::size_t max_size() const { return size_type(UINT_MAX / sizeof(char)); }//noexcept;
 
-		// Resize string
-		//	Resizes the string to a length of n characters.
 		void resize(std::size_t n);
 		void resize(std::size_t n, char c);
 
-		// Return size of allocated storage
-		// 	Returns the size of the storage space currently allocated for the string, expressed in terms of bytes.
 		std::size_t capacity() const { return _cap - _begin; }// noexcept;
 
-		// Request a change in capacity
-		//	Requests that the string capacity be adapted to a planned change in size to a length of up to n characters.
 		void reserve(std::size_t n = 0);
 
-		// Clear string
-		//	Erases the contents of the string, which becomes an empty string(with a length of 0 characters).
 		void clear() noexcept;
 
-		// Test if string is empty
-		//	Returns whether the string is empty(i.e.whether its length is 0).
 		bool empty() const { return _begin == _end; }//noexcept;
 
-		// Shrink to fit
-		// 	Requests the string to reduce its capacity to fit its size.
 		void shrink_to_fit();
 
 
 
 		//////////////////// element access ////////////////////
 
-		// Get character of string
-		// Returns a reference to the character at position pos in the string.
 		char& operator[] (std::size_t pos) { return *(_begin + pos); }
 		const char& operator[] (std::size_t pos) const { return *(_begin + pos); }
 
-		// Get character in string
-		//	Returns a reference to the character at position pos in the string.
 		char& at(std::size_t pos);
 		const char& at(std::size_t pos) const;
 
-		// Access last character
-		//	Returns a reference to the last character of the string.
 		char& back() { return *(_end - 1); }
 		const char& back() const { return *(_end - 1); }
 
-		// Access first character
-		//	Returns a reference to the first character of the string.
 		char& front() { return *_begin; }
 		const char& front() const { return *_begin; }
 
@@ -196,31 +126,14 @@ namespace MySTL
 
 		//Append to string
 		//	Extends the string by appending additional characters at the end of its current value :
-
-		// (1) string
-		//	Appends a copy of str.
-		string& append(const string& str);
-		// (2) substring
-		//	Appends a copy of a substring of str.The substring is the portion of str that begins at the character
-		//  position subpos and spans sublen characters
-		//  (or until the end of str, if either str is too short or if sublen is string::npos).
-		string& append(const string& str, std::size_t subpos, std::size_t sublen);
-		// (3) c - string
-		//	Appends a copy of the string formed by the null - terminated character sequence(C - string) pointed by s.
-		string& append(const char* s);
-		// (4) buffer
-		//	Appends a copy of the first n characters in the array of characters pointed by s.
-		string& append(const char* s, std::size_t n);
-		// (5) fill
-		//	Appends n consecutive copies of character c.
-		string& append(std::size_t n, char c);
-		// (6) range
-		//	Appends a copy of the sequence of characters in the range[first, last), in the same order.
+		string& append(const string& str);											// (1) string
+		string& append(const string& str, std::size_t subpos, std::size_t sublen);	// (2) substring
+		string& append(const char* s);												// (3) c - string
+		string& append(const char* s, std::size_t n);								// (4) buffer
+		string& append(std::size_t n, char c);										// (5) fill
 		template <typename InputIterator>
-		string& append(InputIterator first, InputIterator last);
-		// (7) initializer list
-		//	Appends a copy of each of the characters in il, in the same order.
-		string& append(std::initializer_list<char> il);
+		string& append(InputIterator first, InputIterator last);					// (6) range
+		string& append(std::initializer_list<char> il);								// (7) initializer list
 
 
 		// Append character to string
@@ -230,146 +143,69 @@ namespace MySTL
 
 		// Assign content to string
 		//	Assigns a new value to the string, replacing its current contents.
-
-		//	(1) string
-		//	Copies str.
-		string& assign(const string& str);
-		//	(2) substring
-		//	Copies the portion of str that begins at the character position subpos and spans sublen characters
-		//  (or until the end of str, if either str is too short or if sublen is string::npos).
-		string& assign(const string& str, std::size_t subpos, std::size_t sublen);
-		//	(3) c - string
-		//	Copies the null - terminated character sequence(C - string) pointed by s.
-		string& assign(const char* s);
-		//	(4) buffer
-		//	Copies the first n characters from the array of characters pointed by s.
-		string& assign(const char* s, std::size_t n);
-		//	(5) fill
-		//	Replaces the current value by n consecutive copies of character c.
-		string& assign(std::size_t n, char c);
-		//	(6) range
-		//	Copies the sequence of characters in the range[first, last), in the same order.
+		string& assign(const string& str);											// (1) string
+		string& assign(const string& str, std::size_t subpos, std::size_t sublen);	// (2) substring
+		string& assign(const char* s);												// (3) c - string
+		string& assign(const char* s, std::size_t n);								// (4) buffer
+		string& assign(std::size_t n, char c);										// (5) fill
 		template <typename InputIterator>
-		string& assign(InputIterator first, InputIterator last);
-		//	(7) initializer list
-		//	Copies each of the characters in il, in the same order.
-		string& assign(std::initializer_list<char> il);
-		//	(8) move
-		//	Acquires the contents of str.
-		//	str is left in an unspecified but valid state.
-		string& assign(string&& str) noexcept;
+		string& assign(InputIterator first, InputIterator last);					// (6) range
+		string& assign(std::initializer_list<char> il);								// (7) initializer list
+		string& assign(string&& str); //noexcept;									// (8) move
 
 
 		// Insert into string
-		//	Inserts additional characters into the string right before the character indicated by pos(or p) :
-
-		//	(1) string
-		//	Inserts a copy of str.
-		string& insert(std::size_t pos, const string& str);
-		//	(2) substring
-		//	Inserts a copy of a substring of str.The substring is the portion of str that begins at the character position
-		//  subpos and spans sublen characters(or until the end of str, if either str is too short or if sublen is npos).
-		string& insert(std::size_t pos, const string& str, std::size_t subpos, std::size_t sublen);
-		//	(3) c - string
-		//	Inserts a copy of the string formed by the null - terminated character sequence(C - string) pointed by s.
-		string& insert(std::size_t pos, const char* s);
-		//	(4) buffer
-		//	Inserts a copy of the first n characters in the array of characters pointed by s.
-		string& insert(std::size_t pos, const char* s, std::size_t n);
-		//	(5) fill
-		//	Inserts n consecutive copies of character c.
-		string& insert(std::size_t pos, std::size_t n, char c);
+		//	Inserts additional characters into the string right before the character indicated by pos(or p)
+		string& insert(std::size_t pos, const string& str);											//	(1) string
+		string& insert(std::size_t pos, const string& str, std::size_t subpos, std::size_t sublen);	//	(2) substring
+		string& insert(std::size_t pos, const char* s);												//	(3) c - string
+		string& insert(std::size_t pos, const char* s, std::size_t n);								//	(4) buffer
+		string& insert(std::size_t pos, std::size_t n, char c);										//	(5) fill
 		iterator insert(const_iterator p, std::size_t n, char c);
-		//	(6) single character
-		//	Inserts character c.
-		iterator insert(const_iterator p, char c);
-		//	(7) range
-		//	Inserts a copy of the sequence of characters in the range[first, last), in the same order.
+		iterator insert(const_iterator p, char c);													//	(6) single character
 		template <typename InputIterator>
-		iterator insert(iterator p, InputIterator first, InputIterator last);
-		//	(8) initializer list
-		//	Inserts a copy of each of the characters in il, in the same order.
-		string& insert(const_iterator p, std::initializer_list<char> il);
+		iterator insert(iterator p, InputIterator first, InputIterator last);						//	(7) range
+		string& insert(const_iterator p, std::initializer_list<char> il);							//	(8) initializer list
 
 
 		//Erase characters from string
 		//	Erases part of the string, reducing its length :
-
-		//  (1) sequence
-		//	Erases the portion of the string value that begins at the character position pos and spans len characters
-		//  (or until the end of the string, if either the content is too short or if len is string::npos.
-		//	Notice that the default argument erases all characters in the string(like member function clear).
-		string& erase(std::size_t pos = 0, std::size_t len = npos);
-		//	(2) character
-		//	Erases the character pointed by p.
-		iterator erase(const_iterator p);
-		//	(3) range
-		//	Erases the sequence of characters in the range[first, last).
-		iterator erase(const_iterator first, const_iterator last);
+		string& erase(std::size_t pos = 0, std::size_t len = npos);	//  (1) sequence
+		iterator erase(const_iterator p);							//	(2) character
+		iterator erase(const_iterator first, const_iterator last);	//	(3) range
 
 
 		// Replace portion of string
 		//	Replaces the portion of the string that begins at character pos and spans len characters
-		//  (or the part of the string in the range between[i1, i2)) by new contents:
-
-		//  (1) string
-		//	Copies str.
-		string& replace(std::size_t pos, std::size_t len, const string& str);
+		//  (or the part of the string in the range between[i1, i2)) by new contents
+		string& replace(std::size_t pos, std::size_t len, const string& str);							//  (1) string
 		string& replace(const_iterator i1, const_iterator i2, const string& str);
-		//	(2) substring
-		//	Copies the portion of str that begins at the character position subpos and spans sublen characters
-		//  (or until the end of str, if either str is too short or if sublen is string::npos).
-		string& replace(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen);
-		//	(3) c - string
-		//	Copies the null - terminated character sequence(C - string) pointed by s.
-		string& replace(std::size_t pos, std::size_t len, const char* s);
+		string& replace(std::size_t pos, std::size_t len, const string& str, std::size_t subpos, std::size_t sublen);//	(2) substring
+		string& replace(std::size_t pos, std::size_t len, const char* s);								//	(3) c - string
 		string& replace(const_iterator i1, const_iterator i2, const char* s);
-		//	(4) buffer
-		//	Copies the first n characters from the array of characters pointed by s.
-		string& replace(std::size_t pos, std::size_t len, const char* s, std::size_t n);
+		string& replace(std::size_t pos, std::size_t len, const char* s, std::size_t n);				//	(4) buffer
 		string& replace(const_iterator i1, const_iterator i2, const char* s, std::size_t n);
-		//	(5) fill
-		//	Replaces the portion of the string by n consecutive copies of character c.
-		string& replace(std::size_t pos, std::size_t len, std::size_t n, char c);
+		string& replace(std::size_t pos, std::size_t len, std::size_t n, char c);						//	(5) fill
 		string& replace(const_iterator i1, const_iterator i2, std::size_t n, char c);
-		//	(6) range
-		//	Copies the sequence of characters in the range[first, last), in the same order.
 		template <typename InputIterator>
-		string& replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last);
-		//	(7) initializer list
-		//	Copies each of the characters in il, in the same order.
-		string& replace(const_iterator i1, const_iterator i2, std::initializer_list<char> il);
+		string& replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last);	//	(6) range
+		string& replace(const_iterator i1, const_iterator i2, std::initializer_list<char> il);			//	(7) initializer list
 
 
-		// Swap string values
-		//	Exchanges the content of the container by the content of str, which is another string object.Lengths may differ.
 		void swap(string& str);
 
-		// Delete last character
-		//	Erases the last character of the string, effectively reducing its length by one.
 		void pop_back();
 
 
 
 		//////////////////// string operations ////////////////////
 
-		// Get C string equivalent
-		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string)
-		// representing the current value of the string object.
 		const char* c_str() const noexcept;
 
-		// Get string data
-		//	Returns a pointer to an array that contains a null - terminated sequence of characters(i.e., a C - string)
-		//	representing the current value of the string object.
 		const char* data() const noexcept;
 
-		//  Get allocator
-		//	Returns a copy of the allocator object associated with the string.
 		allocator_type get_allocator() const noexcept;
 
-		// Copy sequence of characters from string
-		//	Copies a substring of the current value of the string object into the array pointed by s.
-		//  This substring contains the len characters that start at position pos.
 		std::size_t copy(char* s, std::size_t len, std::size_t pos = 0) const;
 
 		//	Find content in string
@@ -574,4 +410,4 @@ namespace MySTL
 	std::istream& getline(std::istream&& is, string& str);
 }
 
-#endif	// _STRING_H_
+#endif	// INCLUDED_STRING_H_

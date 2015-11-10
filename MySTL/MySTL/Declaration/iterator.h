@@ -1,5 +1,5 @@
-#ifndef _ITERATOR_H_
-#define _ITERATOR_H_
+#ifndef INCLUDED_ITERATOR_H
+#define INCLUDED_ITERATOR_H
 
 #include <cstddef>
 
@@ -14,7 +14,7 @@ namespace MySTL
 
 
 	// base iterator
-	template <typename Category, 
+	template <typename Category,
 		typename T,
 		typename Distance = std::ptrdiff_t,
 		typename Pointer = T*,
@@ -22,7 +22,7 @@ namespace MySTL
 	struct iterator
 	{
 		typedef Category	iterator_category;
-		typedef T			value_type;
+		typedef				value_type;
 		typedef Distance	difference_type;
 		typedef Pointer		pointer;
 		typedef Reference	reference;

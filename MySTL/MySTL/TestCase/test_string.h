@@ -1,5 +1,5 @@
-#ifndef _TEST_STRING_H_
-#define _TEST_STRING_H_
+#ifndef INCLUDED_TEST_STRING_H
+#define INCLUDED_TEST_STRING_H
 
 #include <iostream>
 #include <fstream>

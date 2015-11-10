@@ -1,5 +1,5 @@
-#ifndef _VECTOR_H_
-#define _VECTOR_H_
+#ifndef INCLUDED_VECTOR_H
+#define INCLUDED_VECTOR_H
 
 #include <initializer_list>
 #include <cstddef>		// ptrdiff_t
@@ -28,11 +28,11 @@ namespace MySTL
 		typedef std::reverse_iterator<const T*> const_reverse_iterator;
 		typedef std::ptrdiff_t					difference_type;
 		//typedef allocator<T>					allocator_type;
-		
+
 	public:
 		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
 		vector(const vector &);											// constructor: copy
-		vector(vector &&); //noexcept;									// constructor: move 
+		vector(vector &&); //noexcept;									// constructor: move
 		vector(const size_type n);	// explicit							// constructor: fill
 		vector(const size_type n, const value_type &val);				// constructor: fill
 		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
@@ -66,13 +66,13 @@ namespace MySTL
 		iterator insert(iterator position, InputIterator first, InputIterator second);// insert elements: range
 		iterator insert(iterator position, value_type &&val);					// insert elements: move
 		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
-		
+
 		void clear(); //noexcept;										// clear content
 		void swap(vector &x);											// swap content
-		
+
 		iterator erase(const_iterator position);						// erase elements: single element
 		iterator erase(const_iterator first, const_iterator second);	// erase elements: range
-		
+
 		template<typename... Args>
 		void emplace(const_iterator position, Args&&... args);			// construct and insert element
 		template<typename... Args>
@@ -93,7 +93,7 @@ namespace MySTL
 		iterator rbegin() const { return reverse_iterator(elements); }	// return reverse iterator to reverse begining
 		iterator rend() const { return reverse_iterator(first_free); }	// return reverse iterator to reverse end
 		const_iterator cbegin() const { return elements; }				// return const_iterator to begining
-		const_iterator cend() const { return first_free; }				// return const_iterator to end	
+		const_iterator cend() const { return first_free; }				// return const_iterator to end
 		const_iterator crbegin() const { return const_reverse_iterator(elements); } // return const_reverse_iterator to reverse beigining
 		const_iterator crend() const { return const_reverse_iterator(first_free); } // return const_reverse_iterator to reverse end
 
@@ -109,7 +109,7 @@ namespace MySTL
 		void free();
 
 		void reallocate();
-		
+
 
 		std::allocator<T> alloc;
 		T *elements;      // head pointer
@@ -120,19 +120,19 @@ namespace MySTL
 	//	// non-member functions overloads
 	//	template <typename T, typename Alloc>
 	//	friend bool operator== (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//	
+	//
 	//	template <typename T, typename Alloc>
 	//	friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//	
+	//
 	//	template <typename T, typename Alloc>
 	//	friend bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//	
+	//
 	//	template <typename T, typename Alloc>
 	//	friend bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//	
+	//
 	//	template <typename T, typename Alloc>
 	//	friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//	
+	//
 	//	template <typename T, typename Alloc>
 	//	friend bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
 
@@ -144,4 +144,4 @@ namespace MySTL
 
 #include "../Implementation/vector_impl.h"
 
-#endif // _VECTOR_H_
+#endif // INCLUDED_VECTOR_H

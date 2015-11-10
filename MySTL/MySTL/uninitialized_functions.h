@@ -1,5 +1,5 @@
-#ifndef _UNINITIALIZED_FUNCTIONS_H_
-#define _UNINITIALIZED_FUNCTIONS_H_
+#ifndef INCLUDED_UNINITIALIZED_FUNCTIONS_H
+#define INCLUDED_UNINITIALIZED_FUNCTIONS_H
 
 // implementation of
 // uninitialized_copy, uninitialized_fill, uninitialized_fill_n
@@ -7,7 +7,7 @@
 #include "construct.h"      // function:    construct
 #include "iterator.h"       // struct:      iterator_traits
 #include "type_traits.h"    // struct:      _type_traits
-#include "algorithm.h"      // function:    copy, fill
+#include "algorithm.h"      // function:    copy, fill, fill_n
 
 
 namespace MySTL

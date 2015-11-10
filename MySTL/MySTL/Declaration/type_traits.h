@@ -1,5 +1,5 @@
-#ifndef _TYPE_TRAITS_
-#define _TYPE_TRAITS_
+#ifndef INCLUDED_TYPE_TRAITS_H
+#define INCLUDED_TYPE_TRAITS_H
 
 namespace MySTL
 {
@@ -126,7 +126,7 @@ namespace MySTL
 		typedef _true_type			is_POD_type;
 	};
 
-	
+
 	template<typename T>
 	struct _type_traits<T*>
 	{
