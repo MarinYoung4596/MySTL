@@ -15,8 +15,6 @@ namespace MySTL
 		typedef T				value_type;
 		typedef T*				pointer;
 		typedef const T*		const_pointer;
-		typedef T*				iterator;
-		typedef const T*		const_iterator;
 		typedef T&				reference;
 		typedef const T&		const_reference;
 		typedef std::size_t		size_type;
@@ -46,26 +44,23 @@ namespace MySTL
 		}
 
 
-		static void construct(iterator p)
-		{
-			new (p) T();
-		}
+		static void construct(pointer p) { new (p) T(); }
+		static void construct(pointer p, const_reference v) { new (p) T(v); }
 
-		static void construct(iterator p, const_reference v)
-		{
-			new (p) T(v);
-		}
+		static void destory(pointer p) { p->~T(); }
 
-		static void destory(iterator p)
-		{
-			p->~T();
-		}
-
-		static void destory(iterator first, iterator last)
+		static void destory(pointer first, iterator last)
 		{
 			for (; first != last; ++first)
 				first->~T();
 		}
+
+		
+		pointer address(reference x) { return static_cast<pointer>(&x); }
+		const_pointer address(const_reference x) { return static_cast<const_pointer>(&x); }
+
+		size_type max_size() const { return max(size_type(1), size_type(UINT_MAX / sizeof(value_type))); }
+
 	};
 }
 #endif
