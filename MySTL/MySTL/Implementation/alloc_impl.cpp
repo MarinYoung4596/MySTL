@@ -1,7 +1,7 @@
 #include <cstdlib>
 
-#include "./Declaration/iterator.h"
-#include "./Declaration/alloc.h"
+#include "../Declaration/iterator.h"
+#include "../Declaration/alloc.h"
 
 namespace MySTL
 {
