@@ -20,7 +20,10 @@ namespace MySTL
         union obj
         {
             union obj *next;
-            char client;
+			// see:
+			// [1] http://blog.csdn.net/ce123/article/details/8973073
+			// [2] http://blog.csdn.net/yby4769250/article/details/7294696
+            char client[1];	// pointer 
 		};
 
 	private:
@@ -44,7 +47,7 @@ namespace MySTL
         
     public:
         static void* allocate(size_type bytes);
-        static void deallocate(void *p, size_type bytes);
+        static void  deallocate(void *p, size_type bytes);
         static void* reallocate(void *p, size_type old_size, size_type new_size);
     };
 }

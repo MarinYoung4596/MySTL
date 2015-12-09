@@ -41,7 +41,7 @@ namespace MySTL
 		template <typename InputIterator>
 		string(InputIterator first, InputIterator last);					// (7) range constructor
 		string(std::initializer_list<char> il);								// (8) initializer list
-		string(string &&str) noexcept;										// (9) move constructor
+		string(string &&str); //noexcept;									// (9) move constructor
 
 
 

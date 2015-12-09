@@ -33,7 +33,7 @@ namespace MySTL
 		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
 		vector(const vector &);											// constructor: copy
 		vector(vector &&); //noexcept;									// constructor: move
-		vector(const size_type n);	// explicit							// constructor: fill
+		explicit vector(const size_type n);								// constructor: fill
 		vector(const size_type n, const value_type &val);				// constructor: fill
 		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
 		template<typename InputIterator>

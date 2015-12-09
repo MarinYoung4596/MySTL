@@ -1,14 +1,14 @@
 #include <cstdlib>
 
-#include "../Declaration/iterator.h"
 #include "../Declaration/alloc.h"
 
 namespace MySTL
 {
+	// initialization
 	char* alloc::start_free = 0;
 	char* alloc::end_free = 0;
 	alloc::size_type alloc::heap_size = 0;
-	alloc::obj* alloc::free_list[N_FREE_LISTS] = { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 }; // N_FREE_LISTS = 16
+	alloc::obj* alloc::free_list[N_FREE_LISTS] = { 0, 0, 0, 0, /**/ 0, 0, 0, 0, /**/ 0, 0, 0, 0, /**/ 0, 0, 0, 0 }; // N_FREE_LISTS = 16
 
 
 	// no need to specify static feature
@@ -27,7 +27,7 @@ namespace MySTL
 		else // if there's at least one node available in free_list
 		{
 			free_list[index] = list->next; // remove this block (list) from the free_list
-			return list;	// and return to construct object.
+			return list;	// and return to user.
 		}
 	}
 
@@ -75,7 +75,7 @@ namespace MySTL
 		alloc::obj* volatile *list;
 		list = free_list + FREE_LIST_INDEX(bytes);
 		alloc::obj *result, *next, *curr;
-		result = (alloc::obj*)chunk;	// refill free_list in chunk
+		result = (alloc::obj*)chunk;	// refill @free_list in chunk
 
 		*list = next = (alloc::obj*)(chunk + bytes); // let @list point to the new configured memory
 		for (int i = 1; i < nobjs; ++i)	// loop start from 1, because the zeroth node would be returned to the user
@@ -114,26 +114,33 @@ namespace MySTL
 		}
 		else	// @bytes_left can't even provide free space for one block
 		{
-			size_type bytes_to_get = 2 * required_bytes + ROUND_UP(heap_size >> 4);
+			// double, 1 return to user, 19 for @free_list, the other 20+n for memory pool, (@nOBJs was initialized to 20)
+			size_type bytes_to_get = 2 * required_bytes + ROUND_UP(heap_size >> 4);	
 			if (bytes_left > 0)
 			{
+				// If there's still few memory available, assign it to appropriate @free_list
+				// First of all, we need to find its proper location in @free_list.
 				alloc::obj* volatile *list = free_list + FREE_LIST_INDEX(bytes_left);
+				// singly list insertion operation.
 				((alloc::obj*)start_free)->next = *list;
 				*list = (alloc::obj*)start_free;
 			}
 
+			// supply to memory pool
 			start_free = (char*)malloc(bytes_to_get);
 			if (nullptr == start_free)
 			{
 				alloc::obj* volatile *list, *p;
+				// find if there's any blocks that are unused as well as large enough (i >= bytes)
 				for (int i = bytes; i <= MAX_BYTES; i += ALIGN)
 				{
 					list = free_list + FREE_LIST_INDEX(i);
 					p = *list;
-					if (p != nullptr)
+					if (p != nullptr)	// FOUND!
 					{
-						*list = p->next;
-						start_free = (char*)p;
+						// adjust @free_list to release the unused block
+						*list = p->next;	// point to next,
+						start_free = (char*)p;	// memory pool start from here, meaning that @p was released.
 						end_free = start_free + i;
 						return chunk_alloc(bytes, nOBJs); // invoke itself recursively to correct @nOBJs
 					}

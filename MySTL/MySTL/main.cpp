@@ -1,16 +1,12 @@
-#include <iostream>
+//#define _SCL_SECURE_NO_WARNINGS
 
-#define _SCL_SECURE_NO_WARNINGS
+#include "TestCase/test_allocator.h"
 
-
-#include "TestCase/test_vector.h"
-
+using namespace MySTL;
 
 int main()
 {
-
-	MySTL::TestCase::vectorTest::testCase_vector();
-
+	MySTL::TestAllocator::tc_allocator();
 
 
 	system("pause");

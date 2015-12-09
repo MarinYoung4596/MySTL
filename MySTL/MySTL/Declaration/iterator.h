@@ -22,7 +22,7 @@ namespace MySTL
 	struct iterator
 	{
 		typedef Category	iterator_category;
-		typedef				value_type;
+		typedef	T			value_type;
 		typedef Distance	difference_type;
 		typedef Pointer		pointer;
 		typedef Reference	reference;
