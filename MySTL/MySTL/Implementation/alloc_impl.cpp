@@ -32,9 +32,9 @@ namespace MySTL
 	}
 
 
-	void alloc::deallocate(void *p, alloc::size_type bytes)
+	void alloc::deallocate(void *p, alloc::size_type n)
 	{
-		if (bytes > (size_t)MAX_BYTES)
+		if (n > (size_t)MAX_BYTES)
 			free(p);
 		else
 		{
@@ -46,7 +46,7 @@ namespace MySTL
 						                    |
 										   bytes
 			*/
-			size_t index = FREE_LIST_INDEX(bytes);
+			size_t index = FREE_LIST_INDEX(n);
 			// insert @q in the head of suitable node list in the @free_list,
 			// same with the insertion operation of single link list
 			alloc::obj *q = (alloc::obj *)p;

@@ -81,11 +81,19 @@
   <ItemGroup>
     <ClInclude Include="Declaration\alloc.h" />
     <ClInclude Include="Declaration\allocator.h" />
+    <ClInclude Include="Declaration\construct.h" />
+    <ClInclude Include="Declaration\iterator.h" />
+    <ClInclude Include="Declaration\type_traits.h" />
+    <ClInclude Include="Declaration\uninitialized_functions.h" />
+    <ClInclude Include="Declaration\vector.h" />
+    <ClInclude Include="Implementation\vector_impl.h" />
     <ClInclude Include="TestCase\test_allocator.h" />
+    <ClInclude Include="TestCase\test_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation\alloc_impl.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestCase\test_vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,14 +5,16 @@
 #include <cstddef>		// ptrdiff_t
 #include <memory>		// allocator, uninitialized_copy, uninitialized_fill
 
-#include "../Declaration/iterator.h"
-#include "../Declaration/type_traits.h"
+#include "iterator.h"
+#include "type_traits.h"
+#include "alloc.h"
+#include "allocator.h"
 
 
 namespace MySTL
 {
 
-	template <typename T>
+	template <typename T, typename Alloc = alloc>
 	class vector
 	{
 	public:
@@ -27,7 +29,10 @@ namespace MySTL
 		typedef std::reverse_iterator<T*>		reverse_iterator;
 		typedef std::reverse_iterator<const T*> const_reverse_iterator;
 		typedef std::ptrdiff_t					difference_type;
-		//typedef allocator<T>					allocator_type;
+		typedef allocator<T>					allocator_type;
+
+	protected:
+		typedef Alloc							data_allocator;
 
 	public:
 		vector() : elements(nullptr), first_free(nullptr), cap(nullptr) {}//constructor: default
@@ -48,8 +53,8 @@ namespace MySTL
 		reference operator[](size_type n) { return *(elements + n); }	// access element
 		reference front() { return *(begin()); }						// access first element
 		reference back() { return *(end() - 1); }						// access last element
+		iterator  data() { return elements; }							// access data
 		reference at(size_type n);										// access element
-		iterator data()  { return elements; }							// access data
 
 		// Modifiers
 		void assign(size_type n, const value_type&);					// assign vector content: fill
@@ -67,7 +72,7 @@ namespace MySTL
 		iterator insert(iterator position, value_type &&val);					// insert elements: move
 		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
 
-		void clear(); //noexcept;										// clear content
+		void clear() { erase(begin(), end()); } //noexcept;				// clear content
 		void swap(vector &x);											// swap content
 
 		iterator erase(const_iterator position);						// erase elements: single element
@@ -98,7 +103,7 @@ namespace MySTL
 		const_iterator crend() const { return const_reverse_iterator(first_free); } // return const_reverse_iterator to reverse end
 
 		// Allocator
-		// allocator_type get_allocator() const;
+		allocator_type get_allocator() const { return data_allocator; }
 
 	private:
 		void chk_n_alloc();
@@ -110,34 +115,32 @@ namespace MySTL
 
 		void reallocate();
 
+		iterator elements;      // head pointer
+		iterator first_free;    // the pointer that point to the first free element in the array
+		iterator cap;           // tail pointer, end of storage
 
-		std::allocator<T> alloc;
-		T *elements;      // head pointer
-		T *first_free;    // the pointer that point to the first free element in the array
-		T *cap;           // tail pointer, end of storage
+	public:
+		// non-member functions overloads
+		template <typename T, typename Alloc> // why?
+		friend bool operator== (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	
+		template <typename T, typename Alloc>
+		friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	
+		template <typename T, typename Alloc>
+		friend bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	
+		template <typename T, typename Alloc>
+		friend bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	
+		template <typename T, typename Alloc>
+		friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+	
+		template <typename T, typename Alloc>
+		friend bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
 
-	//public:
-	//	// non-member functions overloads
-	//	template <typename T, typename Alloc>
-	//	friend bool operator== (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//
-	//	template <typename T, typename Alloc>
-	//	friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//
-	//	template <typename T, typename Alloc>
-	//	friend bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//
-	//	template <typename T, typename Alloc>
-	//	friend bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//
-	//	template <typename T, typename Alloc>
-	//	friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	//
-	//	template <typename T, typename Alloc>
-	//	friend bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-
-	//	template <typename T, typename Alloc>
-	//	friend void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
+		template <typename T, typename Alloc>
+		friend void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
 	};
 
 }

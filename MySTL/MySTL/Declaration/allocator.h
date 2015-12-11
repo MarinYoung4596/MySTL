@@ -1,9 +1,11 @@
 #ifndef INCLUDED_ALLOCATOR
 #define INCLUDED_ALLOCATOR
 
+#define NOMINMAX
 
-#include <cstddef>
+#include <cstddef>	// ptrdiff_t
 #include <new>	// placement new
+#include <algorithm>	// std::max
 #include "alloc.h"
 
 namespace MySTL
@@ -49,7 +51,7 @@ namespace MySTL
 
 		static void destory(pointer p) { p->~T(); }
 
-		static void destory(pointer first, iterator last)
+		static void destory(pointer first, pointer last)
 		{
 			for (; first != last; ++first)
 				first->~T();
@@ -59,7 +61,11 @@ namespace MySTL
 		pointer address(reference x) { return static_cast<pointer>(&x); }
 		const_pointer address(const_reference x) { return static_cast<const_pointer>(&x); }
 
-		size_type max_size() const { return max(size_type(1), size_type(UINT_MAX / sizeof(value_type))); }
+		size_type max_size() const 
+		{
+			using std::max;
+			return max(size_type(1), size_type(UINT_MAX / sizeof(value_type))); 
+		}
 
 	};
 }
