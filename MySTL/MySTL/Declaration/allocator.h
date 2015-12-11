@@ -14,13 +14,13 @@ namespace MySTL
 	class allocator
 	{
 	public:
-		typedef T				value_type;
-		typedef T*				pointer;
-		typedef const T*		const_pointer;
-		typedef T&				reference;
-		typedef const T&		const_reference;
-		typedef std::size_t		size_type;
-		typedef std::ptrdiff_t	difference_type;
+		using value_type = T;
+		using pointer = T*;
+		using const_pointer = const T*;
+		using reference = T&;
+		using const_reference = const T&;
+		using size_type = std::size_t;
+		using difference_type = std::ptrdiff_t;
 
 
 	public:
@@ -49,9 +49,8 @@ namespace MySTL
 		static void construct(pointer p) { new (p) T(); }
 		static void construct(pointer p, const_reference v) { new (p) T(v); }
 
-		static void destory(pointer p) { p->~T(); }
-
-		static void destory(pointer first, pointer last)
+		static void destroy(pointer p) { p->~T(); }
+		static void destroy(pointer first, pointer last)
 		{
 			for (; first != last; ++first)
 				first->~T();

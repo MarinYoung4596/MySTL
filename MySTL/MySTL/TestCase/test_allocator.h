@@ -15,12 +15,12 @@ namespace MySTL
 {
 	namespace TestAllocator
 	{
-		void tc_allocator()
+		inline void tc_allocator()
 		{
 			const unsigned int num = 10000;
 			std::vector<int, MySTL::allocator<int>> vv;
 
-			srand((unsigned)time(NULL));
+			srand(static_cast<unsigned>(time(nullptr)));
 			for (auto i = 0; i < num; ++i)
 				vv.push_back(rand());
 			std::cout << vv.size() << std::endl;

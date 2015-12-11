@@ -7,6 +7,9 @@
 
 namespace MySTL
 {
+	template <typename T1, typename T2>
+	static void construct(T1 *p) { new (p) T2(); }
+
     template <typename T1, typename T2>
     inline void construct(T1 *p, const T2 &value)
     {

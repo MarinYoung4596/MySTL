@@ -55,20 +55,20 @@ namespace MySTL
 
     //////////////////////////////////////////////
     template <typename ForwardIterator, typename T>
-    inline void uninitialized_fill(ForwardIterator first, ForwardIterator last, consta T &x)
+    inline void uninitialized_fill(ForwardIterator first, ForwardIterator last, const T &x)
     {
         typedef typename _type_traits<iterator_traits<ForwardIterator>::value_type>::is_POD_type POD_TYPE;
         return _uninntialized_fill_aux(first, last, x, POD_TYPE);
     }
 
     template <typename ForwardIterator, typename T>
-    inline void _uninntialized_fill_aux(ForwardIterator first, ForwardIterator last, consta T &x, _true_type)
+    inline void _uninntialized_fill_aux(ForwardIterator first, ForwardIterator last, const T &x, _true_type)
     {
         return fill(first, last, x);
     }
 
     template <typename ForwardIterator, typename T>
-    inline void _uninntialized_fill_aux(ForwardIterator first, ForwardIterator last, consta T &x, _false_type)
+    inline void _uninntialized_fill_aux(ForwardIterator first, ForwardIterator last, const T &x, _false_type)
     {
         ForwardIterator curr = first;
         for (; curr != first; ++curr)

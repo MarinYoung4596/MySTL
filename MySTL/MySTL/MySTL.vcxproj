@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,13 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -81,19 +81,13 @@
   <ItemGroup>
     <ClInclude Include="Declaration\alloc.h" />
     <ClInclude Include="Declaration\allocator.h" />
-    <ClInclude Include="Declaration\construct.h" />
     <ClInclude Include="Declaration\iterator.h" />
     <ClInclude Include="Declaration\type_traits.h" />
-    <ClInclude Include="Declaration\uninitialized_functions.h" />
-    <ClInclude Include="Declaration\vector.h" />
-    <ClInclude Include="Implementation\vector_impl.h" />
     <ClInclude Include="TestCase\test_allocator.h" />
-    <ClInclude Include="TestCase\test_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation\alloc_impl.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TestCase\test_vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
