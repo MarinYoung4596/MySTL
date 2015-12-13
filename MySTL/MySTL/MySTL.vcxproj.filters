@@ -36,6 +36,21 @@
     <ClInclude Include="Declaration\type_traits.h">
       <Filter>Declaration</Filter>
     </ClInclude>
+    <ClInclude Include="Declaration\construct.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Declaration\uninitialized_functions.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Declaration\vector.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
+    <ClInclude Include="Implementation\vector_impl.h">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCase\test_vector.h">
+      <Filter>TestCase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -43,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="Implementation\alloc_impl.cpp">
       <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCase\test_vector.cpp">
+      <Filter>TestCase</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ namespace MySTL
 		inline void tc_allocator()
 		{
 			const unsigned int num = 10000;
-			std::vector<int, MySTL::allocator<int>> vv;
+			std::vector<int, MySTL::allocator<int> > vv;
 
 			srand(static_cast<unsigned>(time(nullptr)));
 			for (auto i = 0; i < num; ++i)

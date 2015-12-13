@@ -14,13 +14,11 @@
 using namespace MySTL;
 namespace MySTL
 {
-	/*
+	
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(const vector &s)
 	{
-		auto newdata = alloc_n_copy(s.begin(), s.end());
-		elements_start = newdata.first;
-		first_free = end_of_storage = newdata.second;
+		free_alloc_n_copy(s.begin(), s.end());
 	}
 
 
@@ -35,29 +33,21 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(const size_type n)
 	{
-		auto newdata = data_allocator::allocate(n);
-		std::uninitialized_fill_n(newdata, n, value_type());
-		elements_start = static_cast<iterator>(newdata);
-		first_free = end_of_storage = elements_start + n;
+		alloc_n_fill_n(n, value_type());
 	}
 
 
 	template <typename T, typename Alloc>
-	vector<T, Alloc>::vector(const size_type n, const T &val)
+	vector<T, Alloc>::vector(const size_type n, const_reference val)
 	{
-		auto newdata = data_allocator::allocate(n);
-		std::uninitialized_fill_n(newdata, n, val);
-		elements_start = newdata;
-		first_free = end_of_storage = elements_start + n;
+		alloc_n_fill_n(n, val);
 	}
 
 
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(std::initializer_list<T> il)
 	{
-		auto data = alloc_n_copy(il.begin(), il.end());
-		elements_start = data.first;
-		first_free = end_of_storage = data.second;
+		free_alloc_n_copy(il.begin(), il.end());
 	}
 
 
@@ -65,20 +55,14 @@ namespace MySTL
 	template <typename InputIterator>
 	vector<T, Alloc>::vector(InputIterator first, InputIterator second)
 	{
-		auto data = alloc_n_copy(first, second);
-		elements_start = data.first;
-		first_free = end_of_storage = data.second;
+		free_alloc_n_copy(first, second);
 	}
 
 
 	template <typename T, typename Alloc>
-	vector<T, Alloc>& vector<T, Alloc>::operator=(const vector<T, Alloc> &rhs)
+	vector<T, Alloc>& vector<T, Alloc>::operator=(const vector &rhs)
 	{
-		auto data = alloc_n_copy(rhs.begin(), rhs.end());
-		free();
-		elements_start = data.first;
-		first_free = end_of_storage = data.second;
-		return *this;
+		return free_alloc_n_copy(rhs.begin(), rhs.end());
 	}
 
 
@@ -100,24 +84,16 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>& vector<T, Alloc>::operator=(std::initializer_list<T> il)
 	{
-		auto data = alloc_n_copy(il.begin(), il.end());
-		free();
-		elements_start = data.first;
-		first_free = end_of_storage = data.second;
-		return *this;
+		return free_alloc_n_copy(il.begin(), il.end());
 	}
-	
 
-	*/
+	
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::~vector()
 	{
-	
-		std::free(elements_start);
-		std::free(first_free);
-		std::free(end_of_storage);
+		free();
 	}
-	/*
+	
 
 
 	// Elements Access
@@ -132,10 +108,31 @@ namespace MySTL
 	}
 
 
-
 	// Modifiers
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::push_back(const value_type &s)
+	void vector<T, Alloc>::assign(size_type n, const_reference val)
+	{
+		alloc_n_fill_n(n, val);
+	}
+
+
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::assign(std::initializer_list<value_type> il)
+	{
+		assign(il.begin(), il.end());
+	}
+
+
+	template <typename T, typename Alloc>
+	template <typename InputIterator>
+	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
+	{
+		free_alloc_n_copy(first, last);
+	}
+
+
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::push_back(const_reference s)
 	{
 		chk_n_alloc();
 		data_allocator::construct(first_free++, s);
@@ -151,14 +148,14 @@ namespace MySTL
 
 
 	template <typename T, typename Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type &val)
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const_reference val)
 	{
 		return vector<T, Alloc>::insert(position, 1, val);
 	}
 
 
 	template <typename T, typename Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, size_type n, const value_type &val)
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, size_type n, const_reference val)
 	{
 		auto space_left = end_of_storage - first_free;
 		if (space_left >= n)
@@ -211,7 +208,7 @@ namespace MySTL
 			first_free = _end;
 			end_of_storage = elements_start + len;
 		}
-		return const_cast<iterator>(position);
+		return static_cast<iterator>(position);
 	}
 
 
@@ -366,6 +363,30 @@ namespace MySTL
 
 
 	template <typename T, typename Alloc>
+	template <typename InputIterator>
+	vector<T, Alloc>& vector<T, Alloc>::free_alloc_n_copy(InputIterator first, InputIterator last)
+	{
+		auto newdata = alloc_n_copy(first, last);
+		free();
+		elements_start = newdata.first;
+		first_free = end_of_storage = newdata.second;
+		return *this;
+	}
+
+
+	template <typename T, typename Alloc>
+	vector<T, Alloc>& vector<T, Alloc>::alloc_n_fill_n(const size_type n, const_reference val)
+	{
+		auto newdata = data_allocator::allocate(n);
+		std::uninitialized_fill_n(newdata, n, val);
+		free();
+		elements_start = newdata;
+		first_free = end_of_storage = elements_start + n;
+		return *this;
+	}
+
+
+	template <typename T, typename Alloc>
 	void vector<T, Alloc>::reallocate()
 	{
 		auto newcapacity = size() ? 2 * size() : 1;
@@ -385,6 +406,6 @@ namespace MySTL
 		first_free = dest;
 		end_of_storage = elements_start + newcapacity;
 	}
-	*/
+	
 }
 #endif
