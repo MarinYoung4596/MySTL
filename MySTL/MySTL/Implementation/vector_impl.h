@@ -406,6 +406,71 @@ namespace MySTL
 		first_free = dest;
 		end_of_storage = elements_start + newcapacity;
 	}
-	
+
+
+	template <typename T, typename Alloc>
+	bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return false;
+		for (auto ptr1 = lhs.begin(), ptr2 = rhs.begin(); ptr1 != lhs.end() && ptr2 != rhs.end(); ++ptr1, ++ptr2)
+		{
+			if (*ptr1 != *ptr2)
+				return false;
+		}
+		return true;
+	}
+
+
+	template <typename T, typename Alloc>
+	bool operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return !(rhs == rhs);
+	}
+
+
+	template <typename T, typename Alloc>
+	bool operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		for (auto ptr1 = lhs.begin(), ptr2 = rhs.begin(); ptr1 != lhs.end() && ptr2 != rhs.end(); ++ptr1, ++ptr2)
+		{
+			if (*ptr1 >= *ptr2)
+				return false;
+		}
+		return true;
+	}
+
+
+	template <typename T, typename Alloc>
+	bool operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return lhs < rhs || lhs == rhs;
+	}
+
+
+	template <typename T, typename Alloc>
+	bool operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		for (auto ptr1 = lhs.begin(), ptr2 = rhs.begin(); ptr1 != lhs.end() && ptr2 != rhs.end(); ++ptr1, ++ptr2)
+		{
+			if (*ptr1 >= *ptr2)
+				return false;
+		}
+		return true;
+	}
+
+
+	template <typename T, typename Alloc>
+	bool operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return lhs > rhs || lhs == rhs;
+	}
+
+
+	template <typename T, typename Alloc>
+	void swap(vector<T, Alloc>& x, vector<T, Alloc>& y)
+	{
+		x.swap(y);
+	}
 }
 #endif

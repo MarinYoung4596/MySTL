@@ -130,8 +130,8 @@ namespace MySTL
 	public:
 		// non-member functions overloads
 		template <typename T, typename Alloc>
-		friend bool operator== (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	
+		friend bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
 		template <typename T, typename Alloc>
 		friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
 	
@@ -150,6 +150,27 @@ namespace MySTL
 		template <typename T, typename Alloc>
 		friend void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
 	};
+
+	template <typename T, typename Alloc>
+	bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	template <typename T, typename Alloc>
+	bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	template <typename T, typename Alloc>
+	bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	template <typename T, typename Alloc>
+	bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	template <typename T, typename Alloc>
+	bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	template <typename T, typename Alloc>
+	bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+	template <typename T, typename Alloc>
+	void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
 }
 
 #include "../Implementation/vector_impl.h"
