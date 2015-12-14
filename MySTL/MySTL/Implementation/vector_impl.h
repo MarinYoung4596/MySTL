@@ -18,7 +18,7 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(const vector &s)
 	{
-		free_alloc_n_copy(s.begin(), s.end());
+		alloc_n_copy(s.begin(), s.end());
 	}
 
 
@@ -47,7 +47,7 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(std::initializer_list<T> il)
 	{
-		free_alloc_n_copy(il.begin(), il.end());
+		alloc_n_copy(il.begin(), il.end());
 	}
 
 
@@ -55,14 +55,14 @@ namespace MySTL
 	template <typename InputIterator>
 	vector<T, Alloc>::vector(InputIterator first, InputIterator second)
 	{
-		free_alloc_n_copy(first, second);
+		alloc_n_copy(first, second);
 	}
 
 
 	template <typename T, typename Alloc>
 	vector<T, Alloc>& vector<T, Alloc>::operator=(const vector &rhs)
 	{
-		return free_alloc_n_copy(rhs.begin(), rhs.end());
+		return alloc_n_copy(rhs.begin(), rhs.end());
 	}
 
 
@@ -84,7 +84,7 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>& vector<T, Alloc>::operator=(std::initializer_list<T> il)
 	{
-		return free_alloc_n_copy(il.begin(), il.end());
+		return alloc_n_copy(il.begin(), il.end());
 	}
 
 	
@@ -112,7 +112,8 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::assign(size_type n, const_reference val)
 	{
-		alloc_n_fill_n(n, val);
+		typedef typename _type_traits<size_type>::is_POD_type POD_TYPE;
+		assign(n, val, typename POD_TYPE);
 	}
 
 
@@ -127,7 +128,7 @@ namespace MySTL
 	template <typename InputIterator>
 	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
 	{
-		free_alloc_n_copy(first, last);
+		assign(first, last, _false_type);
 	}
 
 
@@ -167,7 +168,6 @@ namespace MySTL
 		}
 		else
 		{
-			// bug fix: 2015/10/6
 			using std::max;
 			const size_type len = size() + max(size(), n);
 			iterator _start = data_allocator::allocate(static_cast<size_type>(len));
@@ -319,6 +319,8 @@ namespace MySTL
 	}
 
 
+	/////////////////////////////////////////////////////////////
+	// private member functions
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::shrink_to_fit()
 	{
@@ -327,7 +329,6 @@ namespace MySTL
 	}
 
 	
-	// private functions
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::free()
 	{
@@ -342,7 +343,6 @@ namespace MySTL
 	}
 	
 
-
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::chk_n_alloc()
 	{
@@ -353,23 +353,12 @@ namespace MySTL
 
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
-	std::pair<typename vector<T, Alloc>::iterator, typename vector<T, Alloc>::iterator>
-		vector<T, Alloc>::alloc_n_copy(InputIterator first, InputIterator last)
+	vector<T, Alloc>& vector<T, Alloc>::alloc_n_copy(InputIterator first, InputIterator last)
 	{
-		auto _begin = data_allocator::allocate(last - first);
-		auto _end = std::uninitialized_copy(first, last, _begin);
-		return std::make_pair(_begin, _end);
-	}
-
-
-	template <typename T, typename Alloc>
-	template <typename InputIterator>
-	vector<T, Alloc>& vector<T, Alloc>::free_alloc_n_copy(InputIterator first, InputIterator last)
-	{
-		auto newdata = alloc_n_copy(first, last);
 		free();
-		elements_start = newdata.first;
-		first_free = end_of_storage = newdata.second;
+		elements_start = data_allocator::allocate(last - first);
+		first_free = std::uninitialized_copy(first, last, elements_start);
+		end_of_storage = first_free;
 		return *this;
 	}
 
@@ -408,6 +397,23 @@ namespace MySTL
 	}
 
 
+	template <typename T, typename Alloc>
+	template <typename InputIterator>
+	void vector<T, Alloc>::assign(InputIterator first, InputIterator last, _false_type)
+	{
+		alloc_n_copy(first, last);
+	}
+
+
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::assign(size_type n, const_reference val, _true_type)
+	{
+		alloc_n_fill_n(n, val);
+	}
+
+
+	/////////////////////////////////////////////////////////////
+	// non-member functions overloads
 	template <typename T, typename Alloc>
 	bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
 	{

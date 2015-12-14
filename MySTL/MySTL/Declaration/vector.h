@@ -110,44 +110,39 @@ namespace MySTL
 
 	private:
 		void chk_n_alloc();
-
 		template <typename InputIterator>
-		std::pair<iterator, iterator> alloc_n_copy(InputIterator, InputIterator);
-		
-		template <typename InputIterator>
-		vector& free_alloc_n_copy(InputIterator, InputIterator);
-		
+		vector& alloc_n_copy(InputIterator, InputIterator);
 		vector& alloc_n_fill_n(const size_type, const_reference);
 
 		void free();
-
 		void reallocate();
 
+		// auxiliary functions for overloads
+		template <typename InputIterator>
+		void vector_aux(InputIterator first, InputIterator second, _false_type);
+		void vector_aux(const size_type n, const_reference val, _true_type);
+
+		template <typename InputIterator>
+		iterator insert(iterator position, InputIterator first, InputIterator second, _false_type);
+		iterator insert(iterator position, size_type n, const_reference val, _true_type);
+
+		template <typename InputIterator>
+		void assign(InputIterator first, InputIterator last, _false_type);
+		void assign(size_type n, const_reference val, _true_type);
+
+	private:
 		iterator elements_start;	// head pointer
 		iterator first_free;		// the pointer that point to the first free element in the array
 		iterator end_of_storage;	// tail pointer, end of storage
 
 	public:
 		// non-member functions overloads
-		template <typename T, typename Alloc>
 		friend bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-
-		template <typename T, typename Alloc>
 		friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	
-		template <typename T, typename Alloc>
 		friend bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	
-		template <typename T, typename Alloc>
 		friend bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	
-		template <typename T, typename Alloc>
-		friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-	
-		template <typename T, typename Alloc>
+		friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);	
 		friend bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-
-		template <typename T, typename Alloc>
 		friend void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
 	};
 

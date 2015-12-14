@@ -16,6 +16,7 @@ namespace MySTL
 		typedef _false_type			is_POD_type;
 	};
 
+
 	// partial specialization
 
 	template<> struct _type_traits<char>
