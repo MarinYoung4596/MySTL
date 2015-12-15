@@ -4,12 +4,12 @@
 
 #include <utility>	// std::move & std::forward & std::pair
 #include <memory>	// std::uninitialized_copy & std::uninitialized_fill
-#include <algorithm>	// std::swap, max
+#include <algorithm>// std::swap, max
 #include <stdexcept>
 
 #include "../Declaration/vector.h"
 #include "../Declaration/uninitialized_functions.h"
-#include "../Declaration/construct.h"
+#include "../Declaration/construct.h"				
 
 using namespace MySTL;
 namespace MySTL
@@ -90,13 +90,13 @@ namespace MySTL
 		return alloc_n_copy(il.begin(), il.end());
 	}
 
-	
+
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::~vector()
 	{
 		free();
 	}
-	
+
 
 
 	// Elements Access
@@ -283,8 +283,6 @@ namespace MySTL
 	}
 
 
-	/////////////////////////////////////////////////////////////
-	// private member functions
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::shrink_to_fit()
 	{
@@ -292,7 +290,9 @@ namespace MySTL
 		end_of_storage = first_free;
 	}
 
-	
+
+	/////////////////////////////////////////////////////////////
+	// private member functions
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::free()
 	{
@@ -305,7 +305,7 @@ namespace MySTL
 			data_allocator::deallocate(elements_start, end_of_storage - elements_start);
 		}
 	}
-	
+
 
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::chk_n_alloc()
@@ -344,7 +344,7 @@ namespace MySTL
 	{
 		auto newcapacity = size() ? 2 * size() : 1;
 		auto newdata = data_allocator::allocate(newcapacity);
-		
+
 		auto dest = newdata;
 		auto elem = elements_start;
 		for (size_type i = 0; i != size(); ++i)
@@ -377,6 +377,7 @@ namespace MySTL
 	}
 
 
+	// insert auxiliary
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator second, std::false_type)
@@ -434,6 +435,7 @@ namespace MySTL
 	}
 
 
+	// assign auxiliary
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
 	void vector<T, Alloc>::assign(InputIterator first, InputIterator last, std::false_type)

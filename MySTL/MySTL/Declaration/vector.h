@@ -32,7 +32,7 @@ namespace MySTL
 		using allocator_type         = allocator<T>;
 
 	protected:
-		using data_allocator = Alloc;
+		using data_allocator         = Alloc;
 
 	public:
 		vector() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}//constructor: default

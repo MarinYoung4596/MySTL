@@ -74,7 +74,7 @@ namespace MySTL
 		{
 			MySTL::vector<int> myvector(5);  // 5 default-constructed ints
 
-			int i = 0;
+			auto i = 0;
 
 			//MySTL::vector<int>::reverse_iterator rit = myvector.rbegin();
 			//for (; rit != myvector.rend(); ++rit)
