@@ -21,7 +21,7 @@ namespace MySTL
         // (e.g. _type_traits<int>), so as to judge whether it is POD_TYPE or not.
         // We've try our best to improve the efficency with respect to different objects :-)
         typedef typename _type_traits<iterator_traits<InputIterator>::value_type>::is_POD_type POD_TYPE;
-        return _uninitialized_copy_aux(first, last, result, POD_TYPE);
+        return _uninitialized_copy_aux(first, last, result, POD_TYPE());
     }
 
     template <typename InputIterator, typename ForwardIterator, typename T>
@@ -58,7 +58,7 @@ namespace MySTL
     inline void uninitialized_fill(ForwardIterator first, ForwardIterator last, const T &x)
     {
         typedef typename _type_traits<iterator_traits<ForwardIterator>::value_type>::is_POD_type POD_TYPE;
-        return _uninntialized_fill_aux(first, last, x, POD_TYPE);
+        return _uninntialized_fill_aux(first, last, x, POD_TYPE());
     }
 
     template <typename ForwardIterator, typename T>
@@ -81,7 +81,7 @@ namespace MySTL
     typename ForwardIterator uninitialized_fill_n(ForwardIterator first, Size n, const T &x)
     {
         typedef typename _type_traits<iterator_traits<ForwardIterator>::value_type>::is_POD_type POD_TYPE;
-        return _uninntialized_fill_n_aux(first, n, x, POD_TYPE);
+        return _uninntialized_fill_n_aux(first, n, x, POD_TYPE());
     }
 
     template <typename ForwardIterator, typename Size, typename T>

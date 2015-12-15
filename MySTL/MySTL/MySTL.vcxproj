@@ -89,12 +89,10 @@
     <ClInclude Include="Declaration\vector.h" />
     <ClInclude Include="Implementation\vector_impl.h" />
     <ClInclude Include="TestCase\test_allocator.h" />
-    <ClInclude Include="TestCase\test_string.h" />
     <ClInclude Include="TestCase\test_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation\alloc_impl.cpp" />
-    <ClCompile Include="Implementation\string_impl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestCase\test_vector.cpp" />
   </ItemGroup>

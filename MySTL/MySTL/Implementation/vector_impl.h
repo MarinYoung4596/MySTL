@@ -14,7 +14,8 @@
 using namespace MySTL;
 namespace MySTL
 {
-	
+	/////////////////////////////////////////////////////////////
+	// public member functions
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(const vector &s)
 	{
@@ -40,7 +41,8 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::vector(const size_type n, const_reference val)
 	{
-		alloc_n_fill_n(n, val);
+		typedef typename std::is_integral<size_type>::type IS_INTEGER;
+		vector_aux(n, val, IS_INTEGER());
 	}
 
 
@@ -55,7 +57,8 @@ namespace MySTL
 	template <typename InputIterator>
 	vector<T, Alloc>::vector(InputIterator first, InputIterator second)
 	{
-		alloc_n_copy(first, second);
+		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
+		vector_aux(first, second, IS_INTEGER());
 	}
 
 
@@ -112,8 +115,8 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::assign(size_type n, const_reference val)
 	{
-		typedef typename _type_traits<size_type>::is_POD_type POD_TYPE;
-		assign(n, val, typename POD_TYPE);
+		typedef typename std::is_integral<size_type>::type IS_INTEGER;
+		assign(n, val, IS_INTEGER());
 	}
 
 
@@ -128,7 +131,8 @@ namespace MySTL
 	template <typename InputIterator>
 	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
 	{
-		assign(first, last, _false_type);
+		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
+		assign(first, last, IS_INTEGER());
 	}
 
 
@@ -158,28 +162,8 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, size_type n, const_reference val)
 	{
-		auto space_left = end_of_storage - first_free;
-		if (space_left >= n)
-		{
-			for (auto curr = end() - 1; curr != position; --curr)
-				*(curr + n) = *curr;
-			std::uninitialized_fill_n(position, n, val);
-			first_free += n;
-		}
-		else
-		{
-			using std::max;
-			const size_type len = size() + max(size(), n);
-			iterator _start = data_allocator::allocate(static_cast<size_type>(len));
-			iterator _end = std::uninitialized_copy(begin(), position, _start);
-			_end = std::uninitialized_fill_n(_end, n, val); // _end point to next free space
-			_end = std::uninitialized_copy(position, end(), _end);
-			free();
-			elements_start = _start;
-			first_free = _end;
-			end_of_storage = elements_start + len;
-		}
-		return const_cast<T *>(position);
+		typedef typename std::is_integral<size_type>::type IS_INTEGER;
+		return insert(position, n, val, IS_INTEGER());
 	}
 
 
@@ -187,28 +171,8 @@ namespace MySTL
 	template <typename InputIterator>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator second)
 	{
-		difference_type space_left = end_of_storage - first_free;
-		difference_type space_required = second - first;
-		if (space_left >= space_required)
-		{
-			std::uninitialized_copy(position, end(), end() + space_required);
-			std::uninitialized_copy(first, second, position);// insert
-			first_free += space_required;
-		}
-		else
-		{
-			using std::max;
-			const size_type len = size() + max(size(), static_cast<size_type>(space_required));
-			iterator _start = static_cast<iterator>(data_allocator::allocate(len));
-			iterator _end = std::uninitialized_copy(begin(), position, _start);
-			_end = std::uninitialized_copy(first, second, _end); // insert
-			_end = std::uninitialized_copy(position, end(), _end);
-			free();
-			elements_start = _start;
-			first_free = _end;
-			end_of_storage = elements_start + len;
-		}
-		return static_cast<iterator>(position);
+		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
+		return insert(position, first, second, IS_INTEGER());
 	}
 
 
@@ -397,16 +361,89 @@ namespace MySTL
 	}
 
 
+	// constructor auxiliary functions, (std::true_type / std::false_type) were regarded as the symbol of overloads.
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
-	void vector<T, Alloc>::assign(InputIterator first, InputIterator last, _false_type)
+	void vector<T, Alloc>::vector_aux(InputIterator first, InputIterator second, std::false_type)
+	{
+		alloc_n_copy(first, second);
+	}
+
+
+	template <typename T, typename Alloc>
+	void vector<T, Alloc>::vector_aux(const size_type n, const_reference val, std::true_type)
+	{
+		alloc_n_fill_n(n, val);
+	}
+
+
+	template <typename T, typename Alloc>
+	template <typename InputIterator>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator second, std::false_type)
+	{
+		difference_type space_left = end_of_storage - first_free;
+		difference_type space_required = second - first;
+		if (space_left >= space_required)
+		{
+			std::uninitialized_copy(position, end(), end() + space_required);
+			std::uninitialized_copy(first, second, position);// insert
+			first_free += space_required;
+		}
+		else
+		{
+			using std::max;
+			const size_type len = size() + max(size(), static_cast<size_type>(space_required));
+			iterator _start = static_cast<iterator>(data_allocator::allocate(len));
+			iterator _end = std::uninitialized_copy(begin(), position, _start);
+			_end = std::uninitialized_copy(first, second, _end); // insert
+			_end = std::uninitialized_copy(position, end(), _end);
+			free();
+			elements_start = _start;
+			first_free = _end;
+			end_of_storage = elements_start + len;
+		}
+		return position;
+	}
+
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, size_type n, const_reference val, std::true_type)
+	{
+		auto space_left = end_of_storage - first_free;
+		if (n <= static_cast<size_type>(space_left))
+		{
+			for (auto curr = end() - 1; curr != position; --curr)
+				*(curr + n) = *curr;
+			std::uninitialized_fill_n(position, n, val);
+			first_free += n;
+		}
+		else
+		{
+			using std::max;
+			const size_type len = size() + max(size(), n);
+			iterator _start = data_allocator::allocate(static_cast<size_type>(len));
+			iterator _end = std::uninitialized_copy(begin(), position, _start);
+			_end = std::uninitialized_fill_n(_end, n, val); // _end point to next free space
+			_end = std::uninitialized_copy(position, end(), _end);
+			free();
+			elements_start = _start;
+			first_free = _end;
+			end_of_storage = elements_start + len;
+		}
+		return position;
+	}
+
+
+	template <typename T, typename Alloc>
+	template <typename InputIterator>
+	void vector<T, Alloc>::assign(InputIterator first, InputIterator last, std::false_type)
 	{
 		alloc_n_copy(first, last);
 	}
 
 
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::assign(size_type n, const_reference val, _true_type)
+	void vector<T, Alloc>::assign(size_type n, const_reference val, std::true_type)
 	{
 		alloc_n_fill_n(n, val);
 	}

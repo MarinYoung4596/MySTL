@@ -119,16 +119,16 @@ namespace MySTL
 
 		// auxiliary functions for overloads
 		template <typename InputIterator>
-		void vector_aux(InputIterator first, InputIterator second, _false_type);
-		void vector_aux(const size_type n, const_reference val, _true_type);
+		void vector_aux(InputIterator first, InputIterator second, std::false_type);
+		void vector_aux(const size_type n, const_reference val, std::true_type);
 
 		template <typename InputIterator>
-		iterator insert(iterator position, InputIterator first, InputIterator second, _false_type);
-		iterator insert(iterator position, size_type n, const_reference val, _true_type);
+		iterator insert(iterator position, InputIterator first, InputIterator second, std::false_type);
+		iterator insert(iterator position, size_type n, const_reference val, std::true_type);
 
 		template <typename InputIterator>
-		void assign(InputIterator first, InputIterator last, _false_type);
-		void assign(size_type n, const_reference val, _true_type);
+		void assign(InputIterator first, InputIterator last, std::false_type);
+		void assign(size_type n, const_reference val, std::true_type);
 
 	private:
 		iterator elements_start;	// head pointer

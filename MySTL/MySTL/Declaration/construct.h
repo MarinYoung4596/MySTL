@@ -37,7 +37,7 @@ namespace MySTL
     inline void _destory(ForwardIterator first, ForwardIterator last, T*) // T* and value_type were used to get the real type of T
     {
         typedef typename _type_traits<T>::has_trivial_destructor trivial_destructor;
-        return _destory_aux(first, last, trivial_destructor);
+        return _destory_aux(first, last, trivial_destructor());
     }
 
     template <typename ForwardIterator>

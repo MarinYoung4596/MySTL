@@ -54,9 +54,6 @@
     <ClInclude Include="Declaration\string.h">
       <Filter>Declaration</Filter>
     </ClInclude>
-    <ClInclude Include="TestCase\test_string.h">
-      <Filter>TestCase</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,9 +64,6 @@
     </ClCompile>
     <ClCompile Include="TestCase\test_vector.cpp">
       <Filter>TestCase</Filter>
-    </ClCompile>
-    <ClCompile Include="Implementation\string_impl.cpp">
-      <Filter>Implementation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
