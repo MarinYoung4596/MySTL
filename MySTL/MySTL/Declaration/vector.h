@@ -3,7 +3,7 @@
 
 #include <initializer_list>
 #include <cstddef>		// ptrdiff_t
-#include <memory>		// allocator, uninitialized_copy, uninitialized_fill
+#include <memory>		// uninitialized_copy, uninitialized_fill
 
 #include "iterator.h"
 #include "type_traits.h"

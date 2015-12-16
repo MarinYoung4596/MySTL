@@ -20,7 +20,7 @@ namespace MySTL
         // After that, invokes the corresponding version partial specialization version of _type_traits
         // (e.g. _type_traits<int>), so as to judge whether it is POD_TYPE or not.
         // We've try our best to improve the efficency with respect to different objects :-)
-        typedef typename _type_traits<iterator_traits<InputIterator>::value_type>::is_POD_type POD_TYPE;
+        typedef typename _type_traits<typename iterator_traits<InputIterator>::value_type>::is_POD_type POD_TYPE;
         return _uninitialized_copy_aux(first, last, result, POD_TYPE());
     }
 

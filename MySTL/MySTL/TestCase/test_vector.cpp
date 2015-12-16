@@ -15,14 +15,14 @@ namespace MySTL
 			std::cout << std::endl;
 		}
 
-		void tc_constructor_1()
+		void tc_constructor()
 		{
 			vector<int> v1;		// constructor: default
 			v1 = { 1, 2, 3, 4, 5 };		// assign content: initializer list
 			printvector(v1);
 
-			//vector<std::string> v2(5, "aa");	// constructor: fill
-			//printvector(v2);
+			vector<int> v2(5, 10);	// constructor: fill
+			printvector(v2);
 
 			vector<int> v3({ 4, 5, 6, 7, 8 });	// constructor: initializer list
 			printvector(v3);
@@ -37,24 +37,6 @@ namespace MySTL
 			int myints[] = { 16, 2, 77, 29 };
 			MySTL::vector<int> v6(myints, myints + sizeof(myints) / sizeof(int));
 			printvector(v6);
-		}
-
-		void tc_constructor()
-		{
-			// constructors used in the same order as described above:
-			MySTL::vector<int> first;                                // empty vector of ints
-			MySTL::vector<int> second(4, 100);                       // four ints with value 100
-			MySTL::vector<int> third(second.begin(), second.end());  // iterating through second
-			MySTL::vector<int> fourth(third);                       // a copy of third
-
-			// the iterator constructor can also be used to construct from arrays:
-			int myints[] = { 16, 2, 77, 29 };
-			MySTL::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
-
-			std::cout << "The contents of fifth are:";
-			for (MySTL::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
-				std::cout << ' ' << *it;	// 16 2 77 29
-			std::cout << '\n';
 		}
 
 		void tc_assignment()
@@ -297,7 +279,6 @@ namespace MySTL
 				sum += myvector.back();
 				myvector.pop_back();
 			}
-
 			std::cout << "The elements of myvector add up to " << sum << '\n';
 		}
 
@@ -411,7 +392,7 @@ namespace MySTL
 			std::cout << '\n';
 		}
 
-		// allocaor
+		// allocator
 		//void tc_get_allocator()
 		//{
 		//	MySTL::vector<int> myvector;
@@ -433,23 +414,23 @@ namespace MySTL
 		//	myvector.get_allocator().deallocate(p, 5);
 		//}
 
-		//void tc_relationalOperators()
-		//{
-		//	MySTL::vector<int> foo(3, 100);   // three ints with a value of 100
-		//	MySTL::vector<int> bar(2, 200);   // two ints with a value of 200
+		void tc_relationalOperators()
+		{
+			MySTL::vector<int> foo(3, 100);   // three ints with a value of 100
+			MySTL::vector<int> bar(2, 200);   // two ints with a value of 200
 
-		//	if (foo == bar) std::cout << "foo and bar are equal\n";
-		//	if (foo != bar) std::cout << "foo and bar are not equal\n";
-		//	if (foo< bar) std::cout << "foo is less than bar\n";
-		//	if (foo> bar) std::cout << "foo is greater than bar\n";
-		//	if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
-		//	if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
-		//}
+			if (foo == bar) std::cout << "foo and bar are equal\n";
+			if (foo != bar) std::cout << "foo and bar are not equal\n";
+			if (foo< bar) std::cout << "foo is less than bar\n";
+			if (foo> bar) std::cout << "foo is greater than bar\n";
+			if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
+			if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+		}
 
 
 		void test_all()
 		{
-			tc_constructor_1();
+			tc_constructor();
 			tc_assignment();
 			tc_size();
 			tc_empty();
@@ -470,7 +451,7 @@ namespace MySTL
 			tc_emplace();
 			tc_emplace_back();
 			//tc_get_allocator();
-			//tc_relationalOperators();
+			tc_relationalOperators();
 		}
 
 	}
