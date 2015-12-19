@@ -213,7 +213,7 @@ namespace MySTL
 		for (auto i = 0; i < len && (second + i) != first_free; ++i)
 			*(first + i) = *(second + i);
 		// destory the objects from second to end() one by one
-		for (auto ptr = second; ptr != end(); ++ptr)
+		for (iterator ptr = second; ptr != end(); ++ptr)
 			data_allocator::destroy(ptr);
 
 		first_free -= len;
@@ -342,7 +342,7 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::reallocate()
 	{
-		auto newcapacity = size() ? 2 * size() : 1;
+		size_type newcapacity = size() ? 2 * size() : 1;
 		auto newdata = data_allocator::allocate(newcapacity);
 
 		auto dest = newdata;

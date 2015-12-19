@@ -18,21 +18,21 @@ namespace MySTL
 	class vector
 	{
 	public:
-		using size_type              = std::size_t;
-		using value_type             = T;
-		using reference              = T&;
-		using const_reference        = const T&;
-		using iterator               = T*;
-		using const_iterator         = const T*;
-		using pointer                = T*;
-		using const_pointer          = const T*;
-		using reverse_iterator       = std::reverse_iterator<T*>;
-		using const_reverse_iterator = std::reverse_iterator<const T*>;
-		using difference_type        = std::ptrdiff_t;
-		using allocator_type         = allocator<T>;
+		typedef std::size_t size_type;
+		typedef T value_type;
+		typedef T &reference;
+		typedef T const &const_reference;
+		typedef T *iterator;
+		typedef const T *const_iterator;
+		typedef T *pointer;
+		typedef T const *const_pointer;
+		typedef std::reverse_iterator<T*> reverse_iterator;
+		typedef std::reverse_iterator<const T*> const_reverse_iterator;
+		typedef std::ptrdiff_t difference_type;
+		typedef allocator<T> allocator_type;
 
 	protected:
-		using data_allocator         = Alloc;
+		typedef Alloc data_allocator;
 
 	public:
 		vector() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}//constructor: default
