@@ -9,15 +9,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="TestCase">
-      <UniqueIdentifier>{936362b1-ee42-421c-bd1c-94759f804db7}</UniqueIdentifier>
+    <Filter Include="Declaration">
+      <UniqueIdentifier>{0d9b6134-b7f4-4a91-a8ec-ddb2b587e75f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Implementation">
-      <UniqueIdentifier>{9360d9ab-91b0-410c-a527-3dc8b8a4410d}</UniqueIdentifier>
+      <UniqueIdentifier>{182f9dcd-c0de-4fc6-8aa5-faf836ff6d09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Declaration">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="TestCase">
+      <UniqueIdentifier>{07d63db0-6d23-42e9-bf9a-0d7768c4c6d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,16 +26,16 @@
     <ClInclude Include="Declaration\allocator.h">
       <Filter>Declaration</Filter>
     </ClInclude>
-    <ClInclude Include="TestCase\test_allocator.h">
-      <Filter>TestCase</Filter>
+    <ClInclude Include="Declaration\construct.h">
+      <Filter>Declaration</Filter>
     </ClInclude>
     <ClInclude Include="Declaration\iterator.h">
       <Filter>Declaration</Filter>
     </ClInclude>
-    <ClInclude Include="Declaration\type_traits.h">
+    <ClInclude Include="Declaration\string.h">
       <Filter>Declaration</Filter>
     </ClInclude>
-    <ClInclude Include="Declaration\construct.h">
+    <ClInclude Include="Declaration\type_traits.h">
       <Filter>Declaration</Filter>
     </ClInclude>
     <ClInclude Include="Declaration\uninitialized_functions.h">
@@ -45,25 +44,31 @@
     <ClInclude Include="Declaration\vector.h">
       <Filter>Declaration</Filter>
     </ClInclude>
-    <ClInclude Include="Declaration\string.h">
-      <Filter>Declaration</Filter>
-    </ClInclude>
     <ClInclude Include="Implementation\vector_impl.h">
       <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCase\test_allocator.h">
+      <Filter>TestCase</Filter>
     </ClInclude>
     <ClInclude Include="TestCase\test_vector.h">
       <Filter>TestCase</Filter>
     </ClInclude>
+    <ClInclude Include="Declaration\reverse_iterator.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Implementation\alloc_impl.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="TestCase\test_vector.cpp">
       <Filter>TestCase</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\string_impl.cpp">
+      <Filter>Implementation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

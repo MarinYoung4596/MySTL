@@ -26,9 +26,9 @@ namespace MySTL
 		void tc_erase();
 		void tc_swap();
 		void tc_clear();
-		//void tc_emplace();
-		//void tc_emplace_back();
-		//void tc_get_allocator();
+		void tc_emplace();
+		void tc_emplace_back();
+		void tc_get_allocator();
 		void tc_relationalOperators();
 		
 		void test_all();

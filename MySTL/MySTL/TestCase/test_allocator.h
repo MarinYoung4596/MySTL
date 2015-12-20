@@ -17,6 +17,7 @@ namespace MySTL
 	{
 		inline void tc_allocator()
 		{
+			std::cout << "----------test allocator----------" << std::endl;
 			const unsigned int num = 10000;
 			std::vector<int, MySTL::allocator<int> > vv;
 
@@ -24,10 +25,6 @@ namespace MySTL
 			for (auto i = 0; i < num; ++i)
 				vv.push_back(rand());
 			std::cout << vv.size() << std::endl;
-
-			//for (auto i = vv.begin(); i != vv.end(); ++i)
-			//	std::cout << *i << '\t';
-			//std::cout << std::endl;
 
 			for (auto i = 0; i < num / 3; ++i)
 				vv.pop_back();
@@ -39,6 +36,7 @@ namespace MySTL
 
 			vv.clear();
 			std::cout << vv.size() << std::endl;
+			std::cout << "----------test allocator success----------\n" << std::endl;
 		}
 	}
 }

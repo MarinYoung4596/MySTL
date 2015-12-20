@@ -5,11 +5,13 @@
 #include <cstddef>		// ptrdiff_t
 #include <memory>		// uninitialized_copy, uninitialized_fill
 
-#include "iterator.h"
-#include "type_traits.h"
-#include "alloc.h"
-#include "allocator.h"
 
+#include "allocator.h"
+#include "reverse_iterator.h"
+
+using namespace MySTL;
+using std::uninitialized_copy;
+using std::uninitialized_fill_n;
 
 namespace MySTL
 {
@@ -18,21 +20,21 @@ namespace MySTL
 	class vector
 	{
 	public:
-		typedef std::size_t size_type;
-		typedef T value_type;
-		typedef T & reference;
-		typedef T const & const_reference;
-		typedef T * iterator;
-		typedef const T * const_iterator;
-		typedef T * pointer;
-		typedef T const * const_pointer;
-		typedef std::reverse_iterator<T*> reverse_iterator;
-		typedef std::reverse_iterator<const T*> const_reverse_iterator;
-		typedef std::ptrdiff_t difference_type;
-		typedef allocator<T> allocator_type;
+		using size_type              = std::size_t;
+		using value_type             = T;
+		using reference              = T&;
+		using const_reference        = T const&;
+		using iterator               = T*;
+		using const_iterator         = const T*;
+		using pointer                = T*;
+		using const_pointer          = T const*;
+		using reverse_iterator       = std::reverse_iterator<T*>;
+		using const_reverse_iterator = std::reverse_iterator<const T*>;
+		using difference_type        = std::ptrdiff_t;
+		using allocator_type         = allocator<T>;
 
 	protected:
-		typedef Alloc data_allocator;
+		using data_allocator         = Alloc;
 
 	public:
 		vector() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}//constructor: default

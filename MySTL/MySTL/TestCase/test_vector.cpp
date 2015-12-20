@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <ctime>
 
 #include "test_vector.h"
 
@@ -10,8 +11,8 @@ namespace MySTL
 		template <typename T>
 		void printvector(vector<T> &v)
 		{
-			for (auto i = v.begin(); i != v.end(); ++i)
-				std::cout << *i << '\t';
+			for (MySTL::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
+				std::cout << *it << '\t';
 			std::cout << std::endl;
 		}
 
@@ -63,9 +64,7 @@ namespace MySTL
 			//	*rit = ++i;
 
 			std::cout << "myvector contains:";
-			for (MySTL::vector<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
-				std::cout << ' ' << *it;
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		// capacity
@@ -109,9 +108,7 @@ namespace MySTL
 			myvector.resize(12);
 
 			std::cout << "myvector contains:";
-			for (size_t i = 0; i < myvector.size(); i++)
-				std::cout << ' ' << myvector[i];
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		void tc_reserve()
@@ -154,8 +151,8 @@ namespace MySTL
 			myvector.resize(10);
 			std::cout << "2. capacity of myvector: " << myvector.capacity() << '\n';
 
-			//myvector.shrink_to_fit();
-			//std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
+			myvector.shrink_to_fit();
+			std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
 		}
 
 		// element access
@@ -178,9 +175,7 @@ namespace MySTL
 			}
 
 			std::cout << "myvector contains:";
-			for (unsigned i = 0; i < sz; i++)
-				std::cout << ' ' << myvector[i];
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		void tc_at()
@@ -192,9 +187,7 @@ namespace MySTL
 				myvector.at(i) = i;
 
 			std::cout << "myvector contains:";
-			for (unsigned i = 0; i < myvector.size(); i++)
-				std::cout << ' ' << myvector.at(i);
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		void tc_front_back()
@@ -224,9 +217,7 @@ namespace MySTL
 			p[2] = 100;
 
 			std::cout << "myvector contains:";
-			for (unsigned i = 0; i < myvector.size(); ++i)
-				std::cout << ' ' << myvector[i];
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		// modifiers
@@ -254,17 +245,13 @@ namespace MySTL
 		void tc_push_back()
 		{
 			MySTL::vector<int> myvector;
-			int myint;
 
-			std::cout << "Please enter some integers (enter 0 to end):\n";
-
-			do {
-				std::cin >> myint;
-				myvector.push_back(myint);
-			} while (myint);
-
+			for (auto i = 0; i < 10; ++i)
+			{
+				srand((unsigned)time(NULL));
+				myvector.push_back(rand());
+			}
 			printvector(myvector);
-			std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
 		}
 
 		void tc_pop_back()
@@ -303,9 +290,7 @@ namespace MySTL
 			myvector.insert(myvector.begin(), myarray, myarray + 3);
 
 			std::cout << "myvector contains:";
-			for (it = myvector.begin(); it < myvector.end(); it++)
-				std::cout << ' ' << *it;
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		void tc_erase()
@@ -322,9 +307,7 @@ namespace MySTL
 			myvector.erase(myvector.begin(), myvector.begin() + 3);
 
 			std::cout << "myvector contains:";
-			for (unsigned i = 0; i < myvector.size(); ++i)
-				std::cout << ' ' << myvector[i];
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		void tc_swap()
@@ -335,14 +318,10 @@ namespace MySTL
 			foo.swap(bar);
 
 			std::cout << "foo contains:";
-			for (unsigned i = 0; i < foo.size(); i++)
-				std::cout << ' ' << foo[i];
-			std::cout << '\n';
+			printvector(foo);
 
 			std::cout << "bar contains:";
-			for (unsigned i = 0; i < bar.size(); i++)
-				std::cout << ' ' << bar[i];
-			std::cout << '\n';
+			printvector(bar);
 		}
 
 		void tc_clear()
@@ -353,18 +332,14 @@ namespace MySTL
 			myvector.push_back(300);
 
 			std::cout << "myvector contains:";
-			for (unsigned i = 0; i < myvector.size(); i++)
-				std::cout << ' ' << myvector[i];
-			std::cout << '\n';
+			printvector(myvector);
 
 			myvector.clear();
 			myvector.push_back(1101);
 			myvector.push_back(2202);
 
 			std::cout << "myvector contains:";
-			for (unsigned i = 0; i < myvector.size(); i++)
-				std::cout << ' ' << myvector[i];
-			std::cout << '\n';
+			printvector(myvector);
 		}
 
 		/*
@@ -416,7 +391,7 @@ namespace MySTL
 			myvector.get_allocator().deallocate(p, 5);
 		}
 		
-		*/
+		
 		void tc_relationalOperators()
 		{
 			MySTL::vector<int> foo(3, 100);   // three ints with a value of 100
@@ -428,11 +403,12 @@ namespace MySTL
 			if (foo> bar) std::cout << "foo is greater than bar\n";
 			if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
 			if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
-		}
+		}*/
 		
 
 		void test_all()
 		{
+			std::cout << "----------test vector----------" << std::endl;
 			tc_constructor();
 			tc_assignment();
 			tc_size();
@@ -454,7 +430,8 @@ namespace MySTL
 			//tc_emplace();
 			//tc_emplace_back();
 			//tc_get_allocator();
-			tc_relationalOperators();
+			//tc_relationalOperators();
+			std::cout << "----------test vector success----------\n" << std::endl;
 		}
 
 	}

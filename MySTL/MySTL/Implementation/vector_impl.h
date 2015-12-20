@@ -9,7 +9,7 @@
 
 #include "../Declaration/vector.h"
 #include "../Declaration/uninitialized_functions.h"
-#include "../Declaration/construct.h"				
+				
 
 using namespace MySTL;
 namespace MySTL

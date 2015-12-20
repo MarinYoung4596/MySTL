@@ -101,7 +101,7 @@ namespace MySTL
 
 	// allocate a space that contains @nOBJs blocks with the size of @bytes
 	//    @nOBJs might be reduced in different situations.
-	// @bytes: the bytes of a block£¬(assume that bytes is the multiple of 8)
+	// @bytes: the bytes of a blocks(assume that bytes is the multiple of 8)
 	// @nOBJs: number of blocks
 	char* alloc::chunk_alloc(size_type bytes, int &nOBJs)
 	{
