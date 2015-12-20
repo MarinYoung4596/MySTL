@@ -154,8 +154,8 @@ namespace MySTL
 			myvector.resize(10);
 			std::cout << "2. capacity of myvector: " << myvector.capacity() << '\n';
 
-			myvector.shrink_to_fit();
-			std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
+			//myvector.shrink_to_fit();
+			//std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
 		}
 
 		// element access
@@ -263,6 +263,7 @@ namespace MySTL
 				myvector.push_back(myint);
 			} while (myint);
 
+			printvector(myvector);
 			std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
 		}
 
@@ -366,6 +367,7 @@ namespace MySTL
 			std::cout << '\n';
 		}
 
+		/*
 		void tc_emplace()
 		{
 			MySTL::vector<int> myvector = { 10, 20, 30 };
@@ -391,29 +393,30 @@ namespace MySTL
 				std::cout << ' ' << x;
 			std::cout << '\n';
 		}
-
+		
 		// allocator
-		//void tc_get_allocator()
-		//{
-		//	MySTL::vector<int> myvector;
-		//	int * p;
-		//	unsigned int i;
+		void tc_get_allocator()
+		{
+			MySTL::vector<int> myvector;
+			int * p;
+			unsigned int i;
 
-		//	// allocate an array with space for 5 elements using vector's allocator:
-		//	p = myvector.get_allocator().allocate(5);
+			// allocate an array with space for 5 elements using vector's allocator:
+			p = myvector.get_allocator().allocate(5);
 
-		//	// construct values in-place on the array:
-		//	for (i = 0; i < 5; i++) myvector.get_allocator().construct(&p[i], i);
+			// construct values in-place on the array:
+			for (i = 0; i < 5; i++) myvector.get_allocator().construct(&p[i], i);
 
-		//	std::cout << "The allocated array contains:";
-		//	for (i = 0; i < 5; i++) std::cout << ' ' << p[i];
-		//	std::cout << '\n';
+			std::cout << "The allocated array contains:";
+			for (i = 0; i < 5; i++) std::cout << ' ' << p[i];
+			std::cout << '\n';
 
-		//	// destroy and deallocate:
-		//	for (i = 0; i < 5; i++) myvector.get_allocator().destroy(&p[i]);
-		//	myvector.get_allocator().deallocate(p, 5);
-		//}
-
+			// destroy and deallocate:
+			for (i = 0; i < 5; i++) myvector.get_allocator().destroy(&p[i]);
+			myvector.get_allocator().deallocate(p, 5);
+		}
+		
+		*/
 		void tc_relationalOperators()
 		{
 			MySTL::vector<int> foo(3, 100);   // three ints with a value of 100
@@ -426,7 +429,7 @@ namespace MySTL
 			if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
 			if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
 		}
-
+		
 
 		void test_all()
 		{
@@ -448,8 +451,8 @@ namespace MySTL
 			tc_erase();
 			tc_swap();
 			tc_clear();
-			tc_emplace();
-			tc_emplace_back();
+			//tc_emplace();
+			//tc_emplace_back();
 			//tc_get_allocator();
 			tc_relationalOperators();
 		}

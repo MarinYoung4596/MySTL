@@ -47,7 +47,7 @@ namespace MySTL
         
     public:
         static void* allocate(size_type bytes);
-        static void  deallocate(void *p, size_type bytes);
+        static void  deallocate(void *p, size_type n);
         static void* reallocate(void *p, size_type old_size, size_type new_size);
     };
 }

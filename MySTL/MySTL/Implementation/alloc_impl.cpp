@@ -1,4 +1,4 @@
-#include <cstdlib>
+#include <cstdlib>	// malloc, free
 
 #include "../Declaration/alloc.h"
 
@@ -28,7 +28,7 @@ namespace MySTL
 	// no need to specify static feature
 	void* alloc::allocate(size_type bytes)
 	{
-		if (bytes > static_cast<size_t>(MAX_BYTES)) // if block size > 128 bytes
+		if (bytes > static_cast<alloc::size_type>(MAX_BYTES)) // if block size > 128 bytes
 			return malloc(bytes);
 		
 		size_t index = FREE_LIST_INDEX(bytes);
@@ -48,8 +48,11 @@ namespace MySTL
 
 	void alloc::deallocate(void *p, size_type n)
 	{
-		if (n > static_cast<size_t>(MAX_BYTES))
+		if (n > static_cast<alloc::size_type>(MAX_BYTES))
+		{
 			free(p);
+			p = nullptr;
+		}
 		else
 		{
 			size_t index = FREE_LIST_INDEX(n);

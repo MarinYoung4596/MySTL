@@ -8,7 +8,7 @@ namespace MySTL
 	namespace TestVector
 	{
 		// function declaration
-		void tc_constructor();
+		void tc_constructor_1();
 		void tc_assignment();
 		void tc_size();
 		void tc_empty();
@@ -26,8 +26,8 @@ namespace MySTL
 		void tc_erase();
 		void tc_swap();
 		void tc_clear();
-		void tc_emplace();
-		void tc_emplace_back();
+		//void tc_emplace();
+		//void tc_emplace_back();
 		//void tc_get_allocator();
 		void tc_relationalOperators();
 		

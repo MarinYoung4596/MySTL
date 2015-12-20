@@ -45,14 +45,14 @@
     <ClInclude Include="Declaration\vector.h">
       <Filter>Declaration</Filter>
     </ClInclude>
+    <ClInclude Include="Declaration\string.h">
+      <Filter>Declaration</Filter>
+    </ClInclude>
     <ClInclude Include="Implementation\vector_impl.h">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="TestCase\test_vector.h">
       <Filter>TestCase</Filter>
-    </ClInclude>
-    <ClInclude Include="Declaration\string.h">
-      <Filter>Declaration</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

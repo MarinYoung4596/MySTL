@@ -20,12 +20,12 @@ namespace MySTL
 	public:
 		typedef std::size_t size_type;
 		typedef T value_type;
-		typedef T &reference;
-		typedef T const &const_reference;
-		typedef T *iterator;
-		typedef const T *const_iterator;
-		typedef T *pointer;
-		typedef T const *const_pointer;
+		typedef T & reference;
+		typedef T const & const_reference;
+		typedef T * iterator;
+		typedef const T * const_iterator;
+		typedef T * pointer;
+		typedef T const * const_pointer;
 		typedef std::reverse_iterator<T*> reverse_iterator;
 		typedef std::reverse_iterator<const T*> const_reverse_iterator;
 		typedef std::ptrdiff_t difference_type;
@@ -38,7 +38,7 @@ namespace MySTL
 		vector() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}//constructor: default
 		
 		vector(const vector &);											// constructor: copy
-		vector(vector &&) noexcept;										// constructor: move
+		vector(vector &&) /*noexcept*/;									// constructor: move
 		explicit vector(const size_type n);								// constructor: fill
 		vector(const size_type n, const_reference val);					// constructor: fill
 		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
@@ -47,7 +47,7 @@ namespace MySTL
 
 		vector& operator=(const vector &rhs);							// assign content: copy
 		vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
-		vector& operator=(vector &&rhs) noexcept;						// assign content: move
+		vector& operator=(vector &&rhs) /*noexcept*/;					// assign content: move
 		
 		~vector();														// destructor
 		
@@ -71,10 +71,10 @@ namespace MySTL
 		iterator insert(iterator position, size_type n, const_reference val);// insert elements: fill
 		template<typename InputIterator>
 		iterator insert(iterator position, InputIterator first, InputIterator second);// insert elements: range
-		iterator insert(iterator position, value_type &&val);			// insert elements: move
+		//iterator insert(iterator position, value_type &&val);			// insert elements: move
 		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
 
-		void clear() noexcept { erase(begin(), end()); } 				// clear content
+		void clear() /*noexcept*/ { erase(begin(), end()); } 			// clear content
 		void swap(vector &x);											// swap content
 
 		iterator erase(iterator position);								// erase elements: single element
@@ -87,7 +87,7 @@ namespace MySTL
 
 		// Capacity
 		size_type size() const { return first_free - elements_start; }	// return size
-		static size_type max_size() noexcept { return size_type(UINT_MAX / sizeof(value_type)); }// return maximum size
+		static size_type max_size() /*noexcept*/ { return size_type(UINT_MAX / sizeof(value_type)); }// return maximum size
 		void resize(size_type n, value_type val = value_type());		// change size
 		size_type capacity() const { return end_of_storage - elements_start; }// return size of allocated storage capacity
 		bool empty() const { return elements_start == first_free; }		// test whether vector is empty
@@ -114,21 +114,21 @@ namespace MySTL
 		vector& alloc_n_copy(InputIterator, InputIterator);
 		vector& alloc_n_fill_n(const size_type, const_reference);
 
-		void free();
-		void reallocate();
+		void _free();
+		void _reallocate();
 
 		// auxiliary functions for overloads
 		template <typename InputIterator>
-		void vector_aux(InputIterator first, InputIterator second, std::false_type);
-		void vector_aux(const size_type n, const_reference val, std::true_type);
+		void _vector_aux(InputIterator first, InputIterator second, std::false_type);
+		void _vector_aux(const size_type n, const_reference val, std::true_type);
 
 		template <typename InputIterator>
-		iterator insert(iterator position, InputIterator first, InputIterator second, std::false_type);
-		iterator insert(iterator position, size_type n, const_reference val, std::true_type);
+		iterator _insert(iterator position, InputIterator first, InputIterator second, std::false_type);
+		iterator _insert(iterator position, size_type n, const_reference val, std::true_type);
 
 		template <typename InputIterator>
-		void assign(InputIterator first, InputIterator last, std::false_type);
-		void assign(size_type n, const_reference val, std::true_type);
+		void _assign(InputIterator first, InputIterator last, std::false_type);
+		void _assign(size_type n, const_reference val, std::true_type);
 
 	private:
 		iterator elements_start;	// head pointer

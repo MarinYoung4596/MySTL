@@ -24,7 +24,7 @@ namespace MySTL
 
 
 	template <typename T, typename Alloc>
-	vector<T, Alloc>::vector(vector &&s) noexcept
+	vector<T, Alloc>::vector(vector &&s) /*noexcept*/
 		: elements_start(s.elements_start), first_free(s.first_free), end_of_storage(s.end_of_storage)
 	{
 		s.elements_start = s.first_free = s.end_of_storage = nullptr;
@@ -42,7 +42,7 @@ namespace MySTL
 	vector<T, Alloc>::vector(const size_type n, const_reference val)
 	{
 		typedef typename std::is_integral<size_type>::type IS_INTEGER;
-		vector_aux(n, val, IS_INTEGER());
+		_vector_aux(n, val, IS_INTEGER());
 	}
 
 
@@ -58,7 +58,7 @@ namespace MySTL
 	vector<T, Alloc>::vector(InputIterator first, InputIterator second)
 	{
 		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
-		vector_aux(first, second, IS_INTEGER());
+		_vector_aux(first, second, IS_INTEGER());
 	}
 
 
@@ -70,11 +70,11 @@ namespace MySTL
 
 
 	template <typename T, typename Alloc>
-	vector<T, Alloc>& vector<T, Alloc>::operator=(vector<T, Alloc> &&rhs) noexcept
+	vector<T, Alloc>& vector<T, Alloc>::operator=(vector<T, Alloc> &&rhs) /*noexcept*/
 	{
 		if (this != &rhs)
 		{
-			free();
+			_free();
 			elements_start = rhs.elements_start;
 			first_free = rhs.first_free;
 			end_of_storage = rhs.end_of_storage;
@@ -94,7 +94,7 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>::~vector()
 	{
-		free();
+		_free();
 	}
 
 
@@ -116,7 +116,7 @@ namespace MySTL
 	void vector<T, Alloc>::assign(size_type n, const_reference val)
 	{
 		typedef typename std::is_integral<size_type>::type IS_INTEGER;
-		assign(n, val, IS_INTEGER());
+		_assign(n, val, IS_INTEGER());
 	}
 
 
@@ -132,7 +132,7 @@ namespace MySTL
 	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
 	{
 		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
-		assign(first, last, IS_INTEGER());
+		_assign(first, last, IS_INTEGER());
 	}
 
 
@@ -163,7 +163,7 @@ namespace MySTL
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, size_type n, const_reference val)
 	{
 		typedef typename std::is_integral<size_type>::type IS_INTEGER;
-		return insert(position, n, val, IS_INTEGER());
+		return _insert(position, n, val, IS_INTEGER());
 	}
 
 
@@ -172,7 +172,7 @@ namespace MySTL
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator second)
 	{
 		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
-		return insert(position, first, second, IS_INTEGER());
+		return _insert(position, first, second, IS_INTEGER());
 	}
 
 
@@ -262,7 +262,7 @@ namespace MySTL
 			auto len_insert = n - size();
 			T *_end = std::uninitialized_copy(begin(), end(), _start);
 			_end = std::uninitialized_fill_n(_end, len_insert, val);
-			free();
+			_free();
 			elements_start = _start;
 			first_free = end_of_storage = _end;
 		}
@@ -276,7 +276,7 @@ namespace MySTL
 			return;
 		iterator _start = static_cast<iterator>(data_allocator::allocate(n));
 		iterator _end = std::uninitialized_copy(begin(), end(), _start);
-		free();
+		_free();
 		elements_start = _start;
 		first_free = _end;
 		end_of_storage = elements_start + n;
@@ -286,7 +286,7 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	void vector<T, Alloc>::shrink_to_fit()
 	{
-		data_allocator::deallocate(first_free, end_of_storage - first_free);
+		data_allocator::deallocate(first_free, static_cast<size_type>(end_of_storage - first_free));
 		end_of_storage = first_free;
 	}
 
@@ -294,13 +294,12 @@ namespace MySTL
 	/////////////////////////////////////////////////////////////
 	// private member functions
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::free()
+	void vector<T, Alloc>::_free()
 	{
 		if (elements_start)
 		{
 			// destroy the object p in vector one by one
-			for (auto p = first_free; p != elements_start; --p)
-				data_allocator::destroy(p);
+			data_allocator::destroy(elements_start, first_free);
 			// and free the space.
 			data_allocator::deallocate(elements_start, end_of_storage - elements_start);
 		}
@@ -311,7 +310,7 @@ namespace MySTL
 	void vector<T, Alloc>::chk_n_alloc()
 	{
 		if (size() == capacity())
-			reallocate();
+			_reallocate();
 	}
 
 
@@ -319,7 +318,7 @@ namespace MySTL
 	template <typename InputIterator>
 	vector<T, Alloc>& vector<T, Alloc>::alloc_n_copy(InputIterator first, InputIterator last)
 	{
-		free();
+		_free();
 		elements_start = data_allocator::allocate(last - first);
 		first_free = std::uninitialized_copy(first, last, elements_start);
 		end_of_storage = first_free;
@@ -330,9 +329,9 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	vector<T, Alloc>& vector<T, Alloc>::alloc_n_fill_n(const size_type n, const_reference val)
 	{
+		_free();
 		auto newdata = data_allocator::allocate(n);
 		std::uninitialized_fill_n(newdata, n, val);
-		free();
 		elements_start = newdata;
 		first_free = end_of_storage = elements_start + n;
 		return *this;
@@ -340,7 +339,7 @@ namespace MySTL
 
 
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::reallocate()
+	void vector<T, Alloc>::_reallocate()
 	{
 		size_type newcapacity = size() ? 2 * size() : 1;
 		auto newdata = data_allocator::allocate(newcapacity);
@@ -354,7 +353,7 @@ namespace MySTL
 		// or
 		// dest = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), newdata);
 
-		free();
+		_free();
 		elements_start = newdata;
 		first_free = dest;
 		end_of_storage = elements_start + newcapacity;
@@ -364,14 +363,14 @@ namespace MySTL
 	// constructor auxiliary functions, (std::true_type / std::false_type) were regarded as the symbol of overloads.
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
-	void vector<T, Alloc>::vector_aux(InputIterator first, InputIterator second, std::false_type)
+	void vector<T, Alloc>::_vector_aux(InputIterator first, InputIterator second, std::false_type)
 	{
 		alloc_n_copy(first, second);
 	}
 
 
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::vector_aux(const size_type n, const_reference val, std::true_type)
+	void vector<T, Alloc>::_vector_aux(const size_type n, const_reference val, std::true_type)
 	{
 		alloc_n_fill_n(n, val);
 	}
@@ -380,7 +379,7 @@ namespace MySTL
 	// insert auxiliary
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator second, std::false_type)
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::_insert(iterator position, InputIterator first, InputIterator second, std::false_type)
 	{
 		difference_type space_left = end_of_storage - first_free;
 		difference_type space_required = second - first;
@@ -398,7 +397,7 @@ namespace MySTL
 			iterator _end = std::uninitialized_copy(begin(), position, _start);
 			_end = std::uninitialized_copy(first, second, _end); // insert
 			_end = std::uninitialized_copy(position, end(), _end);
-			free();
+			_free();
 			elements_start = _start;
 			first_free = _end;
 			end_of_storage = elements_start + len;
@@ -408,7 +407,7 @@ namespace MySTL
 
 
 	template <typename T, typename Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, size_type n, const_reference val, std::true_type)
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::_insert(iterator position, size_type n, const_reference val, std::true_type)
 	{
 		auto space_left = end_of_storage - first_free;
 		if (n <= static_cast<size_type>(space_left))
@@ -426,7 +425,7 @@ namespace MySTL
 			iterator _end = std::uninitialized_copy(begin(), position, _start);
 			_end = std::uninitialized_fill_n(_end, n, val); // _end point to next free space
 			_end = std::uninitialized_copy(position, end(), _end);
-			free();
+			_free();
 			elements_start = _start;
 			first_free = _end;
 			end_of_storage = elements_start + len;
@@ -438,14 +437,14 @@ namespace MySTL
 	// assign auxiliary
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
-	void vector<T, Alloc>::assign(InputIterator first, InputIterator last, std::false_type)
+	void vector<T, Alloc>::_assign(InputIterator first, InputIterator last, std::false_type)
 	{
 		alloc_n_copy(first, last);
 	}
 
 
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::assign(size_type n, const_reference val, std::true_type)
+	void vector<T, Alloc>::_assign(size_type n, const_reference val, std::true_type)
 	{
 		alloc_n_fill_n(n, val);
 	}
