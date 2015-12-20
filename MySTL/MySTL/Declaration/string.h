@@ -59,14 +59,10 @@ namespace MySTL
 
 
 		//////////////////// iterators ////////////////////
-		iterator begin() /*noexcept*/ { return _begin; }
-		const_iterator begin() const /*noexcept*/ { return _begin; }
-		iterator end() /*noexcept*/ { return _end; }
-		const_iterator end() const /*noexcept*/ { return _end; }
-		reverse_iterator rbegin() /*noexcept*/ { return reverse_iterator(_begin); }
-		const_reverse_iterator rbegin() const /*noexcept*/ { return const_reverse_iterator(_begin); }
-		reverse_iterator rend() /*noexcept*/ { return reverse_iterator(_begin); }
-		const_reverse_iterator rend() const /*noexcept*/{ return const_reverse_iterator(_end); }
+		iterator begin() const/*noexcept*/ { return _begin; }
+		iterator end() const/*noexcept*/ { return _end; }
+		reverse_iterator rbegin() const/*noexcept*/ { return reverse_iterator(_begin); }
+		reverse_iterator rend() const/*noexcept*/ { return reverse_iterator(_begin); }
 		const_iterator cbegin() const /*noexcept*/ { return _begin; }
 		const_iterator cend() const /*noexcept*/ { return _end; }
 		const_reverse_iterator crbegin() const /*noexcept*/ { return const_reverse_iterator(_begin); }
@@ -137,7 +133,7 @@ namespace MySTL
 		template <typename InputIterator>
 		string& assign(InputIterator first, InputIterator last);				// (6) range
 		string& assign(std::initializer_list<char> il);							// (7) initializer list
-		//string& assign(string&& str); ///*noexcept*/;							// (8) move
+		string& assign(string&& str); ///*noexcept*/;							// (8) move
 
 
 		// Insert into string
@@ -350,15 +346,15 @@ namespace MySTL
 
 	//////////////////// friend functions' declaration ////////////////////
 
-	string operator+ (const string& lhs, const string& rhs);		// string(1)
+	string operator+ (const string& lhs, const string& rhs);	// string(1)
 	string operator+ (string&&      lhs, string&&      rhs);
 	string operator+ (string&&      lhs, const string& rhs);
 	string operator+ (const string& lhs, string&&      rhs);
-	string operator+ (const string& lhs, const char*   rhs);		// c - string(2)
+	string operator+ (const string& lhs, const char*   rhs);	// c - string(2)
 	string operator+ (string&&      lhs, const char*   rhs);
 	string operator+ (const char*   lhs, const string& rhs);
 	string operator+ (const char*   lhs, string&&      rhs);
-	string operator+ (const string& lhs, char          rhs);		// character(3)
+	string operator+ (const string& lhs, char          rhs);	// character(3)
 	string operator+ (string&&      lhs, char          rhs);
 	string operator+ (char          lhs, const string& rhs);
 	string operator+ (char          lhs, string&&      rhs);
