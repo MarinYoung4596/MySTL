@@ -10,7 +10,6 @@
 #include <cstddef>		// size_t, ptrdiff_t
 #include <climits>      // UINT_MAX
 
-#include "iterator.h"
 #include "uninitialized_functions.h"
 
 namespace MySTL
@@ -73,7 +72,7 @@ namespace MySTL
 		//////////////////// capacity ////////////////////
 		size_type size() const /*noexcept*/ { return _end - _begin; }
 		size_type length() const /*noexcept*/ { return _end - _begin; }
-		size_type max_size() const /*noexcept*/ { return size_type(UINT_MAX / sizeof(char)); }
+		static size_type max_size() /*noexcept*/ { return size_type(UINT_MAX / sizeof(char)); }
 
 		void resize(size_type n);
 		void resize(size_type n, char c);
@@ -153,8 +152,8 @@ namespace MySTL
 		//Erase characters from string
 		//	Erases part of the string, reducing its length :
 		string& erase(size_type pos = 0, size_type len = npos);		//  (1) sequence
-		iterator erase(const_iterator p);							//	(2) character
-		iterator erase(const_iterator first, const_iterator last);	//	(3) range
+		iterator erase(iterator p);									//	(2) character
+		iterator erase(iterator first, iterator last);				//	(3) range
 
 
 		// Replace portion of string
@@ -259,23 +258,16 @@ namespace MySTL
 
 		std::allocator<char> alloc;
 
-		// check and allocate
 		void chk_n_alloc();
-		// allocate and copy
 		void alloc_n_copy(const_iterator first, const_iterator second);
-		// allocate and fill n
 		void alloc_n_fill_n(const char &c, size_type n);
-		// destroy and deallocate
 		void _free();
-		// re allocate
 		void _reallocate();
 
-		// cstring - strlen
 		static size_type strlen(const char *s);
-		// compare_aux
+
 		template <typename InputIterator>
 		int _compare_aux(size_type pos, size_type len, InputIterator first, InputIterator last);
-
 
 
 	public:
