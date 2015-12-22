@@ -91,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation\alloc_impl.cpp" />
-    <ClCompile Include="Implementation\string_impl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestCase\test_vector.cpp" />
   </ItemGroup>

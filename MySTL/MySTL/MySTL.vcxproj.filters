@@ -67,8 +67,5 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Implementation\string_impl.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

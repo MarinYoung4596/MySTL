@@ -2,6 +2,11 @@
 
 #include "../Declaration/alloc.h"
 
+#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif
+
 namespace MySTL
 {
 	// initialization
@@ -50,6 +55,13 @@ namespace MySTL
 	{
 		if (n > static_cast<alloc::size_type>(MAX_BYTES))
 		{
+#ifdef DEBUG
+			if (p == nullptr)
+			{
+				std::cout << "NULL!!!" << std::endl;
+				return;
+			}
+#endif
 			free(p);
 			p = nullptr;
 		}
