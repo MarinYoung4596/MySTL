@@ -11,7 +11,7 @@ namespace MySTL
 		template <typename T>
 		void printvector(vector<T> &v)
 		{
-			for (MySTL::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
+			for (vector<int>::iterator it = v.begin(); it != v.end(); ++it)
 				std::cout << *it << '\t';
 			std::cout << std::endl;
 		}
@@ -248,7 +248,7 @@ namespace MySTL
 
 			for (auto i = 0; i < 10; ++i)
 			{
-				srand((unsigned)time(NULL));
+				srand(static_cast<unsigned>(time(nullptr)));
 				myvector.push_back(rand());
 			}
 			printvector(myvector);

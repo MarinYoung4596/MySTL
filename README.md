@@ -2,18 +2,31 @@
 MySTL is a Tiny C++ STL library.
 
 #TO-DO LIST
- 1. type_traits .............................................................................. [ DONE ]
- 2. iterator, reverse_iterator ................................................. [ DONE ]
- 3. allocater ................................................................................. [ DONE ]
- 4. uninitialized functions, construct / destroy .............. [ DONE ]
- 4. vector ...................................................................................... [ DONE ]
- 5. string ....................................................................................... [ ...        ]
- 6. dequeue, stack, queue ...................................................... [ ...        ]
- 7. ...
+ 1. type_traits
+ 2. iterator, reverse_iterator
+ 3. allocater
+ 4. uninitialized functions, construct / destroy
+ 4. vector
+ 5. string
+ 6. dequeue, stack, queue
+ 7. algorithm
+ 8. ...
 
 #TIPS
+ * traits
+ * `const T*` means `(const T)*`,
+ 
+   `using pointer = T*;`
+   `using const_pointer = const pointer; // const_pointer = const (T*)`
+   
+   use `T const *`
+ * `const *` // *pointer to const*; Cann't change the object's value it pointed (by this pointer), while its object's value can be changed in another way.
 
-#Bugs & Solutions
+   `* const` // *const pointer*;    Once initialized, its storaged value (the address of the object) can not be changed. 
+	
+
+
+#BUGS & SOLUTIONS
 
  - Use customized reverse_iterator
  - In conjunction with customized uninitialized functions
@@ -28,21 +41,6 @@ MySTL is a Tiny C++ STL library.
 	 - Solution:  use vs2013
  - ERROR C4996: 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe...
 	 - Solution: Create project without Security Development Lifecycle (SDL) checks
- - ERROR C2672, 'std::Iter_cat': no matching overloaded function found
- - ERROR C2893, C2780, C2665 ...
-	 - Solutions: 
-    vector(size_type n, const_reference val) {}
-    template<typename InputIterator>
-    vector(InputIterator first, InputIterator second) {}
-
-	==> use traits
-
-    vector(size_type n, const_reference val)
-    {
-    using IS_INTEGER = typename std::is_integral<size_type>::type;
-    _vector_aux(n, val, IS_INTEGER());
-    }
-
-
-
-
+ - ERROR C2672, C2893, C2780, C2665 ...
+	 - Solutions: functions overload failed ==> use traits
+ - 

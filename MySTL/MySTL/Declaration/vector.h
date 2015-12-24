@@ -23,13 +23,13 @@ namespace MySTL
 		using size_type              = std::size_t;
 		using value_type             = T;
 		using reference              = T&;
-		using const_reference        = T const&;
+		using const_reference        = T const &;
 		using iterator               = T*;
-		using const_iterator         = const T*;
+		using const_iterator         = T const *;
 		using pointer                = T*;
-		using const_pointer          = T const*;
+		using const_pointer          = T const *;
 		using reverse_iterator       = std::reverse_iterator<T*>;
-		using const_reverse_iterator = std::reverse_iterator<const T*>;
+		using const_reverse_iterator = std::reverse_iterator<T const*>;
 		using difference_type        = std::ptrdiff_t;
 		using allocator_type         = allocator<T>;
 
