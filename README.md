@@ -20,8 +20,7 @@ MySTL is a Tiny C++ STL library.
    `using const_pointer = const pointer;` // `const_pointer` means `const (T*)`
    
    use `T const *`
- * `const *` // **pointer to const**; Cann't change the object's value it pointed (by this pointer), while its object's value can be changed in another way.
-
+ * `const *` // **pointer to const**; Cann't change the object's value it pointed (by this pointer), while its object's value can be changed in another way, **we need `pointer to const` in STL**.
    `* const` // **const pointer**;    Once initialized, its storaged value (the address of the object) can not be changed. 
 	
 

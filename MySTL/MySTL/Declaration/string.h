@@ -9,9 +9,11 @@
 #include <iterator>		// reverse_iterator
 #include <cstddef>		// size_t, ptrdiff_t
 #include <climits>      // UINT_MAX
+#include <iostream>		// istream, ostream
 
 #include "uninitialized_functions.h"
 #include "allocator.h"
+#include "reverse_iterator.h"
 
 namespace MySTL
 {
@@ -21,13 +23,15 @@ namespace MySTL
 	public:
 		using value_type             = char;
 		using traits_type            = std::char_traits<char>;
-		using allocator_type         = std::allocator<char>;
+		using allocator_type         = allocator<char>;
 		using reference              = char&;
-		using const_reference        = char const&;
-		using iterator               = char*;
-		using const_iterator         = char const*;
-		using reverse_iterator       = std::reverse_iterator<char *>;
-		using const_reverse_iterator = std::reverse_iterator<const char *>;
+		using const_reference        = const char&;
+		using pointer                = char*;
+		using const_pointer          = const char*;
+		using iterator               = char*;// random access iterator
+		using const_iterator         = const char*;
+		using reverse_iterator       = std::reverse_iterator<iterator>;	
+		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 		using difference_type        = std::ptrdiff_t;
 		using size_type              = std::size_t;
 
@@ -59,10 +63,14 @@ namespace MySTL
 
 
 		//////////////////// iterators ////////////////////
-		iterator begin() const/*noexcept*/ { return _begin; }
-		iterator end() const/*noexcept*/ { return _end; }
-		reverse_iterator rbegin() const/*noexcept*/ { return reverse_iterator(_begin); }
-		reverse_iterator rend() const/*noexcept*/ { return reverse_iterator(_begin); }
+		iterator begin() /*noexcept*/ { return _begin; }
+		const_iterator begin() const /*noexcept*/ { return _begin; }
+		iterator end() /*noexcept*/ { return _end; }
+		const_iterator end() const /*noexcept*/ { return _end; }
+		reverse_iterator rbegin() /*noexcept*/ { return reverse_iterator(_begin); }
+		const_reverse_iterator rbegin() const /*noexcept*/ { return reverse_iterator(_begin); }
+		reverse_iterator rend() /*noexcept*/ { return reverse_iterator(_end); }
+		const_reverse_iterator rend() const /*noexcept*/ { return reverse_iterator(_begin); }
 		const_iterator cbegin() const /*noexcept*/ { return _begin; }
 		const_iterator cend() const /*noexcept*/ { return _end; }
 		const_reverse_iterator crbegin() const /*noexcept*/ { return const_reverse_iterator(_begin); }
@@ -73,7 +81,7 @@ namespace MySTL
 		//////////////////// capacity ////////////////////
 		size_type size() const /*noexcept*/ { return _end - _begin; }
 		size_type length() const /*noexcept*/ { return _end - _begin; }
-		static size_type max_size() /*noexcept*/ { return size_type(UINT_MAX / sizeof(char)); }
+		size_type max_size() const /*noexcept*/ { return size_type(UINT_MAX / sizeof(char)); }
 
 		void resize(size_type n);
 		void resize(size_type n, char c);
@@ -152,9 +160,9 @@ namespace MySTL
 
 		//Erase characters from string
 		//	Erases part of the string, reducing its length :
-		string& erase(size_type pos = 0, size_type len = npos);		//  (1) sequence
-		iterator erase(iterator p);									//	(2) character
-		iterator erase(iterator first, iterator last);				//	(3) range
+		string& erase(size_type pos = 0, size_type len = npos);					//  (1) sequence
+		iterator erase(const_iterator p);										//	(2) character
+		iterator erase(const_iterator first, const_iterator last);				//	(3) range
 
 
 		// Replace portion of string
@@ -270,9 +278,10 @@ namespace MySTL
 
 		template<typename InputIterator>
 		void _string(InputIterator first, InputIterator last, std::false_type);
+		void _string(size_type n, char c, std::true_type);
 
 		template <typename InputIterator>
-		int _compare_aux(size_type pos, size_type len, InputIterator first, InputIterator last);
+		int _compare(size_type pos, size_type len, InputIterator first, InputIterator last);
 
 
 	public:
