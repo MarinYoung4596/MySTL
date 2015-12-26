@@ -121,8 +121,8 @@ namespace MySTL
 
 		// auxiliary functions for overloads
 		template <typename InputIterator>
-		void _vector_aux(InputIterator first, InputIterator second, std::false_type);
-		void _vector_aux(const size_type n, const_reference val, std::true_type);
+		void _vector(InputIterator first, InputIterator second, std::false_type);
+		void _vector(const size_type n, const_reference val, std::true_type);
 
 		template <typename InputIterator>
 		iterator _insert(iterator position, InputIterator first, InputIterator second, std::false_type);
@@ -139,12 +139,25 @@ namespace MySTL
 
 	public:
 		// non-member functions overloads
+		template <typename T, typename Alloc>
 		friend bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+		template <typename T, typename Alloc>
 		friend bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+		template <typename T, typename Alloc>
 		friend bool operator<  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+		template <typename T, typename Alloc>
 		friend bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
-		friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);	
+
+		template <typename T, typename Alloc>
+		friend bool operator>  (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+		template <typename T, typename Alloc>
 		friend bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+		template <typename T, typename Alloc>
 		friend void swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
 	};
 

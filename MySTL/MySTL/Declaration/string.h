@@ -11,6 +11,7 @@
 #include <climits>      // UINT_MAX
 
 #include "uninitialized_functions.h"
+#include "allocator.h"
 
 namespace MySTL
 {
@@ -18,17 +19,17 @@ namespace MySTL
 	class string
 	{
 	public:
-		typedef char								value_type;
-		typedef std::char_traits<char>				traits_type;
-		typedef std::allocator<char>				allocator_type;
-		typedef char &								reference;
-		typedef const char &						const_reference;
-		typedef char *								iterator;
-		typedef const char *						const_iterator;
-		typedef std::reverse_iterator<char *>		reverse_iterator;
-		typedef std::reverse_iterator<const char *>	const_reverse_iterator;
-		typedef std::ptrdiff_t						difference_type;
-		typedef std::size_t							size_type;
+		using value_type             = char;
+		using traits_type            = std::char_traits<char>;
+		using allocator_type         = std::allocator<char>;
+		using reference              = char&;
+		using const_reference        = char const&;
+		using iterator               = char*;
+		using const_iterator         = char const*;
+		using reverse_iterator       = std::reverse_iterator<char *>;
+		using const_reverse_iterator = std::reverse_iterator<const char *>;
+		using difference_type        = std::ptrdiff_t;
+		using size_type              = std::size_t;
 
 	public:
 		//////////////////// constructor ////////////////////
@@ -132,7 +133,7 @@ namespace MySTL
 		template <typename InputIterator>
 		string& assign(InputIterator first, InputIterator last);				// (6) range
 		string& assign(std::initializer_list<char> il);							// (7) initializer list
-		string& assign(string&& str); ///*noexcept*/;							// (8) move
+		string& assign(string&& str); /*noexcept*/;								// (8) move
 
 
 		// Insert into string
@@ -256,8 +257,9 @@ namespace MySTL
 		iterator _end;
 		iterator _cap;
 
-		std::allocator<char> alloc;
+		allocator<char> alloc;
 
+	private:
 		void chk_n_alloc();
 		void alloc_n_copy(const_iterator first, const_iterator second);
 		void alloc_n_fill_n(const char &c, size_type n);
@@ -265,6 +267,9 @@ namespace MySTL
 		void _reallocate();
 
 		static size_type strlen(const char *s);
+
+		template<typename InputIterator>
+		void _string(InputIterator first, InputIterator last, std::false_type);
 
 		template <typename InputIterator>
 		int _compare_aux(size_type pos, size_type len, InputIterator first, InputIterator last);

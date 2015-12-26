@@ -42,7 +42,7 @@ namespace MySTL
 	vector<T, Alloc>::vector(const size_type n, const_reference val)
 	{
 		typedef typename std::is_integral<size_type>::type IS_INTEGER;
-		_vector_aux(n, val, IS_INTEGER());
+		_vector(n, val, IS_INTEGER());
 	}
 
 
@@ -58,7 +58,7 @@ namespace MySTL
 	vector<T, Alloc>::vector(InputIterator first, InputIterator second)
 	{
 		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
-		_vector_aux(first, second, IS_INTEGER());
+		_vector(first, second, IS_INTEGER());
 	}
 
 
@@ -363,14 +363,14 @@ namespace MySTL
 	// constructor auxiliary functions, (std::true_type / std::false_type) were regarded as the symbol of overloads.
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
-	void vector<T, Alloc>::_vector_aux(InputIterator first, InputIterator second, std::false_type)
+	void vector<T, Alloc>::_vector(InputIterator first, InputIterator second, std::false_type)
 	{
 		alloc_n_copy(first, second);
 	}
 
 
 	template <typename T, typename Alloc>
-	void vector<T, Alloc>::_vector_aux(const size_type n, const_reference val, std::true_type)
+	void vector<T, Alloc>::_vector(const size_type n, const_reference val, std::true_type)
 	{
 		alloc_n_fill_n(n, val);
 	}
@@ -448,6 +448,7 @@ namespace MySTL
 	{
 		alloc_n_fill_n(n, val);
 	}
+
 
 
 	/////////////////////////////////////////////////////////////

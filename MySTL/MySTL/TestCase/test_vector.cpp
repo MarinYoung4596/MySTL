@@ -18,6 +18,7 @@ namespace MySTL
 
 		void tc_constructor()
 		{
+			std::cout << "-----\t constructor" << '\n';
 			vector<int> v1;		// constructor: default
 			v1 = { 1, 2, 3, 4, 5 };		// assign content: initializer list
 			printvector(v1);
@@ -42,6 +43,7 @@ namespace MySTL
 
 		void tc_assignment()
 		{
+			std::cout << "-----\t assignment" << '\n';
 			MySTL::vector<int> foo(3, 0);
 			MySTL::vector<int> bar(5, 0);
 
@@ -55,6 +57,7 @@ namespace MySTL
 		// iterator
 		void tc_iterators()
 		{
+			std::cout << "-----\t iterators" << '\n';
 			MySTL::vector<int> myvector(5);  // 5 default-constructed ints
 
 			auto i = 0;
@@ -70,6 +73,7 @@ namespace MySTL
 		// capacity
 		void tc_size()
 		{
+			std::cout << "-----\t size" << '\n';
 			MySTL::vector<int> myvector;
 
 			// set some content in the vector:
@@ -82,6 +86,7 @@ namespace MySTL
 
 		void tc_empty()
 		{
+			std::cout << "-----\t empty" << '\n';
 			MySTL::vector<int> myvector;
 			int sum(0);
 
@@ -98,6 +103,7 @@ namespace MySTL
 
 		void tc_resize()
 		{
+			std::cout << "-----\t resize" << '\n';
 			MySTL::vector<int> myvector;
 
 			// set some initial content:
@@ -113,6 +119,7 @@ namespace MySTL
 
 		void tc_reserve()
 		{
+			std::cout << "-----\t reserve" << '\n';
 			MySTL::vector<int>::size_type sz;
 
 			MySTL::vector<int> foo;
@@ -145,19 +152,21 @@ namespace MySTL
 
 		void tc_shrink_to_fit()
 		{
+			std::cout << "-----\t shrink_to_fit" << '\n';
 			MySTL::vector<int> myvector(100);
 			std::cout << "1. capacity of myvector: " << myvector.capacity() << '\n';
 
 			myvector.resize(10);
 			std::cout << "2. capacity of myvector: " << myvector.capacity() << '\n';
 
-			myvector.shrink_to_fit();
-			std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
+			//myvector.shrink_to_fit();
+			//std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
 		}
 
 		// element access
 		void tc_elementAccess()
 		{
+			std::cout << "-----\t element access" << '\n';
 			MySTL::vector<int> myvector(10);   // 10 zero-initialized elements
 
 			MySTL::vector<int>::size_type sz = myvector.size();
@@ -180,6 +189,7 @@ namespace MySTL
 
 		void tc_at()
 		{
+			std::cout << "-----\t at" << '\n';
 			MySTL::vector<int> myvector(10);   // 10 zero-initialized ints
 
 			// assign some values:
@@ -192,6 +202,7 @@ namespace MySTL
 
 		void tc_front_back()
 		{
+			std::cout << "-----\t front back" << '\n';
 			MySTL::vector<int> myvector;
 
 			myvector.push_back(78);
@@ -207,6 +218,7 @@ namespace MySTL
 
 		void tc_data()
 		{
+			std::cout << "-----\t data" << '\n';
 			MySTL::vector<int> myvector(5);
 
 			int* p = myvector.data();
@@ -223,6 +235,7 @@ namespace MySTL
 		// modifiers
 		void tc_assign()
 		{
+			std::cout << "-----\t assign" << '\n';
 			MySTL::vector<int> first;
 			MySTL::vector<int> second;
 			MySTL::vector<int> third;
@@ -244,6 +257,7 @@ namespace MySTL
 
 		void tc_push_back()
 		{
+			std::cout << "-----\t push_back" << '\n';
 			MySTL::vector<int> myvector;
 
 			for (auto i = 0; i < 10; ++i)
@@ -256,6 +270,7 @@ namespace MySTL
 
 		void tc_pop_back()
 		{
+			std::cout << "-----\t pop_back" << '\n';
 			MySTL::vector<int> myvector;
 			int sum(0);
 			myvector.push_back(100);
@@ -272,6 +287,7 @@ namespace MySTL
 
 		void tc_insert()
 		{
+			std::cout << "-----\t insert" << '\n';
 			MySTL::vector<int> myvector(3, 100);
 			MySTL::vector<int>::iterator it;
 
@@ -295,6 +311,7 @@ namespace MySTL
 
 		void tc_erase()
 		{
+			std::cout << "-----\t erase" << '\n';
 			MySTL::vector<int> myvector;
 
 			// set some values (from 1 to 10)
@@ -312,6 +329,7 @@ namespace MySTL
 
 		void tc_swap()
 		{
+			std::cout << "-----\t swap" << '\n';
 			MySTL::vector<int> foo(3, 100);   // three ints with a value of 100
 			MySTL::vector<int> bar(5, 200);   // five ints with a value of 200
 
@@ -326,6 +344,7 @@ namespace MySTL
 
 		void tc_clear()
 		{
+			std::cout << "-----\t clear" << '\n';
 			MySTL::vector<int> myvector;
 			myvector.push_back(100);
 			myvector.push_back(200);
@@ -342,9 +361,11 @@ namespace MySTL
 			printvector(myvector);
 		}
 
-		/*
+
+        /*
 		void tc_emplace()
 		{
+			std::cout << "-----\t emplace" << '\n';
 			MySTL::vector<int> myvector = { 10, 20, 30 };
 
 			myvector.emplace(myvector.begin() + 1, 100);
@@ -358,6 +379,7 @@ namespace MySTL
 
 		void tc_emplace_back()
 		{
+			std::cout << "-----\t emplace_back" << '\n';
 			MySTL::vector<int> myvector = { 10, 20, 30 };
 
 			myvector.emplace_back(100);
@@ -367,44 +389,48 @@ namespace MySTL
 			for (auto& x : myvector)
 				std::cout << ' ' << x;
 			std::cout << '\n';
-		}
-		
+		}*/
+
+
 		// allocator
+		/*
 		void tc_get_allocator()
 		{
-			MySTL::vector<int> myvector;
-			int * p;
-			unsigned int i;
+		MySTL::vector<int> myvector;
+		int * p;
+		unsigned int i;
 
-			// allocate an array with space for 5 elements using vector's allocator:
-			p = myvector.get_allocator().allocate(5);
+		// allocate an array with space for 5 elements using vector's allocator:
+		p = myvector.get_allocator().allocate(5);
 
-			// construct values in-place on the array:
-			for (i = 0; i < 5; i++) myvector.get_allocator().construct(&p[i], i);
+		// construct values in-place on the array:
+		for (i = 0; i < 5; i++) myvector.get_allocator().construct(&p[i], i);
 
-			std::cout << "The allocated array contains:";
-			for (i = 0; i < 5; i++) std::cout << ' ' << p[i];
-			std::cout << '\n';
+		std::cout << "The allocated array contains:";
+		for (i = 0; i < 5; i++) std::cout << ' ' << p[i];
+		std::cout << '\n';
 
-			// destroy and deallocate:
-			for (i = 0; i < 5; i++) myvector.get_allocator().destroy(&p[i]);
-			myvector.get_allocator().deallocate(p, 5);
+		// destroy and deallocate:
+		for (i = 0; i < 5; i++) myvector.get_allocator().destroy(&p[i]);
+		myvector.get_allocator().deallocate(p, 5);
 		}
-		
-		
+		*/
+
+
 		void tc_relationalOperators()
 		{
+			std::cout << "-----\t relational operators" << '\n';
 			MySTL::vector<int> foo(3, 100);   // three ints with a value of 100
 			MySTL::vector<int> bar(2, 200);   // two ints with a value of 200
 
 			if (foo == bar) std::cout << "foo and bar are equal\n";
 			if (foo != bar) std::cout << "foo and bar are not equal\n";
-			if (foo< bar) std::cout << "foo is less than bar\n";
-			if (foo> bar) std::cout << "foo is greater than bar\n";
+			if (foo < bar) std::cout << "foo is less than bar\n";
+			if (foo > bar) std::cout << "foo is greater than bar\n";
 			if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
 			if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
-		}*/
-		
+		}
+
 
 		void test_all()
 		{
@@ -430,7 +456,7 @@ namespace MySTL
 			//tc_emplace();
 			//tc_emplace_back();
 			//tc_get_allocator();
-			//tc_relationalOperators();
+			tc_relationalOperators();
 			std::cout << "----------test vector success----------\n" << std::endl;
 		}
 

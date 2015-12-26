@@ -17,12 +17,12 @@ MySTL is a Tiny C++ STL library.
  * `const T*` means `(const T)*`,
  
    `using pointer = T*;`
-   `using const_pointer = const pointer; // const_pointer = const (T*)`
+   `using const_pointer = const pointer;` // `const_pointer` means `const (T*)`
    
    use `T const *`
- * `const *` // *pointer to const*; Cann't change the object's value it pointed (by this pointer), while its object's value can be changed in another way.
+ * `const *` // **pointer to const**; Cann't change the object's value it pointed (by this pointer), while its object's value can be changed in another way.
 
-   `* const` // *const pointer*;    Once initialized, its storaged value (the address of the object) can not be changed. 
+   `* const` // **const pointer**;    Once initialized, its storaged value (the address of the object) can not be changed. 
 	
 
 
@@ -36,7 +36,8 @@ MySTL is a Tiny C++ STL library.
 	 - [compile error] get_allocator
 	 - [compile error] rbegin, rend
 	 - [logical error] insert_aux
-	 - [link error] operational functions
+	 - [link error] relational operations	[DONE]
+		- Solutions: friend functions declaration error
  - ERROR C2664: 'MySTL::allocator<_Newfirst>::allocator(MySTL::allocator<_Newfirst> &&)': cannot convert argument 1 from 'std::_Wrap_alloc<MySTL::allocator<int>>' to 'const MySTL::allocator<_Newfirst> &'      xmemory0    874
 	 - Solution:  use vs2013
  - ERROR C4996: 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe...
