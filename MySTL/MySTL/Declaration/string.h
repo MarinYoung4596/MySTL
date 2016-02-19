@@ -25,11 +25,11 @@ namespace MySTL
 		using traits_type            = std::char_traits<char>;
 		using allocator_type         = allocator<char>;
 		using reference              = char&;
-		using const_reference        = const char&;
+		using const_reference        = char const &;
 		using pointer                = char*;
-		using const_pointer          = const char*;
+		using const_pointer          = char const *;
 		using iterator               = char*;// random access iterator
-		using const_iterator         = const char*;
+		using const_iterator         = char const *;
 		using reverse_iterator       = std::reverse_iterator<iterator>;	
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 		using difference_type        = std::ptrdiff_t;
@@ -37,10 +37,10 @@ namespace MySTL
 
 	public:
 		//////////////////// constructor ////////////////////
-		string() : _begin(nullptr), _end(nullptr), _cap(nullptr) {}			// (1) default constructor
+		string() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}			// (1) default constructor
 		string(const string &str);											// (2) copy constructor
 		string(const string &str, size_type pos, size_type len = npos);		// (3) substring constructor
-		string(const char* s);												// (4) from c-string
+		explicit string(const char* s);										// (4) from c-string
 		string(const char* s, size_type n);									// (5) from buffer
 		string(size_type n, char c);										// (6) fill constructor
 		template <typename InputIterator>
@@ -63,50 +63,51 @@ namespace MySTL
 
 
 		//////////////////// iterators ////////////////////
-		iterator begin() /*noexcept*/ { return _begin; }
-		const_iterator begin() const /*noexcept*/ { return _begin; }
-		iterator end() /*noexcept*/ { return _end; }
-		const_iterator end() const /*noexcept*/ { return _end; }
-		reverse_iterator rbegin() /*noexcept*/ { return reverse_iterator(_begin); }
-		const_reverse_iterator rbegin() const /*noexcept*/ { return reverse_iterator(_begin); }
-		reverse_iterator rend() /*noexcept*/ { return reverse_iterator(_end); }
-		const_reverse_iterator rend() const /*noexcept*/ { return reverse_iterator(_begin); }
-		const_iterator cbegin() const /*noexcept*/ { return _begin; }
-		const_iterator cend() const /*noexcept*/ { return _end; }
-		const_reverse_iterator crbegin() const /*noexcept*/ { return const_reverse_iterator(_begin); }
-		const_reverse_iterator crend() const /*noexcept*/ { return const_reverse_iterator(_end); }
+		iterator begin() /*noexcept*/ { return elements_start; }
+		const_iterator begin() const /*noexcept*/ { return elements_start; }
+		iterator end() /*noexcept*/ { return first_free; }
+		const_iterator end() const /*noexcept*/ { return first_free; }
+		reverse_iterator rbegin() /*noexcept*/ { return reverse_iterator(elements_start); }
+		const_reverse_iterator rbegin() const /*noexcept*/ { return reverse_iterator(elements_start); }
+		reverse_iterator rend() /*noexcept*/ { return reverse_iterator(first_free); }
+		const_reverse_iterator rend() const /*noexcept*/ { return reverse_iterator(elements_start); }
+		const_iterator cbegin() const /*noexcept*/ { return elements_start; }
+		const_iterator cend() const /*noexcept*/ { return first_free; }
+		const_reverse_iterator crbegin() const /*noexcept*/ { return const_reverse_iterator(elements_start); }
+		const_reverse_iterator crend() const /*noexcept*/ { return const_reverse_iterator(first_free); }
 
 
 
 		//////////////////// capacity ////////////////////
-		size_type size() const /*noexcept*/ { return _end - _begin; }
-		size_type length() const /*noexcept*/ { return _end - _begin; }
-		size_type max_size() const /*noexcept*/ { return size_type(UINT_MAX / sizeof(char)); }
+		size_type size() const /*noexcept*/ { return first_free - elements_start; }
+		size_type length() const /*noexcept*/ { return first_free - elements_start; }
+
+		static size_type max_size() /*noexcept*/ { return size_type(UINT_MAX / sizeof(char)); }
 
 		void resize(size_type n);
 		void resize(size_type n, char c);
 
-		size_type capacity() const /*noexcept*/ { return _cap - _begin; }
+		size_type capacity() const /*noexcept*/ { return end_of_storage - elements_start; }
 		void reserve(size_type n = 0);
 		void clear() /*noexcept*/;
-		bool empty() const /*noexcept*/ { return _begin == _end; }
+		bool empty() const /*noexcept*/ { return elements_start == first_free; }
 		void shrink_to_fit();
 
 
 
 		//////////////////// element access ////////////////////
 
-		char& operator[] (size_type pos) { return *(_begin + pos); }
-		const char& operator[] (size_type pos) const { return *(_begin + pos); }
+		char& operator[] (size_type pos) { return *(elements_start + pos); }
+		const char& operator[] (size_type pos) const { return *(elements_start + pos); }
 
 		char& at(size_type pos);
 		const char& at(size_type pos) const;
 
-		char& back() { return *(_end - 1); }
-		const char& back() const { return *(_end - 1); }
+		char& back() { return *(first_free - 1); }
+		const char& back() const { return *(first_free - 1); }
 
-		char& front() { return *_begin; }
-		const char& front() const { return *_begin; }
+		char& front() { return *elements_start; }
+		const char& front() const { return *elements_start; }
 
 
 
@@ -261,9 +262,9 @@ namespace MySTL
 	private:
 		static const size_type npos = -1;
 
-		iterator _begin;
-		iterator _end;
-		iterator _cap;
+		iterator elements_start;
+		iterator first_free;
+		iterator end_of_storage;
 
 		allocator<char> alloc;
 
@@ -271,7 +272,7 @@ namespace MySTL
 		void chk_n_alloc();
 		void alloc_n_copy(const_iterator first, const_iterator second);
 		void alloc_n_fill_n(const char &c, size_type n);
-		void _free();
+		void _free() const;
 		void _reallocate();
 
 		static size_type strlen(const char *s);
@@ -282,6 +283,10 @@ namespace MySTL
 
 		template <typename InputIterator>
 		int _compare(size_type pos, size_type len, InputIterator first, InputIterator last);
+		// find auxiliary
+		static void getNextVal(const char *s, size_type pos, size_type n, int next[]);
+		size_type _rfind(const_iterator cit, size_type pos, size_type n);
+
 
 
 	public:

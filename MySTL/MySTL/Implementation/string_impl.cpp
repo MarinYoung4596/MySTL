@@ -10,7 +10,7 @@ namespace MySTL
 	//////////////////// private functions ////////////////////
 	void string::chk_n_alloc()
 	{
-		if (_end == _cap)
+		if (first_free == end_of_storage)
 			_reallocate();
 	}
 
@@ -18,14 +18,14 @@ namespace MySTL
 	{
 		auto new_cap = size() ? 2 * size() : 1;
 		auto data = alloc.allocate(new_cap);
-		auto _elem = _begin;
+		auto _elem = elements_start;
 		auto _dest = data;
 		for (size_type i = 0; i < size(); ++i)
 			alloc.construct(_dest++, std::move(*_elem++));
 		_free();
-		_begin = data;
-		_end = _dest;
-		_cap = _begin + new_cap;
+		elements_start = data;
+		first_free = _dest;
+		end_of_storage = elements_start + new_cap;
 	}
 
 
@@ -37,13 +37,13 @@ namespace MySTL
 	}
 
 
-	void string::_free()
+	void string::_free() const
 	{
-		if (_begin)
+		if (elements_start)
 		{
-			for (auto p = _end; p != _begin;)
+			for (auto p = first_free; p != elements_start;)
 				alloc.destroy(--p);
-			alloc.deallocate(_begin, _cap - _begin);
+			alloc.deallocate(elements_start, end_of_storage - elements_start);
 		}
 	}
 
@@ -52,19 +52,19 @@ namespace MySTL
 	void string::alloc_n_copy(const_iterator first, const_iterator second)
 	{
 		auto start = alloc.allocate(second - first);
-		auto finish = std::uninitialized_copy(first, second, _begin);
+		auto finish = std::uninitialized_copy(first, second, elements_start);
 
-		_begin = start;
-		_end = _cap = finish;
+		elements_start = start;
+		first_free = end_of_storage = finish;
 	}
 
 	void string::alloc_n_fill_n(const char &c, size_type n)
 	{
 		auto start = alloc.allocate(n);
-		auto finish = std::uninitialized_fill_n(_begin, n, c);
+		auto finish = std::uninitialized_fill_n(elements_start, n, c);
 
-		_begin = start;
-		_end = _cap = finish;
+		elements_start = start;
+		first_free = end_of_storage = finish;
 	}
 
 
@@ -82,7 +82,7 @@ namespace MySTL
 
 		const_iterator finish;
 		if (len == npos)
-			finish = _end;
+			finish = first_free;
 		else
 			finish = (str.begin() + pos + len) < str.end() ? (str.begin() + pos + len) : str.end();
 
@@ -101,13 +101,26 @@ namespace MySTL
 
 	string::string(size_type n, char c)
 	{
+		typedef typename std::is_integral<size_type>::type IS_INTEGER;
+		_string(n, c, IS_INTEGER());
+	}
+
+	void string::_string(size_type n, char c, std::true_type)
+	{
 		alloc_n_fill_n(c, n);
 	}
 
 	template <typename InputIterator>
 	string::string(InputIterator first, InputIterator last)
 	{
-		 alloc_n_copy(first, last);
+		typedef typename std::is_integral<InputIterator>::type IS_INTEGER;
+		_string(first, last, IS_INTEGER());
+	}
+
+	template<typename InputIterator>
+	void string::_string(InputIterator first, InputIterator last, std::false_type)
+	{
+		alloc_n_copy(first, last);
 	}
 
 	string::string(std::initializer_list<char> il)
@@ -116,9 +129,9 @@ namespace MySTL
 	}
 
 	string::string(string &&str) /*noexcept*/
-		: _begin(str._begin), _end(str._end), _cap(str._cap)
+		: elements_start(str.elements_start), first_free(str.first_free), end_of_storage(str.end_of_storage)
 	{
-		str._begin = str._end = str._cap = nullptr;
+		str.elements_start = str.first_free = str.end_of_storage = nullptr;
 	}
 
 
@@ -166,11 +179,11 @@ namespace MySTL
 		if (this != &str)
 		{
 			_free();
-			_begin = str._begin;
-			_end = str._end;
-			_cap = str._cap;
+			elements_start = str.elements_start;
+			first_free = str.first_free;
+			end_of_storage = str.end_of_storage;
 
-			str._begin = str._end = str._cap = nullptr;
+			str.elements_start = str.first_free = str.end_of_storage = nullptr;
 		}
 		return *this;
 	}
@@ -186,23 +199,23 @@ namespace MySTL
 	{
 		if (n < size())
 		{
-			for (; _end > _begin + n;)
-				alloc.destroy(--_end);
+			for (; first_free > elements_start + n;)
+				alloc.destroy(--first_free);
 		}
 		else if (n >= size() && n < capacity())
 		{
 			auto len_insert = n - size();
-			_end = std::uninitialized_fill_n(_end, len_insert, c);
+			first_free = std::uninitialized_fill_n(first_free, len_insert, c);
 		}
 		else
 		{
 			auto len_insert = n - size();
 			iterator start = alloc.allocate(n);
-			iterator finish = std::uninitialized_copy(std::make_move_iterator(_begin), std::make_move_iterator(_end), start);
+			iterator finish = std::uninitialized_copy(std::make_move_iterator(elements_start), std::make_move_iterator(first_free), start);
 			finish = std::uninitialized_fill_n(finish, len_insert, c);
 			_free();
-			_begin = start;
-			_end = _cap = finish;
+			elements_start = start;
+			first_free = end_of_storage = finish;
 		}
 	}
 
@@ -211,26 +224,26 @@ namespace MySTL
 		if (n <= capacity())
 			return;
 		iterator start = alloc.allocate(n);
-		iterator finish = std::uninitialized_copy(std::make_move_iterator(_begin), std::make_move_iterator(_end), start);
+		iterator finish = std::uninitialized_copy(std::make_move_iterator(elements_start), std::make_move_iterator(first_free), start);
 		_free();
-		_begin = start;
-		_end = finish;
-		_cap = start + n;
+		elements_start = start;
+		first_free = finish;
+		end_of_storage = start + n;
 	}
 
 	void string::clear()  /*noexcept*/
 	{
-		if (_begin)
+		if (elements_start)
 		{
-			while (_end != _begin)
-				alloc.destroy(--_end);
+			while (first_free != elements_start)
+				alloc.destroy(--first_free);
 		}
 	}
 
 	void string::shrink_to_fit()
 	{
-		alloc.deallocate(_end, _cap - _end);
-		_cap = _end;
+		alloc.deallocate(first_free, end_of_storage - first_free);
+		end_of_storage = first_free;
 	}
 
 
@@ -239,14 +252,14 @@ namespace MySTL
 	{
 		if (pos > size())
 			throw std::out_of_range("out of range!");
-		return *(_begin + pos);
+		return *(elements_start + pos);
 	}
 
 	const char& string::at(size_type pos) const
 	{
 		if (pos > size())
 			throw std::out_of_range("out of range!");
-		return *(_begin + pos);
+		return *(elements_start + pos);
 	}
 
 
@@ -272,7 +285,7 @@ namespace MySTL
 
 	string& string::operator+= (std::initializer_list<char> il)
 	{
-		insert(_end, il);
+		insert(first_free, il);
 		return *this;
 	}
 
@@ -306,19 +319,19 @@ namespace MySTL
 	template <typename InputIterator>
 	string& string::append(InputIterator first, InputIterator last)
 	{
-		insert(_end, first, last);
+		insert(first_free, first, last);
 		return *this;
 	}
 
 	string& string::append(std::initializer_list<char> il)
 	{
-		return insert(_end, il);
+		return insert(first_free, il);
 	}
 
 	void string::push_back(char c)
 	{
 		chk_n_alloc();
-		alloc.construct(_end++, c);
+		alloc.construct(first_free++, c);
 	}
 
 	// assign
@@ -346,17 +359,17 @@ namespace MySTL
 	{
 		if (n <= capacity())
 		{
-			iterator finish = std::uninitialized_fill_n(_begin, n, c);
-			_end = n <= size() ? _end : finish;
+			iterator finish = std::uninitialized_fill_n(elements_start, n, c);
+			first_free = n <= size() ? first_free : finish;
 		}
 		else
 		{
 			_free();
 			auto newcap = 2 * capacity();
 			iterator data = alloc.allocate(newcap);
-			_end = std::uninitialized_fill_n(data, n, c);
-			_begin = data;
-			_cap = _begin + newcap;
+			first_free = std::uninitialized_fill_n(data, n, c);
+			elements_start = data;
+			end_of_storage = elements_start + newcap;
 		}
 		return *this;
 	}
@@ -367,17 +380,17 @@ namespace MySTL
 		difference_type space_required = last - first;
 		if (space_required <= capacity())
 		{
-			iterator finish = std::uninitialized_copy(first, last, _begin);
-			_end = space_required <= size() ? _end : finish;
+			iterator finish = std::uninitialized_copy(first, last, elements_start);
+			first_free = space_required <= size() ? first_free : finish;
 		}
 		else
 		{
 			_free();
 			auto newcap = 2 * capacity();
 			iterator data = alloc.allocate(newcap);
-			_end = std::uninitialized_copy(first, last, data);
-			_begin = data;
-			_cap = _begin + newcap;
+			first_free = std::uninitialized_copy(first, last, data);
+			elements_start = data;
+			end_of_storage = elements_start + newcap;
 		}
 		return *this;
 	}
@@ -391,10 +404,10 @@ namespace MySTL
 	{
 		if (this != &str)
 		{
-			_begin = str._begin;
-			_end = str._end;
-			_cap = str._cap;
-			str._begin = str._end = str._cap = nullptr;
+			elements_start = str.elements_start;
+			first_free = str.first_free;
+			end_of_storage = str.end_of_storage;
+			str.elements_start = str.first_free = str.end_of_storage = nullptr;
 		}
 		return *this;
 	}
@@ -403,66 +416,66 @@ namespace MySTL
 	// insert
 	string& string::insert(size_type pos, const string& str)
 	{
-		insert(_begin + pos, str.begin(), str.end());
+		insert(elements_start + pos, str.begin(), str.end());
 		return *this;
 	}
 
 	string& string::insert(size_type pos, const string& str, size_type subpos, size_type sublen)
 	{
-		insert(_begin + pos, str.begin() + subpos, str.begin() + subpos + sublen);
+		insert(elements_start + pos, str.begin() + subpos, str.begin() + subpos + sublen);
 		return *this;
 	}
 
 	string& string::insert(size_type pos, const char* s)
 	{
-		insert(_begin + pos, s, s + strlen(s));
+		insert(elements_start + pos, s, s + strlen(s));
 		return *this;
 	}
 
 	string& string::insert(size_type pos, const char* s, size_type n)
 	{
-		insert(_begin + pos, s, s + n);
+		insert(elements_start + pos, s, s + n);
 		return *this;
 	}
 
 	string& string::insert(size_type pos, size_type n, char c)
 	{
-		insert(_begin + pos, n, c);
+		insert(elements_start + pos, n, c);
 		return *this;
 	}
 
 	// insert auxiliary: fill n
 	string::iterator string::insert(const_iterator p, size_type n, char c)
 	{
-		if (p < _begin || p > _end)
+		if (p < elements_start || p > first_free)
 			throw std::out_of_range("out of range");
 		if (!n)
 			return const_cast<iterator>(p);
 
-		size_type space_left = _cap - _end;
+		size_type space_left = end_of_storage - first_free;
 
 		iterator res = nullptr;
 		if (n <= space_left)
 		{
-			for (iterator curr = _end - 1; curr != p; --curr)
+			for (iterator curr = first_free - 1; curr != p; --curr)
 				*(curr + n) = *curr;
 			res = std::uninitialized_fill_n(const_cast<iterator>(p), n, c);
-			_end += n;
+			first_free += n;
 		}
 		else
 		{
 			auto newcap = capacity() > n ? 2 * capacity() : capacity() + n;
 			iterator start = alloc.allocate(newcap);
 			iterator finish = std::uninitialized_copy(
-				std::make_move_iterator(_begin),
+				std::make_move_iterator(elements_start),
 				std::make_move_iterator(const_cast<iterator>(p)),
 				start);
 			res = finish = std::uninitialized_fill_n(finish, n, c);
-			finish = std::uninitialized_copy(std::make_move_iterator(finish), std::make_move_iterator(_end), finish);
+			finish = std::uninitialized_copy(std::make_move_iterator(finish), std::make_move_iterator(first_free), finish);
 			_free();
-			_begin = start;
-			_end = finish;
-			_cap = _begin + newcap;
+			elements_start = start;
+			first_free = finish;
+			end_of_storage = elements_start + newcap;
 		}
 		return res;
 	}
@@ -476,35 +489,35 @@ namespace MySTL
 	template <typename InputIterator>
 	string::iterator string::insert(iterator p, InputIterator first, InputIterator last)
 	{
-		if (p < _begin || p > _end)
+		if (p < elements_start || p > first_free)
 			throw std::out_of_range("out of range");
 
 		difference_type space_required = last - first;
 		if (!space_required)
 			return p;
 
-		difference_type space_left = _cap - _end;
+		difference_type space_left = end_of_storage - first_free;
 		iterator res = nullptr;
 
 		if (space_required <= space_left)
 		{
-			for (iterator curr = _end - 1; curr != p; --curr)
+			for (iterator curr = first_free - 1; curr != p; --curr)
 				*(curr + space_required) = *curr;
 			res = std::uninitialized_copy(first, last, p);
-			_end += space_required;
+			first_free += space_required;
 		}
 		else
 		{
 			auto newcap = capacity() > space_required ? 2 * capacity() : capacity() + space_required;
 			iterator start = alloc.allocate(newcap);
 			iterator finish = std::uninitialized_copy(
-				std::make_move_iterator(_begin), std::make_move_iterator(p), start);
+				std::make_move_iterator(elements_start), std::make_move_iterator(p), start);
 			res = finish = std::uninitialized_copy(std::make_move_iterator(first), std::make_move_iterator(last), finish);
-			finish = std::uninitialized_copy(std::make_move_iterator(p), std::make_move_iterator(_end), finish);
+			finish = std::uninitialized_copy(std::make_move_iterator(p), std::make_move_iterator(first_free), finish);
 			_free();
-			_begin = start;
-			_end = finish;
-			_cap = start + newcap;
+			elements_start = start;
+			first_free = finish;
+			end_of_storage = start + newcap;
 		}
 		return res;
 	}
@@ -529,21 +542,13 @@ namespace MySTL
 
 	string::iterator string::erase(const_iterator first, const_iterator last)
 	{
-		/*if (first < _begin || first > _end ||
-			last < _begin || last > _end )
-			throw std::out_of_range("out of range");
-		if (first > last)
-			throw std::invalid_argument("invalid argument");
-		if (first == last)
-			return const_cast<iterator>(first);*/
-
 		iterator p = begin() + static_cast<size_type>(last - begin());
-		std::uninitialized_copy(p, _end, first);
+		std::uninitialized_copy(p, first_free, first);
 
 		difference_type len = last - first;
-		const_iterator stop = _end - len;
-		for (; _end != stop; --_end)
-			alloc.destroy(_end);
+		const_iterator stop = first_free - len;
+		for (; first_free != stop; --first_free)
+			alloc.destroy(first_free);
 
 		return const_cast<iterator>(first);
 	}
@@ -552,7 +557,7 @@ namespace MySTL
 	// replace
 	string& string::replace(size_type pos, size_type len, const string& str)
 	{
-		return replace(_begin + pos, _begin + pos + len, str.begin(), str.end());
+		return replace(elements_start + pos, elements_start + pos + len, str.begin(), str.end());
 	}
 
 	string& string::replace(const_iterator i1, const_iterator i2, const string& str)
@@ -562,12 +567,12 @@ namespace MySTL
 
 	string& string::replace(size_type pos, size_type len, const string& str, size_type subpos, size_type sublen)
 	{
-		return replace(_begin + pos, _begin + pos + len, str.begin() + subpos, str.begin() + subpos + sublen);
+		return replace(elements_start + pos, elements_start + pos + len, str.begin() + subpos, str.begin() + subpos + sublen);
 	}
 
 	string&	string::replace(size_type pos, size_type len, const char* s)
 	{
-		return replace(_begin + pos, _begin + pos + len, s, s + strlen(s));
+		return replace(elements_start + pos, elements_start + pos + len, s, s + strlen(s));
 	}
 
 	string& string::replace(const_iterator i1, const_iterator i2, const char* s)
@@ -577,7 +582,7 @@ namespace MySTL
 
 	string& string::replace(size_type pos, size_type len, const char* s, size_type n)
 	{
-		return replace(_begin + pos, _begin + pos + len, s, s + n);
+		return replace(elements_start + pos, elements_start + pos + len, s, s + n);
 	}
 
 	string& string::replace(const_iterator i1, const_iterator i2, const char* s, size_type n)
@@ -587,7 +592,7 @@ namespace MySTL
 
 	string& string::replace(size_type pos, size_type len, size_type n, char c)
 	{
-		return replace(_begin + pos, _begin + pos + len, n, c);
+		return replace(elements_start + pos, elements_start + pos + len, n, c);
 	}
 
 	// replace auxiliary: fill
@@ -619,9 +624,9 @@ namespace MySTL
 		if (this != &str)
 		{
 			using std::swap;
-			swap(_begin, str._begin);
-			swap(_end, str._end);
-			swap(_cap, str._end);
+			swap(elements_start, str.elements_start);
+			swap(first_free, str.first_free);
+			swap(end_of_storage, str.first_free);
 		}
 	}
 
@@ -629,8 +634,8 @@ namespace MySTL
 	// pop_back
 	void string::pop_back()
 	{
-		if (_begin)
-			alloc.destroy(--_end);
+		if (elements_start)
+			alloc.destroy(--first_free);
 	}
 
 
@@ -639,7 +644,7 @@ namespace MySTL
 	const char* string::c_str() const /*noexcept*/
 	{
 		char *res = new char(size() + 1);
-		char *finish = std::uninitialized_copy(_begin, _end, res);
+		char *finish = std::uninitialized_copy(elements_start, first_free, res);
 		*finish = '\0';
 		return res;
 	}
@@ -652,14 +657,14 @@ namespace MySTL
 
 	string::size_type string::copy(char* s, size_type len, size_type pos = 0) const
 	{
-		auto end_copy = (pos + len) < length() ? (_begin + pos + len) : _end;
-		auto finish =  std::uninitialized_copy(_begin + pos, end_copy, s);
-		return end_copy == _end ? length() - pos : len;
+		auto end_copy = (pos + len) < length() ? (elements_start + pos + len) : first_free;
+		auto finish =  std::uninitialized_copy(elements_start + pos, end_copy, s);
+		return end_copy == first_free ? length() - pos : len;
 	}
 
 
 	// find
-	// @str		another string with the subject to search for
+	// @str		another string with the subject to be searched for
 	// @s		pointer to an array of characters
 	//			(if argument @n is specified, the sequence to match are the first n characters in the array)
 	// @c		individual character to be searched for
@@ -678,7 +683,44 @@ namespace MySTL
 	// find auxiliary: buffer
 	string::size_type string::find(const char* s, size_type pos, size_type n) const
 	{
+		auto m = size();
+		if (m == 0) return 0;
+		if (n == 0 && m == 0) return 0;
+		int *next = static_cast<int*>(malloc(sizeof(int) * m));
+		int i = 0, j = 0;
 
+		getNextVal(s, pos, n, next);
+		for (; i < m && j < n; )
+		{
+			if (j == -1 || *(begin()+i) == *(s+pos+j))
+			{
+				++i;
+				++j;
+			}
+			else // j != -1 or match failed
+				j = next[j];
+		}
+		free(next);
+		next = nullptr;
+		if (j == n) return i - j;
+		return -1;
+	}
+
+	void string::getNextVal(const char* s, size_type pos, size_type n, int next[])
+	{
+		next[0] = -1;
+		int k = -1, j = 0;
+		for (; j < n - 1;)
+		{
+			if (k == -1 || *(s + pos + j) == *(s + pos + k))
+			{
+				++j;
+				++k;
+				next[j] = (*(s+pos+j) != *(s+pos+k)) ? k : next[k];
+			}
+			else
+				k = next[k];
+		}
 	}
 
 	string::size_type string::find(char c, size_type pos = 0) const /*noexcept*/
@@ -695,7 +737,7 @@ namespace MySTL
 	// rfind
 	string::size_type string::rfind(const string& str, size_type pos = npos) const /*noexcept*/
 	{
-
+		return _rfind(str.begin(), pos, str.size());
 	}
 
 	string::size_type string::rfind(const char* s, size_type pos = npos) const
@@ -706,7 +748,7 @@ namespace MySTL
 	// rfind auxiliary: buffer
 	string::size_type string::rfind(const char* s, size_type pos, size_type n) const
 	{
-
+		return _rfind(s, pos, n);
 	}
 
 	string::size_type string::rfind(char c, size_type pos = npos) const /*noexcept*/
@@ -717,6 +759,11 @@ namespace MySTL
 				return cit - cbegin();
 		}
 		return npos;
+	}
+
+	string::size_type string::_rfind(const_iterator cit, size_type pos, size_type n)
+	{
+		
 	}
 
 
@@ -831,7 +878,7 @@ namespace MySTL
 	 *	@s			pointer to an array of characters
 	 *				(if argument @n is specified, the first n characters in the array are used as the \comparing string)
 	 *	@pos		position of the first character in the \compared string
-	 *	 @len		length of \compared string (if the string is shorter, as many characters as possible)
+	 *	@len		length of \compared string (if the string is shorter, as many characters as possible)
 	 *	@subpos, sublen
 	 *				same as @pos and @len above, but for \comparing string
 	 *	@n			number of characters to compare
@@ -874,17 +921,17 @@ namespace MySTL
 	template <typename InputIterator>
 	int string::_compare(size_type pos, size_type len, InputIterator first, InputIterator last)
 	{
+		auto basePos = begin();
 		InputIterator it = first;
 		for (auto i = pos; i < pos + len && it != last; ++i, ++it)
 		{
-			if (*(begin() + pos) > *it)
+			if (*(basePos + i) > *it)
 				return 1;
-			if (*(begin() + pos) < *it)
+			if (*(basePos + i) < *it)
 				return -1;
 		}
 		return 0;
 	}
-
 
 
 
@@ -1097,4 +1144,37 @@ namespace MySTL
 	{
 		x.swap(y);
 	}
+
+	std::istream& operator>> (std::istream& is, string& str)
+	{
+
+	}
+
+	std::ostream& operator<< (std::ostream& os, const string& str)
+	{
+		for (auto it = str.begin(); it != str.end(); ++it)
+			os << *it;
+		return os;
+	}
+
+	std::istream& getline(std::istream&  is, string& str, char delim)
+	{
+		str.clear();
+		char ch;
+		while(is.get(ch))
+		{
+			if (ch == delim) break;
+			str.push_back(ch);
+		}
+		return is;
+	}
+
+	//std::istream& getline(std::istream&& is, string& str, char delim){}
+	
+	std::istream& getline(std::istream&  is, string& str)
+	{
+		return getline(is, str, '\n');
+	}
+	
+	//std::istream& getline(std::istream&& is, string& str){}
 }

@@ -6,6 +6,7 @@
 #include <memory>	// std::uninitialized_copy & std::uninitialized_fill
 #include <algorithm>// std::swap, max
 #include <stdexcept>
+#include <cassert>	// assert
 
 #include "../Declaration/vector.h"
 #include "../Declaration/uninitialized_functions.h"
@@ -103,10 +104,11 @@ namespace MySTL
 	template <typename T, typename Alloc>
 	typename vector<T, Alloc>::reference vector<T, Alloc>::at(size_type n)
 	{
-		if (n >= size())
-		{
-			throw std::out_of_range("out of range!");
-		}
+		//if (n >= size())
+		//{
+		//	throw std::out_of_range("out of range!");
+		//}
+		assert(n >= 0 && n < size());
 		return *(elements_start + n);
 	}
 

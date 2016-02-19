@@ -1,0 +1,139 @@
+﻿  test_vector.cpp
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\xmemory(349): warning C4996: 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xmemory(336): note: see declaration of 'std::_Uninitialized_copy0'
+  c:\users\marin\documents\mystl\mystl\mystl\implementation\vector_impl.h(265): note: see reference to function template instantiation '_FwdIt std::uninitialized_copy<int*,T*>(_InIt,_InIt,_FwdIt)' being compiled
+          with
+          [
+              _FwdIt=int *,
+              T=int,
+              _InIt=int *
+          ]
+  c:\users\marin\documents\mystl\mystl\mystl\implementation\vector_impl.h(250): note: while compiling class template member function 'void MySTL::vector<int,MySTL::allocator<T>>::resize(MySTL::vector<T,MySTL::allocator<T>>::size_type,int)'
+          with
+          [
+              T=int
+          ]
+  c:\users\marin\documents\mystl\mystl\mystl\testcase\test_vector.cpp(112): note: see reference to function template instantiation 'void MySTL::vector<int,MySTL::allocator<T>>::resize(MySTL::vector<T,MySTL::allocator<T>>::size_type,int)' being compiled
+          with
+          [
+              T=int
+          ]
+  c:\users\marin\documents\mystl\mystl\mystl\testcase\test_vector.cpp(22): note: see reference to class template instantiation 'MySTL::vector<int,MySTL::allocator<T>>' being compiled
+          with
+          [
+              T=int
+          ]
+  main.cpp
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\xmemory0(874): error C2664: 'MySTL::allocator<_Newfirst>::allocator(MySTL::allocator<_Newfirst> &&)': cannot convert argument 1 from 'std::_Wrap_alloc<MySTL::allocator<int>>' to 'const MySTL::allocator<_Newfirst> &'
+          with
+          [
+              _Newfirst=std::_Container_proxy
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xmemory0(874): note: Reason: cannot convert from 'std::_Wrap_alloc<MySTL::allocator<int>>' to 'const MySTL::allocator<_Newfirst>'
+          with
+          [
+              _Newfirst=std::_Container_proxy
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\xmemory0(874): note: No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(587): note: see reference to function template instantiation 'std::_Wrap_alloc<MySTL::allocator<_Newfirst>>::_Wrap_alloc<std::_Wrap_alloc<MySTL::allocator<int>>>(_Other &) noexcept' being compiled
+          with
+          [
+              _Newfirst=std::_Container_proxy,
+              _Other=std::_Wrap_alloc<MySTL::allocator<int>>
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(587): note: see reference to function template instantiation 'std::_Wrap_alloc<MySTL::allocator<_Newfirst>>::_Wrap_alloc<std::_Wrap_alloc<MySTL::allocator<int>>>(_Other &) noexcept' being compiled
+          with
+          [
+              _Newfirst=std::_Container_proxy,
+              _Other=std::_Wrap_alloc<MySTL::allocator<int>>
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(585): note: while compiling class template member function 'void std::_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc>>::_Free_proxy(void)'
+          with
+          [
+              _Ty=int,
+              _Alloc=MySTL::allocator<int>
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(552): note: see reference to function template instantiation 'void std::_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc>>::_Free_proxy(void)' being compiled
+          with
+          [
+              _Ty=int,
+              _Alloc=MySTL::allocator<int>
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: see reference to class template instantiation 'std::_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc>>' being compiled
+          with
+          [
+              _Ty=int,
+              _Alloc=MySTL::allocator<int>
+          ]
+  c:\users\marin\documents\mystl\mystl\mystl\testcase\test_allocator.h(22): note: see reference to class template instantiation 'std::vector<int,MySTL::allocator<int>>' being compiled
+  string_impl.cpp
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(78): error C2572: 'MySTL::string::string': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(42): note: see declaration of 'MySTL::string::string'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(209): error C2572: 'MySTL::string::reserve': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(90): note: see declaration of 'MySTL::string::reserve'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(520): error C2572: 'MySTL::string::erase': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(163): note: see declaration of 'MySTL::string::erase'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(520): error C2572: 'MySTL::string::erase': redefinition of default argument: parameter 2
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(163): note: see declaration of 'MySTL::string::erase'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(522): error C2440: 'return': cannot convert from 'MySTL::string::iterator' to 'MySTL::string &'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(641): warning C4267: 'initializing': conversion from 'size_t' to 'char', possible loss of data
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(653): error C2572: 'MySTL::string::copy': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(200): note: see declaration of 'MySTL::string::copy'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(668): error C2572: 'MySTL::string::find': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(204): note: see declaration of 'MySTL::string::find'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(673): error C2572: 'MySTL::string::find': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(205): note: see declaration of 'MySTL::string::find'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(684): error C2572: 'MySTL::string::find': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(207): note: see declaration of 'MySTL::string::find'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(696): error C2572: 'MySTL::string::rfind': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(211): note: see declaration of 'MySTL::string::rfind'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(701): error C2572: 'MySTL::string::rfind': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(212): note: see declaration of 'MySTL::string::rfind'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(712): error C2572: 'MySTL::string::rfind': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(214): note: see declaration of 'MySTL::string::rfind'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(724): error C2572: 'MySTL::string::find_first_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(218): note: see declaration of 'MySTL::string::find_first_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(729): error C2572: 'MySTL::string::find_first_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(219): note: see declaration of 'MySTL::string::find_first_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(739): error C2572: 'MySTL::string::find_first_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(221): note: see declaration of 'MySTL::string::find_first_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(746): error C2572: 'MySTL::string::find_last_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(225): note: see declaration of 'MySTL::string::find_last_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(751): error C2572: 'MySTL::string::find_last_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(226): note: see declaration of 'MySTL::string::find_last_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(761): error C2572: 'MySTL::string::find_last_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(228): note: see declaration of 'MySTL::string::find_last_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(768): error C2572: 'MySTL::string::find_first_not_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(232): note: see declaration of 'MySTL::string::find_first_not_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(773): error C2572: 'MySTL::string::find_first_not_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(233): note: see declaration of 'MySTL::string::find_first_not_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(783): error C2572: 'MySTL::string::find_first_not_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(235): note: see declaration of 'MySTL::string::find_first_not_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(795): error C2572: 'MySTL::string::find_last_not_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(239): note: see declaration of 'MySTL::string::find_last_not_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(800): error C2572: 'MySTL::string::find_last_not_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(240): note: see declaration of 'MySTL::string::find_last_not_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(810): error C2572: 'MySTL::string::find_last_not_of': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(242): note: see declaration of 'MySTL::string::find_last_not_of'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(821): error C2572: 'MySTL::string::substr': redefinition of default argument: parameter 1
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(246): note: see declaration of 'MySTL::string::substr'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(821): error C2572: 'MySTL::string::substr': redefinition of default argument: parameter 2
+  c:\users\marin\documents\mystl\mystl\mystl\declaration\string.h(246): note: see declaration of 'MySTL::string::substr'
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(854): error C2662: 'int MySTL::string::_compare<MySTL::string::const_iterator>(MySTL::string::size_type,MySTL::string::size_type,InputIterator,InputIterator)': cannot convert 'this' pointer from 'const MySTL::string' to 'MySTL::string &'
+          with
+          [
+              InputIterator=MySTL::string::const_iterator
+          ]
+  c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(854): note: Conversion loses qualifiers
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(870): error C2662: 'int MySTL::string::_compare<MySTL::string::const_iterator>(MySTL::string::size_type,MySTL::string::size_type,InputIterator,InputIterator)': cannot convert 'this' pointer from 'const MySTL::string' to 'MySTL::string &'
+          with
+          [
+              InputIterator=MySTL::string::const_iterator
+          ]
+  c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(870): note: Conversion loses qualifiers
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(984): warning C4018: '<': signed/unsigned mismatch
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(997): warning C4018: '<': signed/unsigned mismatch
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(1027): warning C4018: '<': signed/unsigned mismatch
+c:\users\marin\documents\mystl\mystl\mystl\implementation\string_impl.cpp(1038): warning C4018: '<': signed/unsigned mismatch
+  alloc_impl.cpp
+  Generating Code...
