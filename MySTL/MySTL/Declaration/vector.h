@@ -40,7 +40,7 @@ namespace MySTL
 		vector() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}//constructor: default
 		
 		vector(const vector &);											// constructor: copy
-		vector(vector &&) /*noexcept*/;									// constructor: move
+		vector(vector &&) /*noexcept*/;										// constructor: move
 		explicit vector(const size_type n);								// constructor: fill
 		vector(const size_type n, const_reference val);					// constructor: fill
 		vector(std::initializer_list<value_type> il);					// constructor: initializer_list
@@ -49,7 +49,7 @@ namespace MySTL
 
 		vector& operator=(const vector &rhs);							// assign content: copy
 		vector& operator=(std::initializer_list<value_type> il);		// assign content: initializer list
-		vector& operator=(vector &&rhs) /*noexcept*/;					// assign content: move
+		vector& operator=(vector &&rhs) /*noexcept*/;						// assign content: move
 		
 		~vector();														// destructor
 		
@@ -76,7 +76,7 @@ namespace MySTL
 		//iterator insert(iterator position, value_type &&val);			// insert elements: move
 		iterator insert(iterator position, std::initializer_list<value_type> il);// insert elements: initializer list
 
-		void clear() /*noexcept*/ { erase(begin(), end()); } 			// clear content
+		void clear() /*noexcept*/ { erase(begin(), end()); } 				// clear content
 		void swap(vector &x);											// swap content
 
 		iterator erase(iterator position);								// erase elements: single element

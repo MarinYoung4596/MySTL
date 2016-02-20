@@ -56,6 +56,9 @@
     <ClInclude Include="Declaration\reverse_iterator.h">
       <Filter>Declaration</Filter>
     </ClInclude>
+    <ClInclude Include="TestCase\test_string.h">
+      <Filter>TestCase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation\alloc_impl.cpp">

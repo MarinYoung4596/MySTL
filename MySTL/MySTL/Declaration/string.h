@@ -37,8 +37,9 @@ namespace MySTL
 
 	public:
 		//////////////////// constructor ////////////////////
-		string() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}			// (1) default constructor
+		string() : elements_start(nullptr), first_free(nullptr), end_of_storage(nullptr) {}// (1) default constructor
 		string(const string &str);											// (2) copy constructor
+		// NOTE: 
 		string(const string &str, size_type pos, size_type len = npos);		// (3) substring constructor
 		explicit string(const char* s);										// (4) from c-string
 		string(const char* s, size_type n);									// (5) from buffer
@@ -46,7 +47,7 @@ namespace MySTL
 		template <typename InputIterator>
 		string(InputIterator first, InputIterator last);					// (7) range constructor
 		string(std::initializer_list<char> il);								// (8) initializer list
-		string(string &&str) /*noexcept*/;									// (9) move constructor
+		string(string &&str) /*noexcept*/;										// (9) move constructor
 
 		~string();
 
@@ -58,7 +59,7 @@ namespace MySTL
 		string& operator= (const char* s);					// c-string
 		string& operator= (char c);							// character
 		string& operator= (std::initializer_list<char> il);	// initializer list
-		string& operator= (string&& str) /*noexcept*/;		// move
+		string& operator= (string&& str) /*noexcept*/;			// move
 
 
 
@@ -142,7 +143,7 @@ namespace MySTL
 		template <typename InputIterator>
 		string& assign(InputIterator first, InputIterator last);				// (6) range
 		string& assign(std::initializer_list<char> il);							// (7) initializer list
-		string& assign(string&& str); /*noexcept*/;								// (8) move
+		string& assign(string&& str) /*noexcept*/;									// (8) move
 
 
 		// Insert into string
@@ -202,45 +203,45 @@ namespace MySTL
 
 		//	Find content in string
 		//	Searches the string for the first occurrence of the sequence specified by its arguments.
-		size_type find(const string& str, size_type pos = 0) const /*noexcept*/;		// string(1)
+		size_type find(const string& str, size_type pos = 0) const /*noexcept*/;			// string(1)
 		size_type find(const char* s, size_type pos = 0) const;							// c - string(2)
 		size_type find(const char* s, size_type pos, size_type n) const;				// buffer(3)
-		size_type find(char c, size_type pos = 0) const /*noexcept*/;					// character(4)
+		size_type find(char c, size_type pos = 0) const /*noexcept*/;						// character(4)
 
 		//  Find last occurrence of content in string
 		//	Searches the string for the last occurrence of the sequence specified by its arguments.
-		size_type rfind(const string& str, size_type pos = npos) const /*noexcept*/;	// string(1)
+		size_type rfind(const string& str, size_type pos = npos) const /*noexcept*/;		// string(1)
 		size_type rfind(const char* s, size_type pos = npos) const;						// c - string(2)
 		size_type rfind(const char* s, size_type pos, size_type n) const;				// buffer(3)
-		size_type rfind(char c, size_type pos = npos) const /*noexcept*/;				// character(4)
+		size_type rfind(char c, size_type pos = npos) const /*noexcept*/;					// character(4)
 
 		// Find character in string
 		// Searches the string for the first character that matches any of the characters specified in its arguments.
-		size_type find_first_of(const string& str, size_type pos = 0) const /*noexcept*/;// string(1)
+		size_type find_first_of(const string& str, size_type pos = 0) const /*noexcept*/;	// string(1)
 		size_type find_first_of(const char* s, size_type pos = 0) const;				// c - string(2)
 		size_type find_first_of(const char* s, size_type pos, size_type n) const;		// buffer(3)
-		size_type find_first_of(char c, size_type pos = 0) const /*noexcept*/;			// character(4)
+		size_type find_first_of(char c, size_type pos = 0) const /*noexcept*/;				// character(4)
 
 		// Find character in string from the end
 		// Searches the string for the last character that matches any of the characters specified in its arguments.
 		size_type find_last_of(const string& str, size_type pos = npos) const /*noexcept*/;	// string(1)
 		size_type find_last_of(const char* s, size_type pos = npos) const;				// c - string(2)
 		size_type find_last_of(const char* s, size_type pos, size_type n) const;		// buffer(3)
-		size_type find_last_of(char c, size_type pos = npos) const /*noexcept*/;		// character(4)
+		size_type find_last_of(char c, size_type pos = npos) const /*noexcept*/;			// character(4)
 
 		// Find absence of character in string
 		// Searches the string for the first character that does not match any of the characters specified in its arguments.
 		size_type find_first_not_of(const string& str, size_type pos = 0) const /*noexcept*/;// string(1)
 		size_type find_first_not_of(const char* s, size_type pos = 0) const;			// c - string(2)
 		size_type find_first_not_of(const char* s, size_type pos, size_type n) const;	// buffer(3)
-		size_type find_first_not_of(char c, size_type pos = 0) const /*noexcept*/;		// character(4)
+		size_type find_first_not_of(char c, size_type pos = 0) const /*noexcept*/;			// character(4)
 
 		// Find non-matching character in string from the end
 		// Searches the string for the last character that does not match any of the characters specified in its arguments.
 		size_type find_last_not_of(const string& str, size_type pos = npos) const /*noexcept*/;// string(1)
 		size_type find_last_not_of(const char* s, size_type pos = npos) const;			// c - string(2)
 		size_type find_last_not_of(const char* s, size_type pos, size_type n) const;	// buffer(3)
-		size_type find_last_not_of(char c, size_type pos = npos) const /*noexcept*/;	// character(4)
+		size_type find_last_not_of(char c, size_type pos = npos) const /*noexcept*/;		// character(4)
 
 		// Generate substring
 		//	Returns a newly constructed string object with its value initialized to a copy of a substring of this object.
@@ -248,7 +249,7 @@ namespace MySTL
 
 		// Compare strings
 		//	Compares the value of the string object(or a substring) to the sequence of characters specified by its arguments.
-		int compare(const string& str) const /*noexcept*/;								// string(1)
+		int compare(const string& str) const /*noexcept*/;									// string(1)
 		int compare(size_type pos, size_type len, const string& str) const;				// string(1)
 		int compare(size_type pos, size_type len, const string& str, size_type subpos, size_type sublen) const;// substrings(2)
 		int compare(const char* s) const;												// c - string(3)
@@ -275,18 +276,18 @@ namespace MySTL
 		void _free() const;
 		void _reallocate();
 
-		static size_type strlen(const char *s);
+		static size_type _strlen(const char *s);
 
 		template<typename InputIterator>
 		void _string(InputIterator first, InputIterator last, std::false_type);
 		void _string(size_type n, char c, std::true_type);
 
 		template <typename InputIterator>
-		int _compare(size_type pos, size_type len, InputIterator first, InputIterator last);
+		int _compare(size_type pos, size_type len, InputIterator first, InputIterator last) const;
 		// find auxiliary
-		static void getNextVal(const char *s, size_type pos, size_type n, int next[]);
-		size_type _rfind(const_iterator cit, size_type pos, size_type n);
-
+		void getNextVal(const char *s, size_type pos, size_type n, int next[]) const;
+		// find_first_of, find_first_not_of, find_last_of, find_last_not_of auxiliary
+		bool _is_contained(char ch, const_iterator first, const_iterator last) const;
 
 
 	public:

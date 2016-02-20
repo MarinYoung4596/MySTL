@@ -87,6 +87,7 @@
     <ClInclude Include="Declaration\vector.h" />
     <ClInclude Include="Implementation\vector_impl.h" />
     <ClInclude Include="TestCase\test_allocator.h" />
+    <ClInclude Include="TestCase\test_string.h" />
     <ClInclude Include="TestCase\test_vector.h" />
   </ItemGroup>
   <ItemGroup>

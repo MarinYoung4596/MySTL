@@ -29,7 +29,7 @@ namespace MySTL
 	}
 
 
-	string::size_type string::strlen(const char* s)
+	string::size_type string::_strlen(const char* s)
 	{
 		size_type len = 0;
 		for (auto p = s; p != nullptr; ++p, ++len);
@@ -75,7 +75,7 @@ namespace MySTL
 		alloc_n_copy(str.begin(), str.end());
 	}
 
-	string::string(const string &str, size_type pos, size_type len = npos)
+	string::string(const string &str, size_type pos, size_type len)
 	{
 		if (pos > str.size() || len > str.size())
 			throw std::out_of_range("out of range");
@@ -91,7 +91,7 @@ namespace MySTL
 
 	string::string(const char* s)
 	{
-		alloc_n_copy(s, s + strlen(s));
+		alloc_n_copy(s, s + _strlen(s));
 	}
 
 	string::string(const char* s, size_type n)
@@ -156,7 +156,7 @@ namespace MySTL
 	string& string::operator= (const char* s)
 	{
 		_free();
-		alloc_n_copy(s, s + strlen(s));
+		alloc_n_copy(s, s + _strlen(s));
 		return *this;
 	}
 
@@ -219,7 +219,7 @@ namespace MySTL
 		}
 	}
 
-	void string::reserve(size_type n = 0)
+	void string::reserve(size_type n)
 	{
 		if (n <= capacity())
 			return;
@@ -347,7 +347,7 @@ namespace MySTL
 
 	string& string::assign(const char* s)
 	{
-		return assign(s, s + strlen(s));
+		return assign(s, s + _strlen(s));
 	}
 
 	string& string::assign(const char* s, size_type n)
@@ -428,7 +428,7 @@ namespace MySTL
 
 	string& string::insert(size_type pos, const char* s)
 	{
-		insert(elements_start + pos, s, s + strlen(s));
+		insert(elements_start + pos, s, s + _strlen(s));
 		return *this;
 	}
 
@@ -530,9 +530,10 @@ namespace MySTL
 
 
 	// erase
-	string& string::erase(size_type pos = 0, size_type len = npos)
+	string& string::erase(size_type pos, size_type len)
 	{
-		return erase(begin() + pos, begin() + pos + len);
+		erase(begin() + pos, begin() + pos + len);
+		return *this;
 	}
 
 	string::iterator string::erase(const_iterator p)
@@ -572,12 +573,12 @@ namespace MySTL
 
 	string&	string::replace(size_type pos, size_type len, const char* s)
 	{
-		return replace(elements_start + pos, elements_start + pos + len, s, s + strlen(s));
+		return replace(elements_start + pos, elements_start + pos + len, s, s + _strlen(s));
 	}
 
 	string& string::replace(const_iterator i1, const_iterator i2, const char* s)
 	{
-		return replace(i1, i2, s, s + strlen(s));
+		return replace(i1, i2, s, s + _strlen(s));
 	}
 
 	string& string::replace(size_type pos, size_type len, const char* s, size_type n)
@@ -655,7 +656,7 @@ namespace MySTL
 	}
 
 
-	string::size_type string::copy(char* s, size_type len, size_type pos = 0) const
+	string::size_type string::copy(char* s, size_type len, size_type pos) const
 	{
 		auto end_copy = (pos + len) < length() ? (elements_start + pos + len) : first_free;
 		auto finish =  std::uninitialized_copy(elements_start + pos, end_copy, s);
@@ -670,24 +671,24 @@ namespace MySTL
 	// @c		individual character to be searched for
 	// @pos		position of the first character in the string to be considered in the search
 	// @n		length of sequence of characters to match
-	string::size_type string::find(const string& str, size_type pos = 0) const /*noexcept*/
+	string::size_type string::find(const string& str, size_type pos) const /*noexcept*/
 	{
 		return find(str.begin(), pos, str.size());
 	}
 
-	string::size_type string::find(const char* s, size_type pos = 0) const
+	string::size_type string::find(const char* s, size_type pos) const
 	{
-		return find(s, pos, strlen(s));
+		return find(s, pos, _strlen(s));
 	}
 
-	// find auxiliary: buffer
+	// find auxiliary: KMP search
 	string::size_type string::find(const char* s, size_type pos, size_type n) const
 	{
 		auto m = size();
 		if (m == 0) return 0;
 		if (n == 0 && m == 0) return 0;
 		int *next = static_cast<int*>(malloc(sizeof(int) * m));
-		int i = 0, j = 0;
+		auto i = 0, j = 0;
 
 		getNextVal(s, pos, n, next);
 		for (; i < m && j < n; )
@@ -706,10 +707,10 @@ namespace MySTL
 		return -1;
 	}
 
-	void string::getNextVal(const char* s, size_type pos, size_type n, int next[])
+	void string::getNextVal(const char* s, size_type pos, size_type n, int next[]) const
 	{
 		next[0] = -1;
-		int k = -1, j = 0;
+		auto k = -1, j = 0;
 		for (; j < n - 1;)
 		{
 			if (k == -1 || *(s + pos + j) == *(s + pos + k))
@@ -723,7 +724,7 @@ namespace MySTL
 		}
 	}
 
-	string::size_type string::find(char c, size_type pos = 0) const /*noexcept*/
+	string::size_type string::find(char c, size_type pos) const /*noexcept*/
 	{
 		for (auto cit = cbegin() + pos; cit != cend(); ++cit)
 		{
@@ -735,23 +736,30 @@ namespace MySTL
 
 
 	// rfind
-	string::size_type string::rfind(const string& str, size_type pos = npos) const /*noexcept*/
+	string::size_type string::rfind(const string& str, size_type pos) const /*noexcept*/
 	{
-		return _rfind(str.begin(), pos, str.size());
+		return rfind(str.begin(), pos, str.size());
 	}
 
-	string::size_type string::rfind(const char* s, size_type pos = npos) const
+	string::size_type string::rfind(const char* s, size_type pos) const
 	{
-		return rfind(s, pos, strlen(s));
+		return rfind(s, pos, _strlen(s));
 	}
 
-	// rfind auxiliary: buffer
+	// brute force search
 	string::size_type string::rfind(const char* s, size_type pos, size_type n) const
 	{
-		return _rfind(s, pos, n);
+		for (auto i = size(); i != 0; --i)
+		{
+			auto j = s + pos + n;
+			for (; j > s + pos; --j)
+				if (*j != (*this)[i]) break;
+			if (j == s) return i;
+		}
+		return npos;
 	}
 
-	string::size_type string::rfind(char c, size_type pos = npos) const /*noexcept*/
+	string::size_type string::rfind(char c, size_type pos) const /*noexcept*/
 	{
 		for (auto cit = cbegin() + pos; cit >= cbegin(); --cit)
 		{
@@ -761,73 +769,84 @@ namespace MySTL
 		return npos;
 	}
 
-	string::size_type string::_rfind(const_iterator cit, size_type pos, size_type n)
-	{
-		
-	}
 
+	// find_first_of, find_first_not_of, find_last_of, find_last_not_of auxiliary
+	bool string::_is_contained(char ch, const_iterator first, const_iterator last) const
+	{
+		for (auto cit = first; cit != last; ++cit)
+			if (*cit == ch) return true;
+		return false;
+	}
 
 	// find_first_of
-	string::size_type string::find_first_of(const string& str, size_type pos = 0) const /*noexcept*/
+	// searches the string for the first character that matches ##any## of the characters specified in the arguments.
+	// 查找在字符串中第一个与str中某个字符匹配的字符，返回它的位置
+	string::size_type string::find_first_of(const string& str, size_type pos) const /*noexcept*/
 	{
-
+		return find_first_of(str.begin(), pos, str.size());
 	}
 
-	string::size_type string::find_first_of(const char* s, size_type pos = 0) const
+	string::size_type string::find_first_of(const char* s, size_type pos) const
 	{
-		return find_first_of(s, pos, strlen(s));
+		return find_first_of(s, pos, _strlen(s));
 	}
 
 	string::size_type string::find_first_of(const char* s, size_type pos, size_type n) const
 	{
-
+		for (auto i = pos; i != size(); ++i)
+			if (_is_contained((*this)[i], s, s + n)) return i;
+		return npos;
 	}
 
-	string::size_type string::find_first_of(char c, size_type pos = 0) const /*noexcept*/
+	string::size_type string::find_first_of(char c, size_type pos) const /*noexcept*/
 	{
 		return find(c, pos);
 	}
 
 
 	// find_last_of
-	string::size_type string::find_last_of(const string& str, size_type pos = npos) const /*noexcept*/
+	string::size_type string::find_last_of(const string& str, size_type pos) const /*noexcept*/
 	{
-
+		return find_last_of(str.begin(), pos, str.size());
 	}
 
-	string::size_type string::find_last_of(const char* s, size_type pos = npos) const
+	string::size_type string::find_last_of(const char* s, size_type pos) const
 	{
-		return find_last_of(s, pos, strlen(s));
+		return find_last_of(s, pos, _strlen(s));
 	}
 
 	string::size_type string::find_last_of(const char* s, size_type pos, size_type n) const
 	{
-
+		for (auto i = pos; i > 0; --i)
+			if (_is_contained((*this)[i], s, s + n)) return i;
+		return npos;
 	}
 
-	string::size_type string::find_last_of(char c, size_type pos = npos) const /*noexcept*/
+	string::size_type string::find_last_of(char c, size_type pos) const /*noexcept*/
 	{
 		return rfind(c, pos);
 	}
 
 
 	// find_first_not_of
-	string::size_type string::find_first_not_of(const string& str, size_type pos = 0) const /*noexcept*/
+	string::size_type string::find_first_not_of(const string& str, size_type pos) const /*noexcept*/
 	{
-
+		return find_first_not_of(str.begin(), pos, str.size());
 	}
 
-	string::size_type string::find_first_not_of(const char* s, size_type pos = 0) const
+	string::size_type string::find_first_not_of(const char* s, size_type pos) const
 	{
-		return find_first_not_of(s, pos, strlen(s));
+		return find_first_not_of(s, pos, _strlen(s));
 	}
 
 	string::size_type string::find_first_not_of(const char* s, size_type pos, size_type n) const
 	{
-		
+		for (auto i = pos; i < size(); ++i)
+			if (!_is_contained((*this)[i], s, s + n)) return i;
+		return npos;
 	}
 
-	string::size_type string::find_first_not_of(char c, size_type pos = 0) const /*noexcept*/
+	string::size_type string::find_first_not_of(char c, size_type pos) const /*noexcept*/
 	{
 		for (auto i = pos; i != size(); ++i)
 		{
@@ -839,22 +858,24 @@ namespace MySTL
 
 
 	// find_last_not_of
-	string::size_type string::find_last_not_of(const string& str, size_type pos = npos) const /*noexcept*/
+	string::size_type string::find_last_not_of(const string& str, size_type pos) const /*noexcept*/
 	{
-
+		return find_last_not_of(str.begin(), pos, str.size());
 	}
 
-	string::size_type string::find_last_not_of(const char* s, size_type pos = npos) const
+	string::size_type string::find_last_not_of(const char* s, size_type pos) const
 	{
-		return find_last_not_of(s, pos, strlen(s));
+		return find_last_not_of(s, pos, _strlen(s));
 	}
 
 	string::size_type string::find_last_not_of(const char* s, size_type pos, size_type n) const
 	{
-
+		for (auto i = pos; i > 0; --i)
+			if (!_is_contained((*this)[i], s, s + n)) return i;
+		return npos;
 	}
 
-	string::size_type string::find_last_not_of(char c, size_type pos = npos) const /*noexcept*/
+	string::size_type string::find_last_not_of(char c, size_type pos) const /*noexcept*/
 	{
 		for (auto i = pos; i >= 0; --i)
 		{
@@ -865,7 +886,7 @@ namespace MySTL
 	}
 
 
-	string string::substr(size_type pos = 0, size_type len = npos) const
+	string string::substr(size_type pos, size_type len) const
 	{
 		string res(*this, pos, len);
 		return res;
@@ -903,12 +924,12 @@ namespace MySTL
 
 	int string::compare(const char* s) const
 	{
-		return compare(0, size(), s, strlen(s));
+		return compare(0, size(), s, _strlen(s));
 	}
 
 	int string::compare(size_type pos, size_type len, const char* s) const
 	{
-		return compare(pos, len, s, strlen(s));
+		return compare(pos, len, s, _strlen(s));
 	}
 
 	// compare auxiliary: buffer
@@ -919,7 +940,7 @@ namespace MySTL
 
 	// compare auxiliary
 	template <typename InputIterator>
-	int string::_compare(size_type pos, size_type len, InputIterator first, InputIterator last)
+	int string::_compare(size_type pos, size_type len, InputIterator first, InputIterator last) const
 	{
 		auto basePos = begin();
 		InputIterator it = first;
@@ -1147,7 +1168,13 @@ namespace MySTL
 
 	std::istream& operator>> (std::istream& is, string& str)
 	{
-
+		char ch;
+		while (is >> ch)
+		{
+			if (ch == EOF || isblank(ch) || ch == '\n') break;
+			str.push_back(ch);
+		}
+		return is;
 	}
 
 	std::ostream& operator<< (std::ostream& os, const string& str)
