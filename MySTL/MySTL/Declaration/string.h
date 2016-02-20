@@ -92,7 +92,7 @@ namespace MySTL
 		void reserve(size_type n = 0);
 		void clear() /*noexcept*/;
 		bool empty() const /*noexcept*/ { return elements_start == first_free; }
-		void shrink_to_fit();
+		void shrink_to_fit();  
 
 
 

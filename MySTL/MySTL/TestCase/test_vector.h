@@ -8,7 +8,7 @@ namespace MySTL
 	namespace TestVector
 	{
 		// function declaration
-		void tc_constructor_1();
+		void tc_constructor();
 		void tc_assignment();
 		void tc_size();
 		void tc_empty();

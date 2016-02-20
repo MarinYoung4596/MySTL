@@ -28,9 +28,9 @@ MySTL is a Tiny C++ STL library.
 
 #BUGS & SOLUTIONS
 
- - Use customized reverse_iterator
- - In conjunction with customized uninitialized functions
- - vector
+ - **Use customized reverse_iterator**
+ - **In conjunction with customized uninitialized functions**
+ - **vector**
 	 - [compile error] emplace & emplace_back
 	 - [logical error] shrink_to_fit
 	 - [compile error] get_allocator
@@ -38,11 +38,11 @@ MySTL is a Tiny C++ STL library.
 	 - [logical error] insert_aux
 	 - [link error] relational operations	[RESOLVED]
 		- Solutions: friend functions declaration error
- - ERROR C2664: 'MySTL::allocator<_Newfirst>::allocator(MySTL::allocator<_Newfirst> &&)': cannot convert argument 1 from 'std::_Wrap_alloc<MySTL::allocator<int>>' to 'const MySTL::allocator<_Newfirst> &'      xmemory0    874
+ - **ERROR C2664:** 'MySTL::allocator<_Newfirst>::allocator(MySTL::allocator<_Newfirst> &&)': cannot convert argument 1 from 'std::_Wrap_alloc<MySTL::allocator<int>>' to 'const MySTL::allocator<_Newfirst> &'      xmemory0    874
 	 - Solution:  **use vs2013**
- - WARINING C4996: 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe...
+ - **WARINING C4996:** 'std::_Uninitialized_copy0': Function call with parameters that may be unsafe...
 	 - Solution: Create project without Security Development Lifecycle (SDL) checks
- - ERROR C2672, C2893, C2780, C2665 ...
+ - **ERROR C2672, C2893, C2780, C2665 ...**
 	 - Solutions: functions overload failed ==> use traits
- - ERROR C2572: 'MySTL::string::string': redefinition of default argument: parameter 1
+ - **ERROR C2572:** 'MySTL::string::string': redefinition of default argument: parameter 1
 	 - Solution: The defaults only belong in the declaration in the header file, not the implementation in the cpp file.
